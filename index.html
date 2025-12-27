@@ -364,13 +364,14 @@
         </div>
         <div id="daily-quality" class="hidden rounded-xl bg-black/40 p-3">
           <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Quality/Strength (1 = Weak)</span>
+            <span id="daily-quality-label">Quality: 3 - Firm / Functional</span>
             <span id="daily-quality-value" class="text-white font-semibold">3</span>
           </div>
           <input id="daily-quality-slider" type="range" min="1" max="5" value="3" class="mt-2 w-full accent-neon-emerald" />
-          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
-            <span>1</span>
-            <span>5</span>
+          <div class="mt-2 grid grid-cols-3 text-[10px] text-slate-400">
+            <span class="text-left">Soft / Partial</span>
+            <span class="text-center">Firm / Functional</span>
+            <span class="text-right">Rock Hard / 100%</span>
           </div>
         </div>
         <div>
@@ -550,6 +551,7 @@
     const dailyQuality = document.getElementById("daily-quality");
     const dailyQualitySlider = document.getElementById("daily-quality-slider");
     const dailyQualityValue = document.getElementById("daily-quality-value");
+    const dailyQualityLabel = document.getElementById("daily-quality-label");
     const dailyNotes = document.getElementById("daily-notes");
     const saveDailyLogButton = document.getElementById("save-daily-log");
     const cancelDailyLogButton = document.getElementById("cancel-daily-log");
@@ -692,12 +694,20 @@
       dailyQuality.classList.toggle("hidden", !nextValue);
       if (nextValue) {
         dailyQualitySlider.value = 3;
-        dailyQualityValue.textContent = "3";
+        updateDailyQualityDisplay(3);
       }
     }
 
     function updateDailyQualityDisplay(value) {
+      const numeric = Number(value);
+      let descriptor = "Firm / Functional";
+      if (numeric <= 2) {
+        descriptor = "Soft / Partial";
+      } else if (numeric >= 5) {
+        descriptor = "Rock Hard / 100%";
+      }
       dailyQualityValue.textContent = value;
+      dailyQualityLabel.textContent = `Quality: ${value} - ${descriptor}`;
     }
 
     function setDailyDefaultDate(value) {
