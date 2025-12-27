@@ -17,7 +17,8 @@
             "neon-cyan": "#06b6d4",
             "neon-amber": "#f59e0b",
             "neon-emerald": "#10b981",
-            "neon-rose": "#e11d48"
+            "neon-rose": "#e11d48",
+            "neon-violet": "#8b5cf6"
           },
           fontFamily: {
             sans: ["Inter", "ui-sans-serif", "system-ui"]
@@ -83,7 +84,12 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Active Streak</p>
-            <p id="streak" class="text-3xl font-bold text-neon-cyan">0 days</p>
+            <div class="flex items-center gap-2">
+              <p id="streak" class="text-3xl font-bold text-neon-cyan">0 days</p>
+              <span id="vacation-icon" class="hidden text-neon-cyan text-lg" title="Vacation mode enabled">
+                <i class="fa-solid fa-snowflake"></i>
+              </span>
+            </div>
           </div>
           <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-cyan text-xl">
             <i class="fa-solid fa-bolt"></i>
@@ -225,6 +231,26 @@
         <p id="session-warning" class="hidden mt-4 text-sm font-semibold text-neon-rose">STOP if numbness/coldness.</p>
       </div>
 
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Strength Coach</p>
+            <h3 class="text-xl font-semibold mt-1 text-neon-violet">Pelvic Strength (2x/Week)</h3>
+            <p class="text-sm text-slate-300 mt-1">10 reps of 3s engage + 8s full release.</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-violet text-lg">
+            <i class="fa-solid fa-dumbbell"></i>
+          </div>
+        </div>
+        <p id="strength-lock-message" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
+        <button
+          id="start-strength"
+          class="w-full rounded-xl border border-neon-violet/60 py-3 font-semibold text-neon-violet hover:bg-neon-violet/10"
+        >
+          Start Strength Session
+        </button>
+      </div>
+
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
         <div class="flex items-center justify-between">
           <div>
@@ -364,6 +390,17 @@
             <p class="font-semibold text-white">Privacy First</p>
             <p>Everything stays local unless you export manually.</p>
           </div>
+          <label class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 p-3">
+            <span>
+              <span class="block font-semibold text-white">Pause Streak (Vacation Mode)</span>
+              <span class="block text-xs text-slate-400">Missed days won’t reset your streak while active.</span>
+            </span>
+            <span class="relative inline-flex items-center cursor-pointer">
+              <input id="vacation-toggle" type="checkbox" class="sr-only peer" />
+              <span class="h-6 w-11 rounded-full bg-slate-700 peer-checked:bg-neon-cyan transition"></span>
+              <span class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-5"></span>
+            </span>
+          </label>
         </div>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
@@ -414,6 +451,44 @@
         </div>
       </div>
     </section>
+
+    <section id="handbook" class="hidden px-6 space-y-4">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Reference Library</p>
+            <h2 class="text-2xl font-semibold mt-1">Handbook</h2>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-cyan text-lg">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+        <h3 class="text-lg font-semibold text-white">Arousal Scale</h3>
+        <div class="space-y-2 text-base text-slate-100">
+          <p><span class="font-semibold text-neon-cyan">Level 1-2:</span> Neutral</p>
+          <p><span class="font-semibold text-neon-emerald">Level 3-4:</span> Downshift Practice (Best Zone)</p>
+          <p><span class="font-semibold text-neon-amber">Level 6-7:</span> Vascular Holds</p>
+          <p><span class="font-semibold text-neon-rose">Level 8-10:</span> DANGER - Reset</p>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+        <h3 class="text-lg font-semibold text-white">The Red Flags (Stop Signs)</h3>
+        <ul class="list-disc pl-5 text-base text-slate-100 space-y-1">
+          <li>Pelvic Ache</li>
+          <li>Numbness/Coldness</li>
+          <li>Worse Morning Wood</li>
+        </ul>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+        <h3 class="text-lg font-semibold text-white">Quick Fixes</h3>
+        <ul class="space-y-2 text-base text-slate-100">
+          <li><span class="font-semibold text-neon-amber">Too Fast?</span> → Exhale 8s.</li>
+          <li><span class="font-semibold text-neon-emerald">Turtle Mode?</span> → Heat + Deep Squat.</li>
+        </ul>
+      </div>
+    </section>
   </main>
 
   <button
@@ -449,7 +524,7 @@
   </div>
 
   <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-700">
-    <div class="grid grid-cols-4 text-xs text-slate-400">
+    <div class="grid grid-cols-5 text-xs text-slate-400">
       <button data-target="hub" class="nav-btn py-4 flex flex-col items-center gap-1 text-neon-cyan">
         <i class="fa-solid fa-house"></i>
         Hub
@@ -458,8 +533,12 @@
         <i class="fa-solid fa-dumbbell"></i>
         Train
       </button>
+      <button data-target="handbook" class="nav-btn py-4 flex flex-col items-center gap-1">
+        <i class="fa-solid fa-book-open"></i>
+        Handbook
+      </button>
       <button data-target="logs" class="nav-btn py-4 flex flex-col items-center gap-1">
-        <i class="fa-solid fa-book"></i>
+        <i class="fa-solid fa-clipboard-list"></i>
         Logs
       </button>
       <button data-target="settings" class="nav-btn py-4 flex flex-col items-center gap-1">
@@ -587,6 +666,40 @@
       <h3 id="info-title" class="mt-2 text-xl font-semibold"></h3>
       <p id="info-text" class="mt-3 text-sm text-slate-300"></p>
       <button id="close-info" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Close</button>
+    </div>
+  </div>
+
+  <div id="strength-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Strength Coach</p>
+      <h3 class="mt-2 text-xl font-semibold text-neon-violet">Pelvic Strength</h3>
+      <p class="mt-1 text-sm text-slate-300">Lift lightly (30%). No glute squeeze.</p>
+      <div class="mt-5 flex flex-col items-center gap-3">
+        <div id="strength-circle" class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-neon-violet/70 bg-neon-violet/20 text-center">
+          <span id="strength-phase" class="text-sm font-semibold text-neon-violet">Ready</span>
+        </div>
+        <p id="strength-instruction" class="text-sm text-slate-300 text-center">Press start to begin.</p>
+        <div class="text-xs uppercase tracking-[0.3em] text-slate-400">
+          Rep <span id="strength-rep">0</span> / 10 • <span id="strength-timer">00:00</span>
+        </div>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <button id="strength-start" class="rounded-xl bg-neon-violet py-3 font-semibold text-gym-dark">Start</button>
+        <button id="strength-close" class="rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="strength-lock-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Recovery Required</p>
+      <h3 class="mt-2 text-xl font-semibold">Recovery Required</h3>
+      <p class="mt-3 text-sm text-slate-300">
+        Strength work is limited to 2x/week to prevent tightness.
+      </p>
+      <button id="close-strength-lock" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">
+        Close
+      </button>
     </div>
   </div>
 
@@ -766,6 +879,18 @@
     const sessionBLock = document.getElementById("session-b-lock");
     const selectAButton = document.getElementById("select-a");
     const selectBButton = document.getElementById("select-b");
+    const startStrength = document.getElementById("start-strength");
+    const strengthLockMessage = document.getElementById("strength-lock-message");
+    const strengthModal = document.getElementById("strength-modal");
+    const strengthPhase = document.getElementById("strength-phase");
+    const strengthInstruction = document.getElementById("strength-instruction");
+    const strengthRep = document.getElementById("strength-rep");
+    const strengthTimer = document.getElementById("strength-timer");
+    const strengthCircle = document.getElementById("strength-circle");
+    const strengthStartButton = document.getElementById("strength-start");
+    const strengthCloseButton = document.getElementById("strength-close");
+    const strengthLockModal = document.getElementById("strength-lock-modal");
+    const closeStrengthLock = document.getElementById("close-strength-lock");
     const soundToggle = document.getElementById("sound-toggle");
     const soundModeButton = document.getElementById("sound-mode");
     const panicButton = document.getElementById("panic-button");
@@ -774,6 +899,8 @@
     const panicClock = document.getElementById("panic-clock");
     const panicDate = document.getElementById("panic-date");
     const appHeader = document.getElementById("app-header");
+    const vacationToggle = document.getElementById("vacation-toggle");
+    const vacationIcon = document.getElementById("vacation-icon");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -796,8 +923,29 @@
     let neuroAudioMode = "focus";
     let panicClockTimer = null;
     let lastHeaderTap = 0;
+    let strengthTimerId = null;
+    let strengthPhaseRemaining = 0;
+    let strengthRepCount = 0;
+    let strengthPhaseKey = "ready";
+    let vacationModeEnabled = false;
 
     const ringLength = 377;
+    const strengthPhaseMap = {
+      engage: {
+        label: "Engage",
+        duration: 3,
+        instruction: "Lift lightly (30%). Don't squeeze glutes.",
+        color: "#10b981",
+        bg: "rgba(16, 185, 129, 0.2)"
+      },
+      release: {
+        label: "Fully Release",
+        duration: 8,
+        instruction: "Drop completely. Rest.",
+        color: "#9ca3af",
+        bg: "rgba(148, 163, 184, 0.15)"
+      }
+    };
 
     function formatTime(seconds) {
       const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -961,6 +1109,7 @@
         pauseSession();
       }
       stopRecoveryPacer();
+      stopStrengthSession();
       window.speechSynthesis?.cancel();
       stopNeuroAudio(true);
       abortModal.classList.add("hidden");
@@ -978,6 +1127,26 @@
       panicOverlay.classList.add("hidden");
       clearInterval(panicClockTimer);
       panicClockTimer = null;
+    }
+
+    function getLastStrengthSession() {
+      const stored = localStorage.getItem("usph_strength_last");
+      return stored ? Number(stored) : null;
+    }
+
+    function isStrengthLocked() {
+      const last = getLastStrengthSession();
+      if (!last) return false;
+      return Date.now() - last < 72 * 60 * 60 * 1000;
+    }
+
+    function updateStrengthAvailability() {
+      if (!strengthLockMessage) return;
+      if (isStrengthLocked()) {
+        strengthLockMessage.textContent = "Recovery Required (72h)";
+      } else {
+        strengthLockMessage.textContent = "Available";
+      }
     }
 
     function getDayStart(date) {
@@ -1055,6 +1224,84 @@
       recoveryStart = new Date();
       startRecoveryPacer();
       showSection("recovery");
+    }
+
+    function setStrengthPhase(phaseKey) {
+      strengthPhaseKey = phaseKey;
+      const phase = strengthPhaseMap[phaseKey];
+      strengthPhaseRemaining = phase.duration;
+      strengthPhase.textContent = phase.label;
+      strengthInstruction.textContent = phase.instruction;
+      strengthTimer.textContent = formatTime(strengthPhaseRemaining);
+      strengthCircle.style.borderColor = phase.color;
+      strengthCircle.style.backgroundColor = phase.bg;
+      strengthPhase.style.color = phase.color;
+    }
+
+    function updateStrengthRepDisplay() {
+      strengthRep.textContent = strengthRepCount.toString();
+    }
+
+    function strengthTick() {
+      strengthPhaseRemaining = Math.max(0, strengthPhaseRemaining - 1);
+      strengthTimer.textContent = formatTime(strengthPhaseRemaining);
+      if (strengthPhaseRemaining > 0) return;
+      if (strengthPhaseKey === "engage") {
+        setStrengthPhase("release");
+      } else {
+        strengthRepCount += 1;
+        if (strengthRepCount >= 10) {
+          completeStrengthSession();
+        } else {
+          updateStrengthRepDisplay();
+          setStrengthPhase("engage");
+        }
+      }
+    }
+
+    function startStrengthSession() {
+      if (strengthTimerId) return;
+      strengthRepCount = 0;
+      updateStrengthRepDisplay();
+      setStrengthPhase("engage");
+      strengthTimerId = setInterval(strengthTick, 1000);
+      strengthStartButton.textContent = "Running";
+      strengthStartButton.disabled = true;
+      strengthStartButton.classList.add("opacity-60", "cursor-not-allowed");
+      speak("Begin pelvic strength. Engage lightly.");
+    }
+
+    function stopStrengthSession() {
+      clearInterval(strengthTimerId);
+      strengthTimerId = null;
+      strengthStartButton.textContent = "Start";
+      strengthStartButton.disabled = false;
+      strengthStartButton.classList.remove("opacity-60", "cursor-not-allowed");
+    }
+
+    function completeStrengthSession() {
+      stopStrengthSession();
+      localStorage.setItem("usph_strength_last", String(Date.now()));
+      strengthPhase.textContent = "Complete";
+      strengthInstruction.textContent = "Session done. Full rest.";
+      strengthTimer.textContent = "00:00";
+      strengthCircle.style.borderColor = "#8b5cf6";
+      strengthCircle.style.backgroundColor = "rgba(139, 92, 246, 0.2)";
+      strengthPhase.style.color = "#8b5cf6";
+      updateStrengthAvailability();
+      const logs = getLogs();
+      logs.unshift({
+        type: "strength",
+        date: new Date().toISOString(),
+        sessionType: "Pelvic Strength",
+        duration: 2,
+        redFlags: [],
+        aborted: false,
+        postFeeling: "Strong"
+      });
+      localStorage.setItem("usph_logs", JSON.stringify(logs));
+      updateLogs();
+      updateStreak();
     }
 
     function setSession(key) {
@@ -1416,13 +1663,15 @@
         .map((log) => new Date(log.date))
         .map((date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime());
       const uniqueDates = [...new Set(dates)].sort((a, b) => b - a);
-      let streak = 1;
-      for (let i = 0; i < uniqueDates.length - 1; i += 1) {
-        const diff = uniqueDates[i] - uniqueDates[i + 1];
-        if (diff === 86400000) {
-          streak += 1;
-        } else {
-          break;
+      let streak = vacationModeEnabled ? uniqueDates.length : 1;
+      if (!vacationModeEnabled) {
+        for (let i = 0; i < uniqueDates.length - 1; i += 1) {
+          const diff = uniqueDates[i] - uniqueDates[i + 1];
+          if (diff === 86400000) {
+            streak += 1;
+          } else {
+            break;
+          }
         }
       }
       streakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
@@ -1745,6 +1994,35 @@
       updateStreak();
     });
 
+    startStrength.addEventListener("click", () => {
+      if (isStrengthLocked()) {
+        strengthLockModal.classList.remove("hidden");
+        strengthLockModal.classList.add("flex");
+        return;
+      }
+      strengthPhase.textContent = "Ready";
+      strengthInstruction.textContent = "Press start to begin.";
+      strengthRep.textContent = "0";
+      strengthTimer.textContent = "00:00";
+      strengthCircle.style.borderColor = "#8b5cf6";
+      strengthCircle.style.backgroundColor = "rgba(139, 92, 246, 0.2)";
+      strengthPhase.style.color = "#8b5cf6";
+      strengthModal.classList.remove("hidden");
+      strengthModal.classList.add("flex");
+    });
+
+    strengthStartButton.addEventListener("click", startStrengthSession);
+    strengthCloseButton.addEventListener("click", () => {
+      stopStrengthSession();
+      strengthModal.classList.add("hidden");
+      strengthModal.classList.remove("flex");
+    });
+
+    closeStrengthLock.addEventListener("click", () => {
+      strengthLockModal.classList.add("hidden");
+      strengthLockModal.classList.remove("flex");
+    });
+
     startToday.addEventListener("click", () => {
       showSection("train");
       const today = getScheduleForToday();
@@ -1758,6 +2036,20 @@
       }
     });
 
+    function loadVacationMode() {
+      const stored = localStorage.getItem("usph_vacation_mode");
+      vacationModeEnabled = stored === "true";
+      vacationToggle.checked = vacationModeEnabled;
+      vacationIcon.classList.toggle("hidden", !vacationModeEnabled);
+    }
+
+    vacationToggle.addEventListener("change", (event) => {
+      vacationModeEnabled = event.target.checked;
+      localStorage.setItem("usph_vacation_mode", String(vacationModeEnabled));
+      vacationIcon.classList.toggle("hidden", !vacationModeEnabled);
+      updateStreak();
+    });
+
     function init() {
       loadSchedulePreference();
       buildSchedule();
@@ -1766,12 +2058,14 @@
       todayDescription.textContent = today.plan.includes("Rest")
         ? "Breathing + pelvic floor relaxation only."
         : "Follow the guided timer with audio cues.";
+      loadVacationMode();
       updateLogs();
       updateStreak();
       updateDailyMorningToggle(false);
       updateDailyQualityDisplay(dailyQualitySlider.value);
       setDailyDefaultDate();
       setSession("A");
+      updateStrengthAvailability();
     }
 
     init();
