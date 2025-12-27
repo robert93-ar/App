@@ -79,7 +79,20 @@
       <p class="mt-2 text-sm text-slate-300">High-performance guided protocols. Privacy first.</p>
     </header>
 
+    <div
+      id="urge-toast"
+      class="pointer-events-none fixed left-1/2 top-6 z-50 hidden -translate-x-1/2 rounded-full border border-neon-emerald/60 bg-gym-card/90 px-5 py-2 text-sm font-semibold text-neon-emerald opacity-0 shadow-lg transition-opacity duration-300"
+    >
+      Willpower +1
+    </div>
+
     <section id="hub" class="px-6 space-y-4">
+      <button
+        id="urge-sos"
+        class="w-full rounded-2xl border-2 border-neon-rose/70 bg-black/40 py-4 text-center text-sm font-semibold uppercase tracking-[0.25em] text-neon-rose shadow-lg hover:bg-neon-rose/10"
+      >
+        ⚠️ URGE SOS
+      </button>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <div class="flex items-center justify-between">
           <div>
@@ -93,6 +106,18 @@
           </div>
           <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-cyan text-xl">
             <i class="fa-solid fa-bolt"></i>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Retention Streak</p>
+            <p id="retention-streak" class="text-2xl font-bold text-neon-emerald">0 days</p>
+            <p class="mt-1 text-xs text-slate-400">Monk Mode • Discipline &amp; Control</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-emerald text-lg">
+            <i class="fa-solid fa-shield-heart"></i>
           </div>
         </div>
       </div>
@@ -261,7 +286,16 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Current Phase</p>
-            <h3 id="phase-title" class="text-xl font-semibold">—</h3>
+            <div class="flex items-center gap-2">
+              <h3 id="phase-title" class="text-xl font-semibold">—</h3>
+              <button
+                id="position-guide-button"
+                class="hidden rounded-full border border-neon-cyan/60 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-neon-cyan hover:bg-neon-cyan/10"
+                type="button"
+              >
+                Best Positions
+              </button>
+            </div>
             <p id="phase-text" class="text-sm text-slate-300 mt-2">Start a session to begin guidance.</p>
           </div>
           <div class="relative w-32 h-32">
@@ -641,6 +675,29 @@
     </div>
   </div>
 
+  <div id="urge-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Discipline Protocol</p>
+      <h3 class="mt-2 text-xl font-semibold text-neon-rose">Kill The Urge</h3>
+      <div class="mt-4 space-y-3 text-sm text-slate-300">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Do ONE of these immediately:</p>
+        <div class="rounded-xl border border-neon-cyan/30 bg-black/40 p-3">
+          <p class="text-white font-semibold">Option 1: Cold Rinse</p>
+          <p>Cold Rinse: Splash cold water on face (30-60s) + Slow Breathing.</p>
+        </div>
+        <div class="rounded-xl border border-neon-amber/30 bg-black/40 p-3">
+          <p class="text-white font-semibold">Option 2: Movement</p>
+          <p>Movement: 20-30 Slow Air Squats + Breathing.</p>
+        </div>
+        <div class="rounded-xl border border-neon-emerald/30 bg-black/40 p-3">
+          <p class="text-white font-semibold">Option 3: Change Environment</p>
+          <p>Change Environment: 10-Minute Walk outside.</p>
+        </div>
+      </div>
+      <button id="urge-resolve" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">I Beat The Urge</button>
+    </div>
+  </div>
+
   <div id="daily-log-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Daily Check-In</p>
@@ -682,6 +739,17 @@
           Zone-2 Cardio (20+ min)?
         </label>
         <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Did you Ejaculate or Edge today?</p>
+          <div class="mt-2 grid grid-cols-2 gap-3">
+            <button data-retention="no" class="daily-retention-toggle rounded-xl border border-neon-emerald/40 py-2 font-semibold text-neon-emerald">
+              No
+            </button>
+            <button data-retention="yes" class="daily-retention-toggle rounded-xl border border-slate-600 py-2 font-semibold text-slate-300">
+              Yes
+            </button>
+          </div>
+        </div>
+        <div>
           <label for="daily-notes" class="text-xs uppercase tracking-[0.3em] text-slate-400">Notes (Optional)</label>
           <textarea
             id="daily-notes"
@@ -704,6 +772,28 @@
       <h3 id="info-title" class="mt-2 text-xl font-semibold"></h3>
       <p id="info-text" class="mt-3 text-sm text-slate-300"></p>
       <button id="close-info" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Close</button>
+    </div>
+  </div>
+
+  <div id="position-guide-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session A Guide</p>
+      <h3 class="mt-2 text-xl font-semibold text-neon-cyan">Best Positions</h3>
+      <div class="mt-4 space-y-3 text-sm text-slate-300">
+        <div class="rounded-xl border border-neon-cyan/30 bg-black/40 p-3">
+          <p class="text-white font-semibold">Rank 1: Side-Lying (Sims)</p>
+          <p>Best for relaxing pelvic floor. Lie on side, bottom leg straight, top knee bent toward chest.</p>
+        </div>
+        <div class="rounded-xl border border-neon-amber/30 bg-black/40 p-3">
+          <p class="text-white font-semibold">Rank 2: On Back (Knees Bent)</p>
+          <p>Feet flat, knees falling slightly outward. Do not raise hips.</p>
+        </div>
+        <div class="rounded-xl border border-neon-emerald/30 bg-black/40 p-3">
+          <p class="text-white font-semibold">Rank 3: Supported Back</p>
+          <p>Same as above, but with a pillow under knees. Most "chill" setup.</p>
+        </div>
+      </div>
+      <button id="close-position-guide" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Close</button>
     </div>
   </div>
 
@@ -902,10 +992,12 @@
     const dailyQualityValue = document.getElementById("daily-quality-value");
     const dailyQualityLabel = document.getElementById("daily-quality-label");
     const dailyCardio = document.getElementById("daily-cardio");
+    const dailyRetentionButtons = document.querySelectorAll(".daily-retention-toggle");
     const dailyNotes = document.getElementById("daily-notes");
     const saveDailyLogButton = document.getElementById("save-daily-log");
     const cancelDailyLogButton = document.getElementById("cancel-daily-log");
     const streakLabel = document.getElementById("streak");
+    const retentionStreakLabel = document.getElementById("retention-streak");
     const weeklyMorning = document.getElementById("weekly-morning");
     const weeklyStreak = document.getElementById("weekly-streak");
     const weeklyEq = document.getElementById("weekly-eq");
@@ -940,12 +1032,19 @@
     const panicUnlock = document.getElementById("panic-unlock");
     const panicClock = document.getElementById("panic-clock");
     const panicDate = document.getElementById("panic-date");
+    const urgeButton = document.getElementById("urge-sos");
+    const urgeModal = document.getElementById("urge-modal");
+    const urgeResolveButton = document.getElementById("urge-resolve");
+    const urgeToast = document.getElementById("urge-toast");
     const appHeader = document.getElementById("app-header");
     const vacationToggle = document.getElementById("vacation-toggle");
     const vacationIcon = document.getElementById("vacation-icon");
     const heatmapGrid = document.getElementById("heatmap-grid");
     const heatmapTooltip = document.getElementById("heatmap-tooltip");
     const heatmapMonth = document.getElementById("heatmap-month");
+    const positionGuideButton = document.getElementById("position-guide-button");
+    const positionGuideModal = document.getElementById("position-guide-modal");
+    const closePositionGuide = document.getElementById("close-position-guide");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -973,6 +1072,7 @@
     let strengthRepCount = 0;
     let strengthPhaseKey = "ready";
     let vacationModeEnabled = false;
+    let dailyRetentionBreached = false;
 
     const ringLength = 377;
     const strengthPhaseMap = {
@@ -1381,6 +1481,7 @@
       clearInterval(timerId);
       timerId = null;
       updateSessionSettingsNote();
+      updatePositionGuideVisibility();
     }
 
     function openInfoModal(type) {
@@ -1434,6 +1535,20 @@
       }
     }
 
+    function updateDailyRetentionToggle(isBreached) {
+      dailyRetentionBreached = isBreached;
+      dailyRetentionButtons.forEach((btn) => {
+        const isYes = btn.dataset.retention === "yes";
+        const isActive = isYes === isBreached;
+        btn.classList.toggle("border-neon-emerald/40", !isYes && isActive);
+        btn.classList.toggle("text-neon-emerald", !isYes && isActive);
+        btn.classList.toggle("border-neon-rose/40", isYes && isActive);
+        btn.classList.toggle("text-neon-rose", isYes && isActive);
+        btn.classList.toggle("border-slate-600", !isActive);
+        btn.classList.toggle("text-slate-300", !isActive);
+      });
+    }
+
     function updateDailyQualityDisplay(value) {
       const numeric = Number(value);
       let descriptor = "Firm / Functional";
@@ -1453,10 +1568,33 @@
     function openDailyLogModal() {
       setDailyDefaultDate();
       updateDailyMorningToggle(false);
+      updateDailyRetentionToggle(false);
       dailyCardio.checked = false;
       dailyNotes.value = "";
       dailyLogModal.classList.remove("hidden");
       dailyLogModal.classList.add("flex");
+    }
+
+    function updatePositionGuideVisibility() {
+      if (!positionGuideButton) return;
+      const isSessionA = currentSessionKey === "A";
+      const session = isSessionA ? sessions[currentSessionKey] : null;
+      const isSetupPhase = session && session.steps[currentStepIndex]?.title === "Phase 0: Setup";
+      positionGuideButton.classList.toggle("hidden", !(isSessionA && isSetupPhase));
+    }
+
+    function flashWillpowerToast() {
+      if (!urgeToast) return;
+      urgeToast.classList.remove("hidden");
+      urgeToast.classList.remove("opacity-0");
+      urgeToast.classList.add("opacity-100");
+      setTimeout(() => {
+        urgeToast.classList.add("opacity-0");
+        urgeToast.classList.remove("opacity-100");
+      }, 1400);
+      setTimeout(() => {
+        urgeToast.classList.add("hidden");
+      }, 1800);
     }
 
     function adjustTime(delta) {
@@ -1507,6 +1645,7 @@
       if (index === 0) {
         preStartAdjustment = 0;
       }
+      updatePositionGuideVisibility();
     }
 
     function tick() {
@@ -1637,6 +1776,7 @@
         date: logDate.toISOString(),
         morningErection: dailyMorningErection,
         morningQuality: dailyMorningErection ? Number(dailyQualitySlider.value) : null,
+        retentionBreached: dailyRetentionBreached,
         cardio: dailyCardio.checked,
         notes: dailyNotes.value.trim()
       });
@@ -1645,6 +1785,7 @@
       dailyLogModal.classList.remove("flex");
       updateLogs();
       updateWeeklyStatus();
+      updateRetentionStreak();
     }
 
     function updateLogs() {
@@ -1653,6 +1794,7 @@
         logList.innerHTML = '<p class="text-slate-400">No logs yet.</p>';
         renderHeatmap();
         updateWeeklyStatus();
+        updateRetentionStreak();
         applySafetyLocks();
         return;
       }
@@ -1665,6 +1807,7 @@
               : "No";
             const notes = log.notes ? log.notes : "—";
             const cardio = log.cardio ? "Yes" : "No";
+            const retentionStatus = log.retentionBreached ? "Reset (Ejaculation/Edging)" : "Clean";
             return `
               <div class="rounded-xl bg-black/40 p-4">
                 <div class="flex items-center justify-between">
@@ -1674,6 +1817,7 @@
                 <p class="text-xs text-slate-400 mt-1">${date}</p>
                 <p class="text-xs text-slate-400 mt-1">Morning Erection: <span class="text-white">${morningStatus}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Cardio: <span class="text-white">${cardio}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Retention: <span class="text-white">${retentionStatus}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Notes: <span class="text-white">${notes}</span></p>
               </div>
             `;
@@ -1711,6 +1855,7 @@
         .join("");
       renderHeatmap();
       updateWeeklyStatus();
+      updateRetentionStreak();
       applySafetyLocks();
     }
 
@@ -1738,6 +1883,33 @@
       }
       streakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
       weeklyStreak.textContent = streakLabel.textContent;
+    }
+
+    function updateRetentionStreak() {
+      if (!retentionStreakLabel) return;
+      const logs = getDailyLogs();
+      if (!logs.length) {
+        retentionStreakLabel.textContent = "0 days";
+        return;
+      }
+      const sorted = logs
+        .slice()
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      let streak = 0;
+      let lastDay = null;
+      for (const log of sorted) {
+        const date = new Date(log.date);
+        const day = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+        if (lastDay !== null && lastDay - day !== 86400000) {
+          break;
+        }
+        if (log.retentionBreached) {
+          break;
+        }
+        streak += 1;
+        lastDay = day;
+      }
+      retentionStreakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
     }
 
     function updateWeeklyStatus() {
@@ -2121,6 +2293,12 @@
       });
     });
 
+    dailyRetentionButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        updateDailyRetentionToggle(btn.dataset.retention === "yes");
+      });
+    });
+
     dailyQualitySlider.addEventListener("input", (event) => {
       updateDailyQualityDisplay(event.target.value);
     });
@@ -2154,6 +2332,35 @@
       helpModal.classList.add("hidden");
       helpModal.classList.remove("flex");
     });
+
+    if (urgeButton) {
+      urgeButton.addEventListener("click", () => {
+        urgeModal.classList.remove("hidden");
+        urgeModal.classList.add("flex");
+      });
+    }
+
+    if (urgeResolveButton) {
+      urgeResolveButton.addEventListener("click", () => {
+        urgeModal.classList.add("hidden");
+        urgeModal.classList.remove("flex");
+        flashWillpowerToast();
+      });
+    }
+
+    if (positionGuideButton) {
+      positionGuideButton.addEventListener("click", () => {
+        positionGuideModal.classList.remove("hidden");
+        positionGuideModal.classList.add("flex");
+      });
+    }
+
+    if (closePositionGuide) {
+      closePositionGuide.addEventListener("click", () => {
+        positionGuideModal.classList.add("hidden");
+        positionGuideModal.classList.remove("flex");
+      });
+    }
 
     scheduleRadios.forEach((radio) => {
       radio.addEventListener("change", (event) => {
@@ -2262,7 +2469,9 @@
       loadVacationMode();
       updateLogs();
       updateStreak();
+      updateRetentionStreak();
       updateDailyMorningToggle(false);
+      updateDailyRetentionToggle(false);
       updateDailyQualityDisplay(dailyQualitySlider.value);
       setDailyDefaultDate();
       setSession("A");
