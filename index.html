@@ -100,7 +100,12 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Weekly Status</p>
-            <h2 class="text-xl font-semibold mt-2">The Stud Score</h2>
+            <h2 class="text-xl font-semibold mt-2 flex items-center gap-2">
+              <span>The Stud Score</span>
+              <span id="cardio-icon" class="hidden text-neon-rose text-base" title="Vascular support active">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </span>
+            </h2>
           </div>
           <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-emerald text-xl">
             <i class="fa-solid fa-chart-line"></i>
@@ -182,6 +187,7 @@
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
             <h2 id="session-title" class="text-2xl font-semibold mt-1">Select a Session</h2>
             <p id="session-note" class="text-sm text-slate-300 mt-2">Choose Session A or B to begin.</p>
+            <p id="session-settings-note" class="mt-2 text-xs text-neon-cyan hidden"></p>
           </div>
           <div class="flex flex-col items-center gap-2">
             <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-amber text-xl">
@@ -347,7 +353,26 @@
     <section id="logs" class="hidden px-6 space-y-4">
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Logbook</p>
-        <div id="log-list" class="mt-4 space-y-3 text-sm text-slate-300"></div>
+        <div class="mt-4 space-y-4">
+          <div class="rounded-xl border border-slate-700 bg-black/40 p-4">
+            <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
+              <span>Consistency Heatmap</span>
+              <span id="heatmap-month" class="text-slate-500"></span>
+            </div>
+            <div class="mt-3 grid grid-cols-7 text-[10px] uppercase tracking-[0.3em] text-slate-500">
+              <span class="text-center">Mon</span>
+              <span class="text-center">Tue</span>
+              <span class="text-center">Wed</span>
+              <span class="text-center">Thu</span>
+              <span class="text-center">Fri</span>
+              <span class="text-center">Sat</span>
+              <span class="text-center">Sun</span>
+            </div>
+            <div id="heatmap-grid" class="mt-3 grid grid-cols-7 gap-2"></div>
+            <p id="heatmap-tooltip" class="mt-3 text-xs text-slate-300">Tap a day for details.</p>
+          </div>
+          <div id="log-list" class="space-y-3 text-sm text-slate-300"></div>
+        </div>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <div class="flex items-center justify-between">
@@ -589,6 +614,15 @@
           <option value="Numb/Cold">Numb/Cold</option>
         </select>
       </div>
+      <div class="mt-4 space-y-2 text-sm text-slate-300">
+        <label for="session-settings" class="text-xs uppercase tracking-[0.3em] text-slate-400">Device Settings Used</label>
+        <input
+          id="session-settings"
+          type="text"
+          class="w-full rounded-xl bg-black/40 px-3 py-2 text-sm text-white border border-slate-600"
+          placeholder="Level 2, 3 pumps..."
+        />
+      </div>
       <button id="save-log" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">Save Log</button>
     </div>
   </div>
@@ -643,6 +677,10 @@
             <span class="text-right">Rock Hard / 100%</span>
           </div>
         </div>
+        <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-black/40 p-3 text-sm text-slate-300">
+          <input id="daily-cardio" type="checkbox" class="accent-neon-cyan" />
+          Zone-2 Cardio (20+ min)?
+        </label>
         <div>
           <label for="daily-notes" class="text-xs uppercase tracking-[0.3em] text-slate-400">Notes (Optional)</label>
           <textarea
@@ -863,6 +901,7 @@
     const dailyQualitySlider = document.getElementById("daily-quality-slider");
     const dailyQualityValue = document.getElementById("daily-quality-value");
     const dailyQualityLabel = document.getElementById("daily-quality-label");
+    const dailyCardio = document.getElementById("daily-cardio");
     const dailyNotes = document.getElementById("daily-notes");
     const saveDailyLogButton = document.getElementById("save-daily-log");
     const cancelDailyLogButton = document.getElementById("cancel-daily-log");
@@ -870,7 +909,10 @@
     const weeklyMorning = document.getElementById("weekly-morning");
     const weeklyStreak = document.getElementById("weekly-streak");
     const weeklyEq = document.getElementById("weekly-eq");
+    const cardioIcon = document.getElementById("cardio-icon");
     const postFeeling = document.getElementById("post-feeling");
+    const sessionSettingsInput = document.getElementById("session-settings");
+    const sessionSettingsNote = document.getElementById("session-settings-note");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const infoTriggers = document.querySelectorAll(".info-trigger");
     const helpButton = document.getElementById("help-button");
@@ -901,6 +943,9 @@
     const appHeader = document.getElementById("app-header");
     const vacationToggle = document.getElementById("vacation-toggle");
     const vacationIcon = document.getElementById("vacation-icon");
+    const heatmapGrid = document.getElementById("heatmap-grid");
+    const heatmapTooltip = document.getElementById("heatmap-tooltip");
+    const heatmapMonth = document.getElementById("heatmap-month");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -1312,6 +1357,7 @@
         sessionNote.textContent =
           key === "A" ? sessionALock.textContent || "Daily training complete." : sessionBLock.textContent || "Recovery required.";
         sessionWarning.classList.add("hidden");
+        updateSessionSettingsNote();
         return;
       }
       currentSessionKey = key;
@@ -1334,6 +1380,7 @@
       toggleSession.textContent = "Start";
       clearInterval(timerId);
       timerId = null;
+      updateSessionSettingsNote();
     }
 
     function openInfoModal(type) {
@@ -1406,6 +1453,7 @@
     function openDailyLogModal() {
       setDailyDefaultDate();
       updateDailyMorningToggle(false);
+      dailyCardio.checked = false;
       dailyNotes.value = "";
       dailyLogModal.classList.remove("hidden");
       dailyLogModal.classList.add("flex");
@@ -1476,6 +1524,7 @@
       sessionStart = new Date();
       timerId = setInterval(tick, 1000);
       toggleSession.textContent = "Pause";
+      updateSessionSettingsNote();
     }
 
     function pauseSession() {
@@ -1497,10 +1546,12 @@
         sessionType: sessions[currentSessionKey]?.name || "Unknown",
         duration,
         redFlags: reason ? [reason] : [],
-        aborted: Boolean(reason)
+        aborted: Boolean(reason),
+        sessionKey: currentSessionKey
       };
       sessionStart = null;
       postFeeling.value = "Energized";
+      sessionSettingsInput.value = "";
       logModal.classList.remove("hidden");
       logModal.classList.add("flex");
     }
@@ -1509,18 +1560,22 @@
       const flags = Array.from(document.querySelectorAll(".red-flag:checked")).map(
         (input) => input.value
       );
+      const deviceSettings = sessionSettingsInput.value.trim();
       if (lastLogPending) {
         lastLogPending.redFlags = [...new Set([...lastLogPending.redFlags, ...flags])];
         lastLogPending.postFeeling = postFeeling.value;
+        lastLogPending.deviceSettings = deviceSettings;
         lastLogPending.type = "session";
         const logs = getLogs();
         logs.unshift(lastLogPending);
         localStorage.setItem("usph_logs", JSON.stringify(logs));
+        updateStoredSessionSetting(lastLogPending.sessionKey, deviceSettings);
         lastLogPending = null;
         updateLogs();
         updateStreak();
       }
       document.querySelectorAll(".red-flag").forEach((input) => (input.checked = false));
+      sessionSettingsInput.value = "";
       logModal.classList.add("hidden");
       logModal.classList.remove("flex");
     }
@@ -1582,6 +1637,7 @@
         date: logDate.toISOString(),
         morningErection: dailyMorningErection,
         morningQuality: dailyMorningErection ? Number(dailyQualitySlider.value) : null,
+        cardio: dailyCardio.checked,
         notes: dailyNotes.value.trim()
       });
       localStorage.setItem("usph_logs", JSON.stringify(logs));
@@ -1595,6 +1651,7 @@
       const logs = getLogs();
       if (!logs.length) {
         logList.innerHTML = '<p class="text-slate-400">No logs yet.</p>';
+        renderHeatmap();
         updateWeeklyStatus();
         applySafetyLocks();
         return;
@@ -1607,6 +1664,7 @@
               ? `Yes (${log.morningQuality || "?"}/5)`
               : "No";
             const notes = log.notes ? log.notes : "—";
+            const cardio = log.cardio ? "Yes" : "No";
             return `
               <div class="rounded-xl bg-black/40 p-4">
                 <div class="flex items-center justify-between">
@@ -1615,6 +1673,7 @@
                 </div>
                 <p class="text-xs text-slate-400 mt-1">${date}</p>
                 <p class="text-xs text-slate-400 mt-1">Morning Erection: <span class="text-white">${morningStatus}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Cardio: <span class="text-white">${cardio}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Notes: <span class="text-white">${notes}</span></p>
               </div>
             `;
@@ -1635,6 +1694,7 @@
           const flags = log.redFlags?.length ? log.redFlags.join(", ") : "None";
           const badge = log.aborted ? "ABORTED" : "Completed";
           const feeling = log.postFeeling || "—";
+          const settings = log.deviceSettings ? log.deviceSettings : "—";
           return `
               <div class="rounded-xl bg-black/40 p-4">
                 <div class="flex items-center justify-between">
@@ -1643,11 +1703,13 @@
                 </div>
                 <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
                 <p class="text-xs text-slate-400 mt-1">Red Flags: <span class="text-white">${flags}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Device Settings: <span class="text-white">${settings}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Post-Session: <span class="text-white">${feeling}</span></p>
               </div>
             `;
         })
         .join("");
+      renderHeatmap();
       updateWeeklyStatus();
       applySafetyLocks();
     }
@@ -1712,11 +1774,13 @@
       if (!qualityLogs.length) {
         weeklyEq.textContent = "--/5";
         updateEqChart();
+        updateCardioIndicator();
         return;
       }
       const totalQuality = qualityLogs.reduce((sum, log) => sum + Number(log.morningQuality), 0);
       weeklyEq.textContent = `${(totalQuality / qualityLogs.length).toFixed(1)}/5`;
       updateEqChart();
+      updateCardioIndicator();
     }
 
     function updateEqChart() {
@@ -1745,6 +1809,143 @@
       eqChartLabels.innerHTML = chartDates
         .map((date) => `<span class="flex-1 text-center">${dayInitials[date.getDay()]}</span>`)
         .join("");
+    }
+
+    function getStoredSessionSettings() {
+      return JSON.parse(localStorage.getItem("usph_session_settings") || "{}");
+    }
+
+    function updateStoredSessionSetting(sessionKey, note) {
+      if (!sessionKey) return;
+      const stored = getStoredSessionSettings();
+      if (note) {
+        stored[sessionKey] = {
+          note,
+          updatedAt: new Date().toISOString()
+        };
+      } else {
+        delete stored[sessionKey];
+      }
+      localStorage.setItem("usph_session_settings", JSON.stringify(stored));
+      updateSessionSettingsNote();
+    }
+
+    function updateSessionSettingsNote() {
+      if (!sessionSettingsNote) return;
+      if (!currentSessionKey || sessionStart) {
+        sessionSettingsNote.classList.add("hidden");
+        sessionSettingsNote.textContent = "";
+        return;
+      }
+      const stored = getStoredSessionSettings();
+      const entry = stored[currentSessionKey];
+      if (entry && entry.note) {
+        sessionSettingsNote.textContent = `Last Session Settings: ${entry.note}`;
+        sessionSettingsNote.classList.remove("hidden");
+      } else {
+        sessionSettingsNote.classList.add("hidden");
+        sessionSettingsNote.textContent = "";
+      }
+    }
+
+    function updateCardioIndicator() {
+      if (!cardioIcon) return;
+      const today = new Date();
+      const dailyLog = getDailyLogs().find((log) => isSameDay(new Date(log.date), today));
+      cardioIcon.classList.toggle("hidden", !(dailyLog && dailyLog.cardio));
+    }
+
+    function getSessionKeyFromLog(log) {
+      if (log.sessionKey) return log.sessionKey;
+      if (/Control & Endurance/i.test(log.sessionType)) return "A";
+      if (/Pump Therapy/i.test(log.sessionType)) return "B";
+      return null;
+    }
+
+    function renderHeatmap() {
+      if (!heatmapGrid) return;
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const startOffset = (firstDay.getDay() + 6) % 7;
+      const sessionLogs = getSessionLogs();
+      const dailyLogs = getDailyLogs();
+      const cells = [];
+      const monthLabel = now.toLocaleDateString([], { month: "long", year: "numeric" });
+
+      if (heatmapMonth) {
+        heatmapMonth.textContent = monthLabel;
+      }
+
+      for (let i = 0; i < startOffset; i += 1) {
+        cells.push('<div class="h-12"></div>');
+      }
+
+      for (let day = 1; day <= daysInMonth; day += 1) {
+        const date = new Date(year, month, day);
+        const dayLogs = sessionLogs.filter((log) => isSameDay(new Date(log.date), date));
+        const dailyLog = dailyLogs.find((log) => isSameDay(new Date(log.date), date));
+        const hasSession = dayLogs.some((log) => log.type === "session");
+        const hasSessionA = dayLogs.some(
+          (log) => log.type === "session" && getSessionKeyFromLog(log) === "A"
+        );
+        const hasSessionB = dayLogs.some(
+          (log) => log.type === "session" && getSessionKeyFromLog(log) === "B"
+        );
+        const hasRecovery = dayLogs.some((log) => log.type === "recovery");
+        const hasCardio = Boolean(dailyLog && dailyLog.cardio);
+        const cardioOnly = hasCardio && !hasSession && !hasRecovery;
+        const hasRedFlag = dayLogs.some(
+          (log) => log.aborted || (log.redFlags && log.redFlags.length)
+        );
+
+        let dotClass = "bg-slate-600/60";
+        if (hasSessionA) {
+          dotClass = "bg-neon-cyan";
+        } else if (hasSessionB) {
+          dotClass = "bg-neon-violet";
+        } else if (hasRecovery || cardioOnly) {
+          dotClass = "bg-neon-emerald";
+        }
+
+        const borderClass = hasRedFlag ? "border-2 border-neon-rose" : "border border-transparent";
+        const summaryItems = [];
+        if (hasSessionA) summaryItems.push("Session A");
+        if (hasSessionB) summaryItems.push("Session B");
+        if (hasRecovery) summaryItems.push("Recovery");
+        if (hasCardio) summaryItems.push("Cardio");
+        if (hasRedFlag) summaryItems.push("Red Flag");
+        const summary = summaryItems.length ? summaryItems.join(" + ") : "No Data";
+        const summaryText = `${date.toLocaleDateString([], {
+          month: "short",
+          day: "numeric"
+        })}: ${summary}`;
+
+        cells.push(`
+          <button
+            class="group relative flex h-12 w-full items-center justify-center rounded-lg bg-black/40 text-xs text-slate-400 transition hover:bg-black/60"
+            data-summary="${summaryText.replace(/"/g, "&quot;")}"
+            type="button"
+          >
+            <span class="absolute left-1 top-1 text-[10px] text-slate-500">${day}</span>
+            <span class="flex h-4 w-4 items-center justify-center rounded-full ${dotClass} ${borderClass} shadow-[0_0_10px_rgba(6,182,212,0.25)]"></span>
+          </button>
+        `);
+      }
+
+      heatmapGrid.innerHTML = cells.join("");
+      if (heatmapTooltip) {
+        heatmapTooltip.textContent = "Tap a day for details.";
+      }
+      heatmapGrid.querySelectorAll("button[data-summary]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (heatmapTooltip) {
+            heatmapTooltip.textContent = button.dataset.summary;
+          }
+        });
+      });
     }
 
     function setLockState(button, label, message) {
