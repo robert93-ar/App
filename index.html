@@ -93,15 +93,45 @@
       >
         ⚠️ URGE SOS
       </button>
+      <button
+        id="game-day-primer"
+        class="w-full rounded-2xl border-2 border-yellow-400/80 bg-gradient-to-r from-yellow-500/10 via-black/40 to-yellow-500/10 py-4 text-center text-sm font-semibold uppercase tracking-[0.3em] text-yellow-200 shadow-[0_0_25px_rgba(250,204,21,0.35)] hover:bg-yellow-400/10"
+      >
+        ⚡ Game Day Primer
+      </button>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Active Streak</p>
-            <div class="flex items-center gap-2">
-              <p id="streak" class="text-3xl font-bold text-neon-cyan">0 days</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Stud Rank</p>
+            <div class="mt-2 flex items-center gap-3">
+              <div
+                id="rank-icon"
+                class="flex h-12 w-12 items-center justify-center rounded-full bg-black/30 text-xl text-slate-300"
+              >
+                <i class="fa-solid fa-chess-pawn"></i>
+              </div>
+              <div>
+                <p id="rank-label" class="text-xl font-semibold text-slate-200">Rank: Novice</p>
+                <p class="text-xs text-slate-400">
+                  Score <span id="rank-score" class="font-semibold text-white">0</span>
+                </p>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
+              <span>
+                Consistency <span id="streak" class="font-semibold text-neon-cyan">0 days</span>
+              </span>
               <span id="vacation-icon" class="hidden text-neon-cyan text-lg" title="Vacation mode enabled">
                 <i class="fa-solid fa-snowflake"></i>
               </span>
+            </div>
+            <div class="mt-2">
+              <div class="h-2 w-full overflow-hidden rounded-full bg-black/40">
+                <div id="rank-progress" class="h-2 w-0 rounded-full bg-slate-500"></div>
+              </div>
+              <p id="rank-progress-text" class="mt-1 text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                0 days to Apprentice
+              </p>
             </div>
           </div>
           <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-cyan text-xl">
@@ -296,7 +326,7 @@
                 Best Positions
               </button>
             </div>
-            <p id="phase-text" class="text-sm text-slate-300 mt-2">Start a session to begin guidance.</p>
+            <p id="phase-text" class="text-sm text-slate-300 mt-2 transition-opacity duration-700">Start a session to begin guidance.</p>
           </div>
           <div class="relative w-32 h-32">
             <svg viewBox="0 0 140 140" class="w-full h-full">
@@ -698,6 +728,73 @@
     </div>
   </div>
 
+  <div id="game-day-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-yellow-300">Game Day Primer</p>
+          <h3 class="mt-2 text-xl font-semibold text-white">Pre-Date Mode</h3>
+          <p class="mt-1 text-sm text-slate-300">5-minute guided warmup to lock in calm.</p>
+        </div>
+        <button
+          id="close-game-day"
+          class="rounded-full border border-slate-600 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-300 hover:text-yellow-300"
+          type="button"
+        >
+          Close
+        </button>
+      </div>
+      <div class="mt-5 space-y-4">
+        <div class="rounded-2xl bg-black/40 p-4 space-y-2">
+          <div class="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
+            <span id="game-day-step">Deep Squat Hold</span>
+            <span id="game-day-step-timer">02:00</span>
+          </div>
+          <p id="game-day-instruction" class="text-sm text-slate-300">
+            Drop hips low. Heels down. Open the pelvic floor.
+          </p>
+          <div id="game-day-pacer" class="hidden mt-3 rounded-xl border border-yellow-400/40 bg-black/30 p-3">
+            <p class="text-[10px] uppercase tracking-[0.3em] text-yellow-200">Box Breathing</p>
+            <div class="mt-2 flex items-center justify-between text-xs text-slate-300">
+              <span id="game-day-breath-phase">Inhale</span>
+              <span id="game-day-breath-count">4s</span>
+            </div>
+            <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-black/60">
+              <div id="game-day-breath-bar" class="h-2 w-0 rounded-full bg-yellow-300"></div>
+            </div>
+            <p class="mt-2 text-xs text-slate-400">In 4s • Hold 4s • Out 4s • Hold 4s</p>
+          </div>
+        </div>
+        <div class="rounded-2xl bg-black/40 p-4">
+          <div class="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
+            <span>Total Remaining</span>
+            <span id="game-day-total-timer">05:00</span>
+          </div>
+          <div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-black/60">
+            <div id="game-day-progress" class="h-2 w-0 rounded-full bg-yellow-300"></div>
+          </div>
+          <p id="game-day-status" class="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">
+            Ready to begin
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            id="game-day-toggle"
+            class="rounded-xl bg-yellow-300 py-3 font-semibold text-gym-dark shadow-[0_0_20px_rgba(250,204,21,0.35)]"
+          >
+            Start
+          </button>
+          <button
+            id="game-day-finish"
+            class="rounded-xl border border-slate-600 py-3 font-semibold text-slate-200 hover:text-yellow-200"
+          >
+            End Primer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="daily-log-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Daily Check-In</p>
@@ -858,7 +955,7 @@
           {
             title: "Phase 3: Control Cycles",
             duration: 1080,
-            text: "Ramp to 5-6 → Hold → Downshift to 3. Loop this logic.",
+            text: "Slow is Strong.",
             color: "#06b6d4"
           },
           {
@@ -944,6 +1041,28 @@
       ]
     };
 
+    const gameDaySteps = [
+      {
+        title: "Deep Squat Hold",
+        duration: 120,
+        text: "Drop hips low. Heels down. Open the pelvic floor.",
+        showPacer: false
+      },
+      {
+        title: "Box Breathing",
+        duration: 180,
+        text: "Calm the nervous system. You are ready.",
+        showPacer: true
+      }
+    ];
+
+    const controlCycleAffirmations = [
+      "Slow is Strong.",
+      "I control the pace.",
+      "I can downshift any time.",
+      "Sensation is information, not urgency."
+    ];
+
     const navButtons = document.querySelectorAll(".nav-btn");
     const sections = document.querySelectorAll("main section");
     const scheduleList = document.getElementById("schedule-list");
@@ -951,6 +1070,7 @@
     const todayDescription = document.getElementById("today-description");
     const startToday = document.getElementById("start-today");
     const startRecovery = document.getElementById("start-recovery");
+    const gameDayButton = document.getElementById("game-day-primer");
     const breathLabel = document.getElementById("breath-label");
     const finishRecovery = document.getElementById("finish-recovery");
     const sessionTitle = document.getElementById("session-title");
@@ -998,6 +1118,11 @@
     const cancelDailyLogButton = document.getElementById("cancel-daily-log");
     const streakLabel = document.getElementById("streak");
     const retentionStreakLabel = document.getElementById("retention-streak");
+    const rankLabel = document.getElementById("rank-label");
+    const rankScore = document.getElementById("rank-score");
+    const rankIcon = document.getElementById("rank-icon");
+    const rankProgress = document.getElementById("rank-progress");
+    const rankProgressText = document.getElementById("rank-progress-text");
     const weeklyMorning = document.getElementById("weekly-morning");
     const weeklyStreak = document.getElementById("weekly-streak");
     const weeklyEq = document.getElementById("weekly-eq");
@@ -1045,6 +1170,20 @@
     const positionGuideButton = document.getElementById("position-guide-button");
     const positionGuideModal = document.getElementById("position-guide-modal");
     const closePositionGuide = document.getElementById("close-position-guide");
+    const gameDayModal = document.getElementById("game-day-modal");
+    const gameDayClose = document.getElementById("close-game-day");
+    const gameDayToggle = document.getElementById("game-day-toggle");
+    const gameDayFinish = document.getElementById("game-day-finish");
+    const gameDayStepLabel = document.getElementById("game-day-step");
+    const gameDayStepTimer = document.getElementById("game-day-step-timer");
+    const gameDayInstruction = document.getElementById("game-day-instruction");
+    const gameDayPacer = document.getElementById("game-day-pacer");
+    const gameDayBreathPhase = document.getElementById("game-day-breath-phase");
+    const gameDayBreathCount = document.getElementById("game-day-breath-count");
+    const gameDayBreathBar = document.getElementById("game-day-breath-bar");
+    const gameDayTotalTimer = document.getElementById("game-day-total-timer");
+    const gameDayProgress = document.getElementById("game-day-progress");
+    const gameDayStatus = document.getElementById("game-day-status");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -1073,6 +1212,18 @@
     let strengthPhaseKey = "ready";
     let vacationModeEnabled = false;
     let dailyRetentionBreached = false;
+    let gameDayTimerId = null;
+    let gameDayBreathTimerId = null;
+    let gameDayStepIndex = 0;
+    let gameDayStepRemaining = 0;
+    let gameDayStart = null;
+    let gameDayBreathPhaseIndex = 0;
+    let gameDayBreathSecond = 4;
+    let controlCycleIntervalId = null;
+    let controlCycleTimeoutId = null;
+    let controlCycleIndex = 0;
+    let lastConsistencyStreak = 0;
+    let lastRetentionStreak = 0;
 
     const ringLength = 377;
     const strengthPhaseMap = {
@@ -1371,6 +1522,148 @@
       showSection("recovery");
     }
 
+    function getGameDayTotalDuration() {
+      return gameDaySteps.reduce((sum, step) => sum + step.duration, 0);
+    }
+
+    function getGameDayTotalRemaining() {
+      const remainingInCurrent = gameDayStepRemaining;
+      const remainingAfter = gameDaySteps
+        .slice(gameDayStepIndex + 1)
+        .reduce((sum, step) => sum + step.duration, 0);
+      return remainingInCurrent + remainingAfter;
+    }
+
+    function updateGameDayDisplay() {
+      const step = gameDaySteps[gameDayStepIndex];
+      if (!step) return;
+      gameDayStepLabel.textContent = step.title;
+      gameDayInstruction.textContent = step.text;
+      gameDayStepTimer.textContent = formatTime(gameDayStepRemaining);
+      const totalRemaining = getGameDayTotalRemaining();
+      const totalDuration = getGameDayTotalDuration();
+      gameDayTotalTimer.textContent = formatTime(totalRemaining);
+      const progress = totalDuration ? ((totalDuration - totalRemaining) / totalDuration) * 100 : 0;
+      gameDayProgress.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      gameDayPacer.classList.toggle("hidden", !step.showPacer);
+    }
+
+    function resetGameDayBreathPacer() {
+      gameDayBreathPhaseIndex = 0;
+      gameDayBreathSecond = 4;
+      gameDayBreathPhase.textContent = "Inhale";
+      gameDayBreathCount.textContent = "4s";
+      gameDayBreathBar.style.width = "0%";
+    }
+
+    function startGameDayBreathPacer() {
+      resetGameDayBreathPacer();
+      clearInterval(gameDayBreathTimerId);
+      const phases = ["Inhale", "Hold", "Exhale", "Hold"];
+      gameDayBreathTimerId = setInterval(() => {
+        gameDayBreathSecond -= 1;
+        if (gameDayBreathSecond <= 0) {
+          gameDayBreathPhaseIndex = (gameDayBreathPhaseIndex + 1) % phases.length;
+          gameDayBreathSecond = 4;
+        }
+        const phaseLabel = phases[gameDayBreathPhaseIndex];
+        const phaseProgress = ((4 - gameDayBreathSecond) / 4) * 100;
+        gameDayBreathPhase.textContent = phaseLabel;
+        gameDayBreathCount.textContent = `${gameDayBreathSecond}s`;
+        gameDayBreathBar.style.width = `${Math.min(100, Math.max(0, phaseProgress))}%`;
+      }, 1000);
+    }
+
+    function stopGameDayBreathPacer() {
+      clearInterval(gameDayBreathTimerId);
+      gameDayBreathTimerId = null;
+    }
+
+    function setGameDayStep(index) {
+      const step = gameDaySteps[index];
+      if (!step) {
+        completeGameDayPrimer();
+        return;
+      }
+      gameDayStepIndex = index;
+      gameDayStepRemaining = step.duration;
+      updateGameDayDisplay();
+      if (step.showPacer) {
+        startGameDayBreathPacer();
+      } else {
+        stopGameDayBreathPacer();
+      }
+    }
+
+    function gameDayTick() {
+      gameDayStepRemaining = Math.max(0, gameDayStepRemaining - 1);
+      updateGameDayDisplay();
+      if (gameDayStepRemaining <= 0) {
+        setGameDayStep(gameDayStepIndex + 1);
+      }
+    }
+
+    function startGameDayPrimer() {
+      if (gameDayTimerId) return;
+      if (!gameDayStart) {
+        gameDayStart = new Date();
+        setGameDayStep(0);
+      }
+      gameDayStatus.textContent = "Running";
+      gameDayToggle.textContent = "Pause";
+      gameDayTimerId = setInterval(gameDayTick, 1000);
+      const currentStep = gameDaySteps[gameDayStepIndex];
+      if (currentStep && currentStep.showPacer) {
+        startGameDayBreathPacer();
+      }
+    }
+
+    function pauseGameDayPrimer() {
+      clearInterval(gameDayTimerId);
+      gameDayTimerId = null;
+      stopGameDayBreathPacer();
+      gameDayStatus.textContent = "Paused";
+      gameDayToggle.textContent = "Resume";
+    }
+
+    function resetGameDayPrimer() {
+      clearInterval(gameDayTimerId);
+      gameDayTimerId = null;
+      stopGameDayBreathPacer();
+      gameDayStart = null;
+      gameDayStepIndex = 0;
+      gameDayStepRemaining = gameDaySteps[0].duration;
+      gameDayStatus.textContent = "Ready to begin";
+      gameDayToggle.textContent = "Start";
+      updateGameDayDisplay();
+    }
+
+    function completeGameDayPrimer() {
+      clearInterval(gameDayTimerId);
+      gameDayTimerId = null;
+      stopGameDayBreathPacer();
+      gameDayStatus.textContent = "Complete";
+      gameDayToggle.textContent = "Start";
+      const duration = Math.max(1, Math.round((Date.now() - gameDayStart.getTime()) / 60000));
+      const logs = getLogs();
+      logs.unshift({
+        type: "gameDay",
+        date: new Date().toISOString(),
+        sessionType: "Game Day Prep",
+        duration,
+        redFlags: [],
+        aborted: false,
+        postFeeling: "Ready"
+      });
+      localStorage.setItem("usph_logs", JSON.stringify(logs));
+      updateLogs();
+      updateStreak();
+      gameDayStart = null;
+      gameDayModal.classList.add("hidden");
+      gameDayModal.classList.remove("flex");
+      resetGameDayPrimer();
+    }
+
     function setStrengthPhase(phaseKey) {
       strengthPhaseKey = phaseKey;
       const phase = strengthPhaseMap[phaseKey];
@@ -1480,6 +1773,7 @@
       toggleSession.textContent = "Start";
       clearInterval(timerId);
       timerId = null;
+      stopControlCycleAffirmations();
       updateSessionSettingsNote();
       updatePositionGuideVisibility();
     }
@@ -1583,6 +1877,50 @@
       positionGuideButton.classList.toggle("hidden", !(isSessionA && isSetupPhase));
     }
 
+    function updatePhaseTextWithFade(text) {
+      if (!phaseText) return;
+      phaseText.style.opacity = "0";
+      clearTimeout(controlCycleTimeoutId);
+      controlCycleTimeoutId = setTimeout(() => {
+        phaseText.textContent = text;
+        phaseText.style.opacity = "1";
+      }, 300);
+    }
+
+    function stopControlCycleAffirmations() {
+      clearInterval(controlCycleIntervalId);
+      controlCycleIntervalId = null;
+      clearTimeout(controlCycleTimeoutId);
+      controlCycleTimeoutId = null;
+      controlCycleIndex = 0;
+    }
+
+    function startControlCycleAffirmations() {
+      stopControlCycleAffirmations();
+      controlCycleIndex = 0;
+      updatePhaseTextWithFade(controlCycleAffirmations[controlCycleIndex]);
+      controlCycleIntervalId = setInterval(() => {
+        controlCycleIndex = (controlCycleIndex + 1) % controlCycleAffirmations.length;
+        updatePhaseTextWithFade(controlCycleAffirmations[controlCycleIndex]);
+      }, 15000);
+    }
+
+    function refreshControlCycleAffirmations() {
+      const step = sessions[currentSessionKey]?.steps[currentStepIndex];
+      if (
+        currentSessionKey === "A" &&
+        step &&
+        step.title === "Phase 3: Control Cycles" &&
+        timerId
+      ) {
+        if (!controlCycleIntervalId) {
+          startControlCycleAffirmations();
+        }
+      } else {
+        stopControlCycleAffirmations();
+      }
+    }
+
     function flashWillpowerToast() {
       if (!urgeToast) return;
       urgeToast.classList.remove("hidden");
@@ -1632,7 +1970,6 @@
       remaining = Math.max(0, adjustedDuration);
       total = Math.max(1, adjustedDuration);
       phaseTitle.textContent = step.title;
-      phaseText.textContent = step.text;
       phaseTime.textContent = formatTime(remaining);
       progressRing.style.stroke = step.color;
       updateRing();
@@ -1640,6 +1977,13 @@
       if (step.showArousal) {
         arousalSlider.value = 3;
         updateArousalFeedback(3);
+      }
+      if (currentSessionKey === "A" && step.title === "Phase 3: Control Cycles") {
+        startControlCycleAffirmations();
+      } else {
+        stopControlCycleAffirmations();
+        phaseText.textContent = step.text;
+        phaseText.style.opacity = "1";
       }
       speak(`${step.title}. ${step.text}`);
       if (index === 0) {
@@ -1670,6 +2014,7 @@
       clearInterval(timerId);
       timerId = null;
       toggleSession.textContent = "Resume";
+      stopControlCycleAffirmations();
     }
 
     function endSession(reason) {
@@ -1678,6 +2023,7 @@
       toggleSession.textContent = "Start";
       arousalPanel.classList.add("hidden");
       stopNeuroAudio();
+      stopControlCycleAffirmations();
       if (!sessionStart) return;
       const duration = Math.round((Date.now() - sessionStart.getTime()) / 60000);
       lastLogPending = {
@@ -1835,6 +2181,18 @@
               </div>
             `;
           }
+          if (log.type === "gameDay") {
+            return `
+              <div class="rounded-xl bg-black/40 p-4">
+                <div class="flex items-center justify-between">
+                  <p class="font-semibold text-white">${log.sessionType}</p>
+                  <span class="text-xs uppercase tracking-[0.2em] text-yellow-300">Primer</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
+                <p class="text-xs text-slate-400 mt-1">Focus: <span class="text-white">Game Day Prep</span></p>
+              </div>
+            `;
+          }
           const flags = log.redFlags?.length ? log.redFlags.join(", ") : "None";
           const badge = log.aborted ? "ABORTED" : "Completed";
           const feeling = log.postFeeling || "—";
@@ -1859,12 +2217,10 @@
       applySafetyLocks();
     }
 
-    function updateStreak() {
+    function calculateConsistencyStreak() {
       const logs = getSessionLogs();
       if (!logs.length) {
-        streakLabel.textContent = "0 days";
-        weeklyStreak.textContent = "0 days";
-        return;
+        return 0;
       }
       const dates = logs
         .map((log) => new Date(log.date))
@@ -1881,16 +2237,13 @@
           }
         }
       }
-      streakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
-      weeklyStreak.textContent = streakLabel.textContent;
+      return streak;
     }
 
-    function updateRetentionStreak() {
-      if (!retentionStreakLabel) return;
+    function calculateRetentionStreak() {
       const logs = getDailyLogs();
       if (!logs.length) {
-        retentionStreakLabel.textContent = "0 days";
-        return;
+        return 0;
       }
       const sorted = logs
         .slice()
@@ -1909,7 +2262,81 @@
         streak += 1;
         lastDay = day;
       }
+      return streak;
+    }
+
+    function updateStudRank() {
+      if (!rankLabel || !rankScore || !rankProgress || !rankProgressText || !rankIcon) return;
+      const score = lastConsistencyStreak + lastRetentionStreak;
+      const ranks = [
+        {
+          name: "Novice",
+          min: 0,
+          max: 7,
+          color: "text-slate-300",
+          bar: "bg-slate-500",
+          icon: "fa-chess-pawn"
+        },
+        {
+          name: "Apprentice",
+          min: 8,
+          max: 30,
+          color: "text-blue-400",
+          bar: "bg-blue-400",
+          icon: "fa-chess-knight"
+        },
+        {
+          name: "Disciplined",
+          min: 31,
+          max: 90,
+          color: "text-purple-400",
+          bar: "bg-purple-400",
+          icon: "fa-chess-king"
+        },
+        {
+          name: "Apex",
+          min: 91,
+          max: Infinity,
+          color: "text-yellow-300",
+          bar: "bg-yellow-300",
+          icon: "fa-crown"
+        }
+      ];
+      const currentRank =
+        ranks.find((rank) => score >= rank.min && score <= rank.max) || ranks[0];
+      const currentIndex = ranks.indexOf(currentRank);
+      const nextRank = ranks[currentIndex + 1] || null;
+      const min = currentRank.min;
+      const max = nextRank ? nextRank.min : currentRank.max;
+      const progress = nextRank ? ((score - min) / (max - min)) * 100 : 100;
+      const daysToNext = nextRank ? Math.max(0, max - score) : 0;
+
+      rankLabel.textContent = `Rank: ${currentRank.name}`;
+      rankLabel.className = `text-xl font-semibold ${currentRank.color}`;
+      rankScore.textContent = score.toString();
+      rankIcon.className = `flex h-12 w-12 items-center justify-center rounded-full bg-black/30 text-xl ${currentRank.color}`;
+      rankIcon.innerHTML = `<i class="fa-solid ${currentRank.icon}"></i>`;
+      rankProgress.className = `h-2 rounded-full ${currentRank.bar}`;
+      rankProgress.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      rankProgressText.textContent = nextRank
+        ? `${daysToNext} day${daysToNext === 1 ? "" : "s"} to ${nextRank.name}`
+        : "Apex achieved";
+    }
+
+    function updateStreak() {
+      const streak = calculateConsistencyStreak();
+      lastConsistencyStreak = streak;
+      streakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
+      weeklyStreak.textContent = streakLabel.textContent;
+      updateStudRank();
+    }
+
+    function updateRetentionStreak() {
+      if (!retentionStreakLabel) return;
+      const streak = calculateRetentionStreak();
+      lastRetentionStreak = streak;
       retentionStreakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
+      updateStudRank();
     }
 
     function updateWeeklyStatus() {
@@ -2133,7 +2560,7 @@
     }
 
     function applySafetyLocks() {
-      const sessionLogs = getSessionLogs();
+      const sessionLogs = getLogs().filter((log) => log.type === "session");
       const today = new Date();
       const trainedToday = sessionLogs.some((log) => isSameDay(new Date(log.date), today));
 
@@ -2246,6 +2673,7 @@
         if (sessionStart) {
           timerId = setInterval(tick, 1000);
           toggleSession.textContent = "Pause";
+          refreshControlCycleAffirmations();
         } else {
           startSession();
         }
@@ -2370,6 +2798,40 @@
 
     startRecovery.addEventListener("click", startRecoverySession);
 
+    if (gameDayButton) {
+      gameDayButton.addEventListener("click", () => {
+        resetGameDayPrimer();
+        gameDayModal.classList.remove("hidden");
+        gameDayModal.classList.add("flex");
+      });
+    }
+
+    if (gameDayClose) {
+      gameDayClose.addEventListener("click", () => {
+        gameDayModal.classList.add("hidden");
+        gameDayModal.classList.remove("flex");
+        resetGameDayPrimer();
+      });
+    }
+
+    if (gameDayToggle) {
+      gameDayToggle.addEventListener("click", () => {
+        if (gameDayTimerId) {
+          pauseGameDayPrimer();
+        } else {
+          startGameDayPrimer();
+        }
+      });
+    }
+
+    if (gameDayFinish) {
+      gameDayFinish.addEventListener("click", () => {
+        gameDayModal.classList.add("hidden");
+        gameDayModal.classList.remove("flex");
+        resetGameDayPrimer();
+      });
+    }
+
     finishRecovery.addEventListener("click", finishRecoverySession);
 
     exportData.addEventListener("click", () => {
@@ -2475,6 +2937,9 @@
       updateDailyQualityDisplay(dailyQualitySlider.value);
       setDailyDefaultDate();
       setSession("A");
+      if (gameDayModal) {
+        resetGameDayPrimer();
+      }
       updateStrengthAvailability();
     }
 
