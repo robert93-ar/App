@@ -175,17 +175,31 @@
             <h2 id="session-title" class="text-2xl font-semibold mt-1">Select a Session</h2>
             <p id="session-note" class="text-sm text-slate-300 mt-2">Choose Session A or B to begin.</p>
           </div>
-          <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-amber text-xl">
-            <i class="fa-solid fa-stopwatch"></i>
+          <div class="flex flex-col items-center gap-2">
+            <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-amber text-xl">
+              <i class="fa-solid fa-stopwatch"></i>
+            </div>
+            <button
+              id="help-button"
+              class="rounded-full border border-slate-600 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-300 hover:text-neon-cyan"
+            >
+              Help / Fixes
+            </button>
           </div>
         </div>
         <div class="mt-4 grid grid-cols-2 gap-3">
-          <button id="select-a" class="rounded-xl border border-neon-cyan/40 px-3 py-3 font-semibold text-neon-cyan">
-            Session A
-          </button>
-          <button id="select-b" class="rounded-xl border border-neon-emerald/40 px-3 py-3 font-semibold text-neon-emerald">
-            Session B
-          </button>
+          <div class="space-y-1">
+            <button id="select-a" class="w-full rounded-xl border border-neon-cyan/40 px-3 py-3 font-semibold text-neon-cyan">
+              Session A
+            </button>
+            <p id="session-a-lock" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
+          </div>
+          <div class="space-y-1">
+            <button id="select-b" class="w-full rounded-xl border border-neon-emerald/40 px-3 py-3 font-semibold text-neon-emerald">
+              Session B
+            </button>
+            <p id="session-b-lock" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
+          </div>
         </div>
         <p id="session-warning" class="hidden mt-4 text-sm font-semibold text-neon-rose">STOP if numbness/coldness.</p>
       </div>
@@ -287,6 +301,22 @@
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Logbook</p>
         <div id="log-list" class="mt-4 space-y-3 text-sm text-slate-300"></div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Progress Chart</p>
+            <h3 class="text-lg font-semibold mt-2">Morning Wood Quality (7 Days)</h3>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-cyan text-lg">
+            <i class="fa-solid fa-chart-column"></i>
+          </div>
+        </div>
+        <div class="mt-5 rounded-xl bg-black/40 p-4">
+          <div class="flex items-end justify-between gap-2 h-36" id="eq-chart"></div>
+          <div class="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-slate-500" id="eq-chart-labels"></div>
+          <div class="mt-2 text-[11px] text-slate-400">Quality scale: 1 (low) → 5 (high)</div>
+        </div>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Privacy</p>
@@ -428,6 +458,20 @@
         </select>
       </div>
       <button id="save-log" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">Save Log</button>
+    </div>
+  </div>
+
+  <div id="help-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Troubleshoot</p>
+      <h3 class="mt-2 text-xl font-semibold">Help / Fixes</h3>
+      <ul class="mt-4 space-y-3 text-sm text-slate-300 list-disc pl-5">
+        <li><span class="text-white font-semibold">Lost Erection?</span> Don't panic. Don't clench. Drop to Level 3, breathe, and rebuild slowly.</li>
+        <li><span class="text-white font-semibold">Too Fast?</span> Stop stimulation. Exhale for 8 seconds. Wait for Level 3.</li>
+        <li><span class="text-white font-semibold">Pelvic Tightness?</span> Stop session. Do 2 mins of "Softening" breathing. Skip Kegels for 48h.</li>
+        <li><span class="text-white font-semibold">Pump Discomfort?</span> Stop immediately. Reduce pressure next time. Ensure full release.</li>
+      </ul>
+      <button id="close-help" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Close</button>
     </div>
   </div>
 
@@ -631,12 +675,15 @@
     const arousalSlider = document.getElementById("arousal-slider");
     const arousalFeedback = document.getElementById("arousal-feedback");
     const logList = document.getElementById("log-list");
+    const eqChart = document.getElementById("eq-chart");
+    const eqChartLabels = document.getElementById("eq-chart-labels");
     const exportData = document.getElementById("export-data");
     const clearData = document.getElementById("clear-data");
     const exportBackup = document.getElementById("export-backup");
     const importBackup = document.getElementById("import-backup");
     const abortModal = document.getElementById("abort-modal");
     const logModal = document.getElementById("log-modal");
+    const helpModal = document.getElementById("help-modal");
     const infoModal = document.getElementById("info-modal");
     const infoTitle = document.getElementById("info-title");
     const infoText = document.getElementById("info-text");
@@ -660,6 +707,12 @@
     const postFeeling = document.getElementById("post-feeling");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const infoTriggers = document.querySelectorAll(".info-trigger");
+    const helpButton = document.getElementById("help-button");
+    const closeHelp = document.getElementById("close-help");
+    const sessionALock = document.getElementById("session-a-lock");
+    const sessionBLock = document.getElementById("session-b-lock");
+    const selectAButton = document.getElementById("select-a");
+    const selectBButton = document.getElementById("select-b");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -698,6 +751,21 @@
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1;
       window.speechSynthesis.speak(utterance);
+    }
+
+    function getDayStart(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    function isSameDay(dateA, dateB) {
+      return getDayStart(dateA).getTime() === getDayStart(dateB).getTime();
+    }
+
+    function isYesterday(date, reference) {
+      const referenceDay = getDayStart(reference);
+      const yesterday = new Date(referenceDay);
+      yesterday.setDate(referenceDay.getDate() - 1);
+      return getDayStart(date).getTime() === yesterday.getTime();
     }
 
     function getScheduleForToday() {
@@ -763,6 +831,15 @@
     }
 
     function setSession(key) {
+      const isLocked = key === "A" ? selectAButton.disabled : selectBButton.disabled;
+      if (isLocked) {
+        currentSessionKey = null;
+        sessionTitle.textContent = "Session Locked";
+        sessionNote.textContent =
+          key === "A" ? sessionALock.textContent || "Daily training complete." : sessionBLock.textContent || "Recovery required.";
+        sessionWarning.classList.add("hidden");
+        return;
+      }
       currentSessionKey = key;
       preStartAdjustment = 0;
       const session = sessions[key];
@@ -1042,6 +1119,7 @@
       if (!logs.length) {
         logList.innerHTML = '<p class="text-slate-400">No logs yet.</p>';
         updateWeeklyStatus();
+        applySafetyLocks();
         return;
       }
       logList.innerHTML = logs
@@ -1094,6 +1172,7 @@
         })
         .join("");
       updateWeeklyStatus();
+      applySafetyLocks();
     }
 
     function updateStreak() {
@@ -1153,10 +1232,76 @@
       const qualityLogs = weekLogs.filter((log) => Number.isFinite(Number(log.morningQuality)));
       if (!qualityLogs.length) {
         weeklyEq.textContent = "--/5";
+        updateEqChart();
         return;
       }
       const totalQuality = qualityLogs.reduce((sum, log) => sum + Number(log.morningQuality), 0);
       weeklyEq.textContent = `${(totalQuality / qualityLogs.length).toFixed(1)}/5`;
+      updateEqChart();
+    }
+
+    function updateEqChart() {
+      const logs = getDailyLogs();
+      const chartDates = Array.from({ length: 7 }, (_, index) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (6 - index));
+        return date;
+      });
+      const dayInitials = ["S", "M", "T", "W", "T", "F", "S"];
+
+      eqChart.innerHTML = chartDates
+        .map((date) => {
+          const log = logs.find((entry) => isSameDay(new Date(entry.date), date));
+          const value = log && Number.isFinite(Number(log.morningQuality)) ? Number(log.morningQuality) : 0;
+          const height = value ? `${(value / 5) * 100}%` : "6%";
+          const barClass = value ? "bg-neon-cyan" : "bg-slate-700/50";
+          return `
+            <div class="flex-1 flex items-end">
+              <div class="w-full rounded-lg ${barClass}" style="height: ${height};" title="Quality ${value || 0}/5"></div>
+            </div>
+          `;
+        })
+        .join("");
+
+      eqChartLabels.innerHTML = chartDates
+        .map((date) => `<span class="flex-1 text-center">${dayInitials[date.getDay()]}</span>`)
+        .join("");
+    }
+
+    function setLockState(button, label, message) {
+      if (message) {
+        button.disabled = true;
+        button.classList.add("opacity-50", "cursor-not-allowed");
+        label.textContent = message;
+      } else {
+        button.disabled = false;
+        button.classList.remove("opacity-50", "cursor-not-allowed");
+        label.textContent = "";
+      }
+    }
+
+    function applySafetyLocks() {
+      const sessionLogs = getSessionLogs();
+      const today = new Date();
+      const trainedToday = sessionLogs.some((log) => isSameDay(new Date(log.date), today));
+
+      if (trainedToday) {
+        setLockState(selectAButton, sessionALock, "Daily Training Complete");
+        setLockState(selectBButton, sessionBLock, "Daily Training Complete");
+        return;
+      }
+
+      setLockState(selectAButton, sessionALock, "");
+      let lockMessage = "";
+      if (sessionLogs.length) {
+        const latest = sessionLogs
+          .slice()
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+        if (latest && /Session B/i.test(latest.sessionType) && isYesterday(new Date(latest.date), today)) {
+          lockMessage = "Recovery Required (24h)";
+        }
+      }
+      setLockState(selectBButton, sessionBLock, lockMessage);
     }
 
     function updateSchedulePreference(nextKey) {
@@ -1228,8 +1373,8 @@
       btn.addEventListener("click", () => showSection(btn.dataset.target));
     });
 
-    document.getElementById("select-a").addEventListener("click", () => setSession("A"));
-    document.getElementById("select-b").addEventListener("click", () => setSession("B"));
+    selectAButton.addEventListener("click", () => setSession("A"));
+    selectBButton.addEventListener("click", () => setSession("B"));
 
     toggleSession.addEventListener("click", () => {
       if (!currentSessionKey) return;
@@ -1306,6 +1451,16 @@
     closeInfo.addEventListener("click", () => {
       infoModal.classList.add("hidden");
       infoModal.classList.remove("flex");
+    });
+
+    helpButton.addEventListener("click", () => {
+      helpModal.classList.remove("hidden");
+      helpModal.classList.add("flex");
+    });
+
+    closeHelp.addEventListener("click", () => {
+      helpModal.classList.add("hidden");
+      helpModal.classList.remove("flex");
     });
 
     scheduleRadios.forEach((radio) => {
