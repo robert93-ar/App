@@ -553,29 +553,134 @@
           </div>
         </div>
       </div>
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-        <h3 class="text-lg font-semibold text-white">Arousal Scale</h3>
-        <div class="space-y-2 text-base text-slate-100">
-          <p><span class="font-semibold text-neon-cyan">Level 1-2:</span> Neutral</p>
-          <p><span class="font-semibold text-neon-emerald">Level 3-4:</span> Downshift Practice (Best Zone)</p>
-          <p><span class="font-semibold text-neon-amber">Level 6-7:</span> Vascular Holds</p>
-          <p><span class="font-semibold text-neon-rose">Level 8-10:</span> DANGER - Reset</p>
+      <div class="bg-gym-card rounded-2xl p-3 shadow-lg">
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-[0.2em]">
+          <button
+            type="button"
+            data-handbook-tab="basics"
+            class="handbook-tab rounded-xl border border-neon-cyan/60 bg-neon-cyan/10 px-2 py-2 text-neon-cyan"
+            aria-selected="true"
+          >
+            Performance Basics
+          </button>
+          <button
+            type="button"
+            data-handbook-tab="health"
+            class="handbook-tab rounded-xl border border-slate-700 px-2 py-2 text-slate-300"
+            aria-selected="false"
+          >
+            Health &amp; Symptoms
+          </button>
         </div>
       </div>
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-        <h3 class="text-lg font-semibold text-white">The Red Flags (Stop Signs)</h3>
-        <ul class="list-disc pl-5 text-base text-slate-100 space-y-1">
-          <li>Pelvic Ache</li>
-          <li>Numbness/Coldness</li>
-          <li>Worse Morning Wood</li>
-        </ul>
+      <div data-handbook-panel="basics" class="space-y-4">
+        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+          <h3 class="text-lg font-semibold text-white">Arousal Scale</h3>
+          <div class="space-y-2 text-base text-slate-100">
+            <p><span class="font-semibold text-neon-cyan">Level 1-2:</span> Neutral</p>
+            <p><span class="font-semibold text-neon-emerald">Level 3-4:</span> Downshift Practice (Best Zone)</p>
+            <p><span class="font-semibold text-neon-amber">Level 6-7:</span> Vascular Holds</p>
+            <p><span class="font-semibold text-neon-rose">Level 8-10:</span> DANGER - Reset</p>
+          </div>
+        </div>
+        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+          <h3 class="text-lg font-semibold text-white">The Red Flags (Stop Signs)</h3>
+          <ul class="list-disc pl-5 text-base text-slate-100 space-y-1">
+            <li>Pelvic Ache</li>
+            <li>Numbness/Coldness</li>
+            <li>Worse Morning Wood</li>
+          </ul>
+        </div>
+        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+          <h3 class="text-lg font-semibold text-white">Quick Fixes</h3>
+          <ul class="space-y-2 text-base text-slate-100">
+            <li><span class="font-semibold text-neon-amber">Too Fast?</span> → Exhale 8s.</li>
+            <li><span class="font-semibold text-neon-emerald">Turtle Mode?</span> → Heat + Deep Squat.</li>
+          </ul>
+        </div>
       </div>
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-        <h3 class="text-lg font-semibold text-white">Quick Fixes</h3>
-        <ul class="space-y-2 text-base text-slate-100">
-          <li><span class="font-semibold text-neon-amber">Too Fast?</span> → Exhale 8s.</li>
-          <li><span class="font-semibold text-neon-emerald">Turtle Mode?</span> → Heat + Deep Squat.</li>
-        </ul>
+      <div data-handbook-panel="health" class="hidden space-y-4">
+        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-white">Health Guide</h3>
+            <span class="text-[10px] uppercase tracking-[0.3em] text-slate-400">Symptoms</span>
+          </div>
+          <p class="text-sm text-slate-300">
+            Tap each card for symptoms, causes, and exact stop/go protocols.
+          </p>
+        </div>
+        <details class="rounded-2xl border border-neon-amber/70 bg-black/40 p-4">
+          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+            Blue Balls (Pelvic Ache)
+            <i class="fa-solid fa-chevron-down text-xs text-neon-amber"></i>
+          </summary>
+          <div class="mt-3 space-y-3 text-sm text-slate-100">
+            <p>
+              <span class="font-semibold text-neon-amber">What is it?</span>
+              Epididymal hypertension. A deep ache in the testicles or perineum caused by prolonged blood flow
+              without release (vasocongestion). Common in retention/stamina training.
+            </p>
+            <div class="space-y-2">
+              <p class="text-xs uppercase tracking-[0.3em] text-neon-amber">Protocol</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Do not force ejaculation just to fix it (this breaks the retention mindset).</li>
+                <li>Pelvic softening: Lie down. Inhale 4s, exhale 8s. Visualize the pelvic floor dropping.</li>
+                <li>Cold therapy: Use the Urge SOS cold rinse to constrict vessels and flush blood out.</li>
+                <li>Movement: 20 air squats to redirect blood to large leg muscles.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+        <details class="rounded-2xl border border-neon-rose/70 bg-black/40 p-4">
+          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+            Red Dots (Petechiae)
+            <i class="fa-solid fa-chevron-down text-xs text-neon-rose"></i>
+          </summary>
+          <div class="mt-3 space-y-3 text-sm text-slate-100">
+            <p>
+              <span class="font-semibold text-neon-rose">What is it?</span>
+              Tiny red or purple dots on the skin surface. These are burst capillaries (micro-bruises).
+            </p>
+            <p><span class="font-semibold text-neon-rose">Cause:</span> Vacuum pressure was too high or increased too fast.</p>
+            <div class="space-y-2">
+              <p class="text-xs uppercase tracking-[0.3em] text-neon-rose">Protocol (Strict)</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Stop pumping: Do not pump again until 100% healed (usually 2-4 days).</li>
+                <li>Lighter pressure: Next time, reduce vacuum by 50%.</li>
+                <li>Note: If spots are large (bruises) or dark purple, see a doctor.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+        <details class="rounded-2xl border border-neon-rose/70 bg-black/40 p-4">
+          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+            The Cold Signal (Numbness)
+            <i class="fa-solid fa-chevron-down text-xs text-neon-rose"></i>
+          </summary>
+          <div class="mt-3 space-y-2 text-sm text-slate-100">
+            <p><span class="font-semibold text-neon-rose">The Feeling:</span> Cold head, pins-and-needles, or loss of sensation.</p>
+            <p><span class="font-semibold text-neon-rose">Meaning:</span> <strong>NERVE COMPRESSION.</strong> This is the #1 signal to stop.</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-neon-rose">Action</p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>Abort session immediately. Remove all devices.</li>
+              <li>Restore blood flow with warmth/massage.</li>
+              <li>Do not train again for 48 hours.</li>
+            </ul>
+          </div>
+        </details>
+        <details class="rounded-2xl border border-neon-emerald/70 bg-black/40 p-4">
+          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+            Signs of Progress (Green Flags)
+            <i class="fa-solid fa-chevron-down text-xs text-neon-emerald"></i>
+          </summary>
+          <div class="mt-3 space-y-2 text-sm text-slate-100">
+            <ul class="list-disc pl-5 space-y-1">
+              <li><span class="font-semibold text-neon-emerald">The warmth:</span> Heavy, relaxed warmth in the genitals (not tight/bursting).</li>
+              <li><span class="font-semibold text-neon-emerald">Morning wood:</span> Waking up with erections 5+ days a week.</li>
+              <li><span class="font-semibold text-neon-emerald">The disconnect:</span> Feeling physically aroused (hard) but mentally calm (heart rate slow).</li>
+            </ul>
+          </div>
+        </details>
       </div>
     </section>
   </main>
@@ -1132,6 +1237,8 @@
     const sessionSettingsNote = document.getElementById("session-settings-note");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const infoTriggers = document.querySelectorAll(".info-trigger");
+    const handbookTabButtons = document.querySelectorAll("[data-handbook-tab]");
+    const handbookPanels = document.querySelectorAll("[data-handbook-panel]");
     const helpButton = document.getElementById("help-button");
     const closeHelp = document.getElementById("close-help");
     const sessionALock = document.getElementById("session-a-lock");
@@ -1484,6 +1591,23 @@
       });
       navButtons.forEach((btn) => {
         btn.classList.toggle("text-neon-cyan", btn.dataset.target === target);
+      });
+    }
+
+    function setHandbookTab(tab) {
+      if (!handbookTabButtons.length) return;
+      handbookTabButtons.forEach((button) => {
+        const isActive = button.dataset.handbookTab === tab;
+        button.classList.toggle("border-neon-cyan/60", isActive);
+        button.classList.toggle("bg-neon-cyan/10", isActive);
+        button.classList.toggle("text-neon-cyan", isActive);
+        button.classList.toggle("border-slate-700", !isActive);
+        button.classList.toggle("text-slate-300", !isActive);
+        button.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      handbookPanels.forEach((panel) => {
+        panel.classList.toggle("hidden", panel.dataset.handbookPanel !== tab);
       });
     }
 
@@ -2652,6 +2776,10 @@
       btn.addEventListener("click", () => showSection(btn.dataset.target));
     });
 
+    handbookTabButtons.forEach((button) => {
+      button.addEventListener("click", () => setHandbookTab(button.dataset.handbookTab));
+    });
+
     selectAButton.addEventListener("click", () => setSession("A"));
     selectBButton.addEventListener("click", () => setSession("B"));
     soundToggle.addEventListener("click", toggleNeuroAudio);
@@ -2936,6 +3064,7 @@
       updateDailyRetentionToggle(false);
       updateDailyQualityDisplay(dailyQualitySlider.value);
       setDailyDefaultDate();
+      setHandbookTab("basics");
       setSession("A");
       if (gameDayModal) {
         resetGameDayPrimer();
