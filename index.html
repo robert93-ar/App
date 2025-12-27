@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Solo Performance Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "gym-dark": "#111827",
+            "gym-card": "#1f2937",
+            "neon-cyan": "#06b6d4",
+            "neon-amber": "#f59e0b",
+            "neon-emerald": "#10b981",
+            "neon-rose": "#e11d48"
+          },
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui"]
+          },
+          boxShadow: {
+            glow: "0 0 25px rgba(6, 182, 212, 0.35)"
+          }
+        }
+      }
+    };
+  </script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    body {
+      background: #111827;
+      color: #f9fafb;
+    }
+    .ring {
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gym-dark font-sans">
+  <main class="pb-24">
+    <header class="px-6 pt-8 pb-4">
+      <p class="text-sm uppercase tracking-[0.4em] text-neon-emerald">Ultimate</p>
+      <h1 class="text-3xl font-bold text-white">Solo Performance Hub</h1>
+      <p class="mt-2 text-sm text-slate-300">High-performance guided protocols. Privacy first.</p>
+    </header>
+
+    <section id="hub" class="px-6 space-y-4">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Active Streak</p>
+            <p id="streak" class="text-3xl font-bold text-neon-cyan">0 days</p>
+          </div>
+          <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-cyan text-xl">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today’s Plan</p>
+        <h2 id="today-plan" class="text-xl font-semibold mt-2">Session A</h2>
+        <p id="today-description" class="text-sm text-slate-300 mt-1"></p>
+        <button
+          id="start-today"
+          class="mt-4 w-full rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow"
+        >
+          Start Session
+        </button>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Weekly Rhythm</p>
+        <ul class="mt-3 space-y-2 text-sm text-slate-300" id="schedule-list"></ul>
+      </div>
+    </section>
+
+    <section id="train" class="hidden px-6 space-y-5">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
+            <h2 id="session-title" class="text-2xl font-semibold mt-1">Select a Session</h2>
+            <p id="session-note" class="text-sm text-slate-300 mt-2">Choose Session A or B to begin.</p>
+          </div>
+          <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-amber text-xl">
+            <i class="fa-solid fa-stopwatch"></i>
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <button id="select-a" class="rounded-xl border border-neon-cyan/40 px-3 py-3 font-semibold text-neon-cyan">
+            Session A
+          </button>
+          <button id="select-b" class="rounded-xl border border-neon-emerald/40 px-3 py-3 font-semibold text-neon-emerald">
+            Session B
+          </button>
+        </div>
+        <p id="session-warning" class="hidden mt-4 text-sm font-semibold text-neon-rose">STOP if numbness/coldness.</p>
+      </div>
+
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Current Phase</p>
+            <h3 id="phase-title" class="text-xl font-semibold">—</h3>
+            <p id="phase-text" class="text-sm text-slate-300 mt-2">Start a session to begin guidance.</p>
+          </div>
+          <div class="relative w-24 h-24">
+            <svg viewBox="0 0 120 120" class="w-full h-full">
+              <circle cx="60" cy="60" r="52" stroke="#374151" stroke-width="10" fill="none"></circle>
+              <circle id="progress-ring" class="ring" cx="60" cy="60" r="52" stroke="#06b6d4" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="326" stroke-dashoffset="326"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <p id="phase-time" class="text-lg font-bold">00:00</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
+            </div>
+          </div>
+        </div>
+        <div id="arousal-panel" class="hidden bg-black/40 rounded-xl p-4">
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Arousal Check</p>
+          <div class="mt-3">
+            <input id="arousal-slider" type="range" min="1" max="10" value="3" class="w-full accent-neon-amber" />
+            <div class="flex items-center justify-between text-xs text-slate-400 mt-2">
+              <span>1</span>
+              <span>10</span>
+            </div>
+          </div>
+          <p id="arousal-feedback" class="mt-2 text-sm font-semibold text-neon-amber">Learning Zone (Best)</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button id="toggle-session" class="rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark">Start</button>
+          <button id="abort-session" class="rounded-xl bg-neon-rose py-3 font-semibold text-white">ABORT</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="logs" class="hidden px-6 space-y-4">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Logbook</p>
+        <div id="log-list" class="mt-4 space-y-3 text-sm text-slate-300"></div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Privacy</p>
+        <div class="mt-4 grid gap-3">
+          <button id="export-data" class="w-full rounded-xl border border-neon-emerald/50 py-3 font-semibold text-neon-emerald">
+            Export Data (JSON)
+          </button>
+          <button id="clear-data" class="w-full rounded-xl border border-neon-rose/50 py-3 font-semibold text-neon-rose">
+            Clear Data
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="hidden px-6 space-y-4">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Preferences</p>
+        <div class="mt-4 space-y-4 text-sm text-slate-300">
+          <div>
+            <p class="font-semibold text-white">Audio Guidance</p>
+            <p>Uses Text-to-Speech for phase changes. Ensure your device volume is on.</p>
+          </div>
+          <div>
+            <p class="font-semibold text-white">Privacy First</p>
+            <p>Everything stays local unless you export manually.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-700">
+    <div class="grid grid-cols-4 text-xs text-slate-400">
+      <button data-target="hub" class="nav-btn py-4 flex flex-col items-center gap-1 text-neon-cyan">
+        <i class="fa-solid fa-house"></i>
+        Hub
+      </button>
+      <button data-target="train" class="nav-btn py-4 flex flex-col items-center gap-1">
+        <i class="fa-solid fa-dumbbell"></i>
+        Train
+      </button>
+      <button data-target="logs" class="nav-btn py-4 flex flex-col items-center gap-1">
+        <i class="fa-solid fa-book"></i>
+        Logs
+      </button>
+      <button data-target="settings" class="nav-btn py-4 flex flex-col items-center gap-1">
+        <i class="fa-solid fa-gear"></i>
+        Settings
+      </button>
+    </div>
+  </nav>
+
+  <div id="abort-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Emergency Stop</p>
+      <h3 class="mt-2 text-xl font-semibold">Reason?</h3>
+      <div class="mt-4 grid gap-3">
+        <button data-reason="Pain" class="abort-reason rounded-xl bg-neon-rose py-3 font-semibold text-white">Pain</button>
+        <button data-reason="Numbness" class="abort-reason rounded-xl bg-neon-amber py-3 font-semibold text-gym-dark">Numbness</button>
+        <button data-reason="Over-aroused" class="abort-reason rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark">Over-aroused</button>
+      </div>
+      <button id="close-abort" class="mt-4 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Cancel</button>
+    </div>
+  </div>
+
+  <div id="log-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Summary</p>
+      <h3 class="mt-2 text-xl font-semibold">Log red flags?</h3>
+      <div class="mt-4 space-y-3 text-sm text-slate-300">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" value="Numbness" class="red-flag accent-neon-rose" />
+          Numbness
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" value="Pain" class="red-flag accent-neon-rose" />
+          Pain
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" value="Eq Quality" class="red-flag accent-neon-rose" />
+          Eq Quality
+        </label>
+      </div>
+      <button id="save-log" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">Save Log</button>
+    </div>
+  </div>
+
+  <script>
+    const sessions = {
+      A: {
+        name: "Control & Endurance (Prostate Focus)",
+        warning: "",
+        steps: [
+          {
+            title: "Phase 0: Setup",
+            duration: 600,
+            text: "Hygiene, Warmth, Lube. Slow Insertion. No stimulation.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Phase 1: Stillness",
+            duration: 120,
+            text: "Body Scan. Soften glutes/abs. Device still.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Phase 2: Gentle Ramp",
+            duration: 480,
+            text: "Low setting. Goal: Level 3-4 (Mild fullness).",
+            color: "#06b6d4"
+          },
+          {
+            title: "Phase 3: Control Cycles",
+            duration: 1080,
+            text: "Ramp to 5-6 → Hold → Downshift to 3. Loop this logic.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Phase 4: Reset",
+            duration: 600,
+            text: "Pelvic Floor Reset. Device Off. Downshift breathing.",
+            color: "#10b981",
+            showArousal: true
+          }
+        ]
+      },
+      B: {
+        name: "Pump Therapy (Vascular Focus)",
+        warning: "STOP if numbness/coldness",
+        steps: [
+          {
+            title: "Step 1: Warmup",
+            duration: 300,
+            text: "Warm cloth/shower. Relax.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Step 2: Seal",
+            duration: 60,
+            text: "Create seal. Mild pressure only.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Step 3: Cycle 1",
+            duration: 240,
+            text: "HOLD. Warm expansion. No pain.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Step 4: Release",
+            duration: 90,
+            text: "FULL RELEASE. Mandatory rest.",
+            color: "#10b981",
+            showArousal: true
+          },
+          {
+            title: "Step 5: Cycle 2",
+            duration: 240,
+            text: "HOLD. Consistent pressure.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Step 6: Release",
+            duration: 90,
+            text: "FULL RELEASE.",
+            color: "#10b981",
+            showArousal: true
+          },
+          {
+            title: "Step 7: Integration",
+            duration: 300,
+            text: "Remove device. Deep breathing. Relax pelvic floor.",
+            color: "#10b981",
+            showArousal: true
+          }
+        ]
+      }
+    };
+
+    const schedule = [
+      { day: "Mon", plan: "Session A" },
+      { day: "Tue", plan: "Session B" },
+      { day: "Wed", plan: "Rest (Breathing only)" },
+      { day: "Thu", plan: "Session A" },
+      { day: "Fri", plan: "Session B" },
+      { day: "Sat", plan: "Session A (Light)" },
+      { day: "Sun", plan: "Rest" }
+    ];
+
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const sections = document.querySelectorAll("main section");
+    const scheduleList = document.getElementById("schedule-list");
+    const todayPlan = document.getElementById("today-plan");
+    const todayDescription = document.getElementById("today-description");
+    const startToday = document.getElementById("start-today");
+    const sessionTitle = document.getElementById("session-title");
+    const sessionNote = document.getElementById("session-note");
+    const sessionWarning = document.getElementById("session-warning");
+    const phaseTitle = document.getElementById("phase-title");
+    const phaseText = document.getElementById("phase-text");
+    const phaseTime = document.getElementById("phase-time");
+    const progressRing = document.getElementById("progress-ring");
+    const toggleSession = document.getElementById("toggle-session");
+    const abortSession = document.getElementById("abort-session");
+    const arousalPanel = document.getElementById("arousal-panel");
+    const arousalSlider = document.getElementById("arousal-slider");
+    const arousalFeedback = document.getElementById("arousal-feedback");
+    const logList = document.getElementById("log-list");
+    const exportData = document.getElementById("export-data");
+    const clearData = document.getElementById("clear-data");
+    const abortModal = document.getElementById("abort-modal");
+    const logModal = document.getElementById("log-modal");
+    const saveLogButton = document.getElementById("save-log");
+    const streakLabel = document.getElementById("streak");
+
+    let currentSessionKey = null;
+    let currentStepIndex = 0;
+    let remaining = 0;
+    let total = 0;
+    let timerId = null;
+    let sessionStart = null;
+    let lastLogPending = null;
+
+    const ringLength = 326;
+
+    function formatTime(seconds) {
+      const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const secs = String(seconds % 60).padStart(2, "0");
+      return `${mins}:${secs}`;
+    }
+
+    function updateRing() {
+      const ratio = remaining / total;
+      progressRing.style.strokeDashoffset = `${ringLength - ringLength * ratio}`;
+    }
+
+    function speak(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function getScheduleForToday() {
+      const dayIndex = new Date().getDay();
+      const mapping = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const dayName = mapping[dayIndex];
+      return schedule.find((item) => item.day === dayName) || schedule[0];
+    }
+
+    function buildSchedule() {
+      scheduleList.innerHTML = schedule
+        .map(
+          (item) =>
+            `<li class="flex items-center justify-between"><span>${item.day}</span><span class="text-white">${item.plan}</span></li>`
+        )
+        .join("");
+    }
+
+    function showSection(target) {
+      sections.forEach((section) => {
+        section.classList.toggle("hidden", section.id !== target);
+      });
+      navButtons.forEach((btn) => {
+        btn.classList.toggle("text-neon-cyan", btn.dataset.target === target);
+      });
+    }
+
+    function setSession(key) {
+      currentSessionKey = key;
+      const session = sessions[key];
+      sessionTitle.textContent = session.name;
+      sessionNote.textContent = "Press start to begin the interval timer.";
+      sessionWarning.textContent = session.warning;
+      sessionWarning.classList.toggle("hidden", session.warning.length === 0);
+      phaseTitle.textContent = "Ready";
+      phaseText.textContent = "Set up your space and prepare to begin.";
+      phaseTime.textContent = "00:00";
+      progressRing.style.stroke = session.steps[0].color;
+      progressRing.style.strokeDashoffset = ringLength;
+      toggleSession.textContent = "Start";
+      clearInterval(timerId);
+      timerId = null;
+    }
+
+    function updateArousalFeedback(value) {
+      let label = "Learning Zone (Best)";
+      let color = "text-neon-amber";
+      const numeric = Number(value);
+      if (numeric <= 2) {
+        label = "Neutral";
+        color = "text-slate-300";
+      } else if (numeric <= 4) {
+        label = "Learning Zone (Best)";
+        color = "text-neon-amber";
+      } else if (numeric <= 7) {
+        label = "Engorgement Hold";
+        color = "text-neon-emerald";
+      } else {
+        label = "DANGER - RESET NOW";
+        color = "text-neon-rose";
+      }
+      arousalFeedback.textContent = label;
+      arousalFeedback.className = `mt-2 text-sm font-semibold ${color}`;
+    }
+
+    function setStep(index) {
+      const session = sessions[currentSessionKey];
+      const step = session.steps[index];
+      if (!step) {
+        endSession();
+        return;
+      }
+      currentStepIndex = index;
+      remaining = step.duration;
+      total = step.duration;
+      phaseTitle.textContent = step.title;
+      phaseText.textContent = step.text;
+      phaseTime.textContent = formatTime(remaining);
+      progressRing.style.stroke = step.color;
+      updateRing();
+      arousalPanel.classList.toggle("hidden", !step.showArousal);
+      if (step.showArousal) {
+        arousalSlider.value = 3;
+        updateArousalFeedback(3);
+      }
+      speak(`${step.title}. ${step.text}`);
+    }
+
+    function tick() {
+      remaining -= 1;
+      phaseTime.textContent = formatTime(remaining);
+      updateRing();
+      if (remaining <= 0) {
+        setStep(currentStepIndex + 1);
+      }
+    }
+
+    function startSession() {
+      if (!currentSessionKey) return;
+      setStep(0);
+      sessionStart = new Date();
+      timerId = setInterval(tick, 1000);
+      toggleSession.textContent = "Pause";
+    }
+
+    function pauseSession() {
+      clearInterval(timerId);
+      timerId = null;
+      toggleSession.textContent = "Resume";
+    }
+
+    function endSession(reason) {
+      clearInterval(timerId);
+      timerId = null;
+      toggleSession.textContent = "Start";
+      arousalPanel.classList.add("hidden");
+      if (!sessionStart) return;
+      const duration = Math.round((Date.now() - sessionStart.getTime()) / 60000);
+      lastLogPending = {
+        date: new Date().toISOString(),
+        sessionType: sessions[currentSessionKey]?.name || "Unknown",
+        duration,
+        redFlags: reason ? [reason] : [],
+        aborted: Boolean(reason)
+      };
+      sessionStart = null;
+      logModal.classList.remove("hidden");
+      logModal.classList.add("flex");
+    }
+
+    function saveLog() {
+      const flags = Array.from(document.querySelectorAll(".red-flag:checked")).map(
+        (input) => input.value
+      );
+      if (lastLogPending) {
+        lastLogPending.redFlags = [...new Set([...lastLogPending.redFlags, ...flags])];
+        const logs = getLogs();
+        logs.unshift(lastLogPending);
+        localStorage.setItem("usph_logs", JSON.stringify(logs));
+        lastLogPending = null;
+        updateLogs();
+        updateStreak();
+      }
+      document.querySelectorAll(".red-flag").forEach((input) => (input.checked = false));
+      logModal.classList.add("hidden");
+      logModal.classList.remove("flex");
+    }
+
+    function getLogs() {
+      return JSON.parse(localStorage.getItem("usph_logs") || "[]");
+    }
+
+    function updateLogs() {
+      const logs = getLogs();
+      if (!logs.length) {
+        logList.innerHTML = '<p class="text-slate-400">No sessions logged yet.</p>';
+        return;
+      }
+      logList.innerHTML = logs
+        .map((log) => {
+          const date = new Date(log.date).toLocaleDateString();
+          const flags = log.redFlags.length ? log.redFlags.join(", ") : "None";
+          const badge = log.aborted ? "ABORTED" : "Completed";
+          return `
+            <div class="rounded-xl bg-black/40 p-4">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold text-white">${log.sessionType}</p>
+                <span class="text-xs uppercase tracking-[0.2em] text-neon-amber">${badge}</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
+              <p class="text-xs text-slate-400 mt-1">Red Flags: <span class="text-white">${flags}</span></p>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function updateStreak() {
+      const logs = getLogs();
+      if (!logs.length) {
+        streakLabel.textContent = "0 days";
+        return;
+      }
+      const dates = logs
+        .map((log) => new Date(log.date))
+        .map((date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime());
+      const uniqueDates = [...new Set(dates)].sort((a, b) => b - a);
+      let streak = 1;
+      for (let i = 0; i < uniqueDates.length - 1; i += 1) {
+        const diff = uniqueDates[i] - uniqueDates[i + 1];
+        if (diff === 86400000) {
+          streak += 1;
+        } else {
+          break;
+        }
+      }
+      streakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
+    }
+
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => showSection(btn.dataset.target));
+    });
+
+    document.getElementById("select-a").addEventListener("click", () => setSession("A"));
+    document.getElementById("select-b").addEventListener("click", () => setSession("B"));
+
+    toggleSession.addEventListener("click", () => {
+      if (!currentSessionKey) return;
+      if (!timerId) {
+        if (sessionStart) {
+          timerId = setInterval(tick, 1000);
+          toggleSession.textContent = "Pause";
+        } else {
+          startSession();
+        }
+      } else {
+        pauseSession();
+      }
+    });
+
+    abortSession.addEventListener("click", () => {
+      if (!sessionStart) return;
+      abortModal.classList.remove("hidden");
+      abortModal.classList.add("flex");
+    });
+
+    document.getElementById("close-abort").addEventListener("click", () => {
+      abortModal.classList.add("hidden");
+      abortModal.classList.remove("flex");
+    });
+
+    document.querySelectorAll(".abort-reason").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        abortModal.classList.add("hidden");
+        abortModal.classList.remove("flex");
+        endSession(btn.dataset.reason);
+      });
+    });
+
+    saveLogButton.addEventListener("click", saveLog);
+
+    arousalSlider.addEventListener("input", (event) => {
+      updateArousalFeedback(event.target.value);
+    });
+
+    exportData.addEventListener("click", () => {
+      const logs = getLogs();
+      const blob = new Blob([JSON.stringify(logs, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "ultimate-solo-performance-log.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+
+    clearData.addEventListener("click", () => {
+      if (!confirm("Clear all local logs?")) return;
+      localStorage.removeItem("usph_logs");
+      updateLogs();
+      updateStreak();
+    });
+
+    startToday.addEventListener("click", () => {
+      showSection("train");
+      const today = getScheduleForToday();
+      if (today.plan.includes("Session A")) {
+        setSession("A");
+      } else if (today.plan.includes("Session B")) {
+        setSession("B");
+      } else {
+        sessionTitle.textContent = "Rest Day";
+        sessionNote.textContent = "Breathing only. No device work today.";
+      }
+    });
+
+    function init() {
+      buildSchedule();
+      const today = getScheduleForToday();
+      todayPlan.textContent = today.plan;
+      todayDescription.textContent = today.plan.includes("Rest")
+        ? "Breathing + pelvic floor relaxation only."
+        : "Follow the guided timer with audio cues.";
+      updateLogs();
+      updateStreak();
+      setSession("A");
+    }
+
+    init();
+  </script>
+</body>
+</html>
