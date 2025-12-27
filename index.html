@@ -43,6 +43,29 @@
       transform: rotate(-90deg);
       transform-origin: 50% 50%;
     }
+    .breath-circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 4px solid #10b981;
+      animation: breathCycle 12s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
+    }
+    @keyframes breathCycle {
+      0% {
+        transform: scale(0.75);
+      }
+      33.333% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(0.75);
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-gym-dark font-sans">
@@ -128,6 +151,17 @@
         </button>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Recovery Room</p>
+        <h2 class="text-xl font-semibold mt-2 text-neon-emerald">Recovery & Breathwork</h2>
+        <p class="text-sm text-slate-300 mt-1">Guided breath pacing for rest days and warmups.</p>
+        <button
+          id="start-recovery"
+          class="mt-4 w-full rounded-xl border border-neon-emerald/60 py-3 font-semibold text-neon-emerald hover:bg-neon-emerald/10"
+        >
+          Recovery &amp; Breathwork
+        </button>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Weekly Rhythm</p>
         <ul class="mt-3 space-y-2 text-sm text-slate-300" id="schedule-list"></ul>
       </div>
@@ -208,6 +242,47 @@
       </div>
     </section>
 
+    <section id="recovery" class="hidden px-6 space-y-5">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Recovery Room</p>
+            <h2 class="text-2xl font-semibold mt-1 text-neon-emerald">Recovery & Breathwork</h2>
+            <p class="text-sm text-slate-300 mt-2">4s inhale, 8s exhale. Soften your body.</p>
+          </div>
+          <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-emerald text-xl">
+            <i class="fa-solid fa-spa"></i>
+          </div>
+        </div>
+        <div class="mt-6 flex flex-col items-center gap-4">
+          <div class="breath-circle">
+            <span id="breath-label" class="text-xs uppercase tracking-[0.3em] text-neon-emerald">INHALE</span>
+          </div>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Visual Pacer</p>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Mobility Routine</p>
+        <div class="mt-4 space-y-3 text-sm text-slate-300">
+          <label class="flex items-center gap-2">
+            <input type="checkbox" class="accent-neon-emerald" />
+            Hip Flexor Stretch (30s/side)
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" class="accent-neon-emerald" />
+            Figure-4 Glute Stretch (30s/side)
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" class="accent-neon-emerald" />
+            Deep Squat Hold (60s)
+          </label>
+        </div>
+      </div>
+      <button id="finish-recovery" class="w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">
+        Finish Recovery
+      </button>
+    </section>
+
     <section id="logs" class="hidden px-6 space-y-4">
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Logbook</p>
@@ -267,6 +342,24 @@
               <span class="block text-xs text-slate-400">Mon(A), Tue(B), Wed(A), Thu(B), Fri(A), Sat(B), Sun(Rest).</span>
             </span>
           </label>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Data Backup</p>
+        <div class="mt-4 grid gap-3">
+          <button
+            id="export-backup"
+            class="w-full rounded-xl border border-neon-emerald/50 py-3 font-semibold text-neon-emerald"
+          >
+            Export Data (Backup)
+          </button>
+          <label
+            for="import-backup"
+            class="w-full cursor-pointer rounded-xl border border-neon-amber/50 py-3 text-center font-semibold text-neon-amber"
+          >
+            Import Data (Restore)
+          </label>
+          <input id="import-backup" type="file" accept="application/json" class="hidden" />
         </div>
       </div>
     </section>
@@ -519,6 +612,9 @@
     const todayPlan = document.getElementById("today-plan");
     const todayDescription = document.getElementById("today-description");
     const startToday = document.getElementById("start-today");
+    const startRecovery = document.getElementById("start-recovery");
+    const breathLabel = document.getElementById("breath-label");
+    const finishRecovery = document.getElementById("finish-recovery");
     const sessionTitle = document.getElementById("session-title");
     const sessionNote = document.getElementById("session-note");
     const sessionWarning = document.getElementById("session-warning");
@@ -537,6 +633,8 @@
     const logList = document.getElementById("log-list");
     const exportData = document.getElementById("export-data");
     const clearData = document.getElementById("clear-data");
+    const exportBackup = document.getElementById("export-backup");
+    const importBackup = document.getElementById("import-backup");
     const abortModal = document.getElementById("abort-modal");
     const logModal = document.getElementById("log-modal");
     const infoModal = document.getElementById("info-modal");
@@ -573,6 +671,9 @@
     let preStartAdjustment = 0;
     let dailyMorningErection = false;
     let scheduleKey = "standard";
+    let recoveryStart = null;
+    let recoveryIntervalId = null;
+    let recoveryTimeoutId = null;
 
     const ringLength = 377;
 
@@ -624,6 +725,41 @@
       navButtons.forEach((btn) => {
         btn.classList.toggle("text-neon-cyan", btn.dataset.target === target);
       });
+    }
+
+    function setBreathLabel(text) {
+      if (breathLabel) {
+        breathLabel.textContent = text;
+      }
+    }
+
+    function startRecoveryPacer() {
+      setBreathLabel("INHALE");
+      clearTimeout(recoveryTimeoutId);
+      recoveryTimeoutId = setTimeout(() => {
+        setBreathLabel("EXHALE & SOFTEN");
+      }, 4000);
+      clearInterval(recoveryIntervalId);
+      recoveryIntervalId = setInterval(() => {
+        setBreathLabel("INHALE");
+        clearTimeout(recoveryTimeoutId);
+        recoveryTimeoutId = setTimeout(() => {
+          setBreathLabel("EXHALE & SOFTEN");
+        }, 4000);
+      }, 12000);
+    }
+
+    function stopRecoveryPacer() {
+      clearInterval(recoveryIntervalId);
+      clearTimeout(recoveryTimeoutId);
+      recoveryIntervalId = null;
+      recoveryTimeoutId = null;
+    }
+
+    function startRecoverySession() {
+      recoveryStart = new Date();
+      startRecoveryPacer();
+      showSection("recovery");
     }
 
     function setSession(key) {
@@ -835,6 +971,33 @@
       logModal.classList.remove("flex");
     }
 
+    function finishRecoverySession() {
+      if (!recoveryStart) {
+        showSection("hub");
+        return;
+      }
+      const duration = Math.max(
+        1,
+        Math.round((Date.now() - recoveryStart.getTime()) / 60000)
+      );
+      const logs = getLogs();
+      logs.unshift({
+        type: "recovery",
+        date: new Date().toISOString(),
+        sessionType: "Recovery Session",
+        duration,
+        redFlags: [],
+        aborted: false,
+        postFeeling: "Restorative"
+      });
+      localStorage.setItem("usph_logs", JSON.stringify(logs));
+      recoveryStart = null;
+      stopRecoveryPacer();
+      updateLogs();
+      updateStreak();
+      showSection("hub");
+    }
+
     function getLogs() {
       return JSON.parse(localStorage.getItem("usph_logs") || "[]").map((log) => ({
         type: log.type || "session",
@@ -898,6 +1061,19 @@
                 <p class="text-xs text-slate-400 mt-1">${date}</p>
                 <p class="text-xs text-slate-400 mt-1">Morning Erection: <span class="text-white">${morningStatus}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Notes: <span class="text-white">${notes}</span></p>
+              </div>
+            `;
+          }
+          if (log.type === "recovery") {
+            const feeling = log.postFeeling || "—";
+            return `
+              <div class="rounded-xl bg-black/40 p-4">
+                <div class="flex items-center justify-between">
+                  <p class="font-semibold text-white">${log.sessionType}</p>
+                  <span class="text-xs uppercase tracking-[0.2em] text-neon-emerald">Recovery</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
+                <p class="text-xs text-slate-400 mt-1">Post-Session: <span class="text-white">${feeling}</span></p>
               </div>
             `;
           }
@@ -992,6 +1168,52 @@
       todayDescription.textContent = today.plan.includes("Rest")
         ? "Breathing + pelvic floor relaxation only."
         : "Follow the guided timer with audio cues.";
+    }
+
+    function collectLocalStorage() {
+      const data = {};
+      for (let i = 0; i < localStorage.length; i += 1) {
+        const key = localStorage.key(i);
+        if (key) {
+          data[key] = localStorage.getItem(key);
+        }
+      }
+      return data;
+    }
+
+    function exportBackupData() {
+      const backup = collectLocalStorage();
+      const blob = new Blob([JSON.stringify(backup, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "performance-hub-backup.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importBackupData(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (!parsed || typeof parsed !== "object") {
+            alert("Invalid backup file.");
+            return;
+          }
+          localStorage.clear();
+          Object.entries(parsed).forEach(([key, value]) => {
+            localStorage.setItem(key, value);
+          });
+          location.reload();
+        } catch (error) {
+          alert("Unable to read backup file.");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function loadSchedulePreference() {
@@ -1092,6 +1314,10 @@
       });
     });
 
+    startRecovery.addEventListener("click", startRecoverySession);
+
+    finishRecovery.addEventListener("click", finishRecoverySession);
+
     exportData.addEventListener("click", () => {
       const logs = getLogs();
       const blob = new Blob([JSON.stringify(logs, null, 2)], { type: "application/json" });
@@ -1101,6 +1327,18 @@
       link.download = "ultimate-solo-performance-log.json";
       link.click();
       URL.revokeObjectURL(url);
+    });
+
+    exportBackup.addEventListener("click", exportBackupData);
+
+    importBackup.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!confirm("This will overwrite current data. Continue?")) {
+        event.target.value = "";
+        return;
+      }
+      importBackupData(file);
     });
 
     clearData.addEventListener("click", () => {
