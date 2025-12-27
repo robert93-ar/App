@@ -109,6 +109,12 @@
             <span id="weekly-eq" class="text-white font-semibold">--/5</span>
           </div>
         </div>
+        <button
+          id="log-daily"
+          class="w-full rounded-xl border border-neon-emerald/50 py-2 text-sm font-semibold text-neon-emerald hover:bg-neon-emerald/10"
+        >
+          Log Daily Stats
+        </button>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today’s Plan</p>
@@ -318,28 +324,6 @@
           Eq Quality
         </label>
       </div>
-      <div class="mt-5 space-y-3 text-sm text-slate-300">
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Morning Erection Today?</p>
-        <div class="grid grid-cols-2 gap-3">
-          <button data-morning="yes" class="morning-toggle rounded-xl border border-neon-emerald/40 py-2 font-semibold text-neon-emerald">
-            Yes
-          </button>
-          <button data-morning="no" class="morning-toggle rounded-xl border border-slate-600 py-2 font-semibold text-slate-300">
-            No
-          </button>
-        </div>
-        <div id="morning-quality" class="hidden rounded-xl bg-black/40 p-3">
-          <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Quality (1 = Weak)</span>
-            <span id="morning-quality-value" class="text-white font-semibold">3</span>
-          </div>
-          <input id="morning-quality-slider" type="range" min="1" max="5" value="3" class="mt-2 w-full accent-neon-emerald" />
-          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
-            <span>1</span>
-            <span>5</span>
-          </div>
-        </div>
-      </div>
       <div class="mt-5 space-y-2 text-sm text-slate-300">
         <label for="post-feeling" class="text-xs uppercase tracking-[0.3em] text-slate-400">Post-Session Feeling</label>
         <select id="post-feeling" class="w-full rounded-xl bg-black/40 px-3 py-2 text-sm text-white border border-slate-600">
@@ -351,6 +335,58 @@
         </select>
       </div>
       <button id="save-log" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">Save Log</button>
+    </div>
+  </div>
+
+  <div id="daily-log-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Daily Check-In</p>
+      <h3 class="mt-2 text-xl font-semibold">Daily Health Check</h3>
+      <div class="mt-4 space-y-4 text-sm text-slate-300">
+        <div>
+          <label for="daily-date" class="text-xs uppercase tracking-[0.3em] text-slate-400">Date</label>
+          <input
+            id="daily-date"
+            type="date"
+            class="mt-2 w-full rounded-xl bg-black/40 px-3 py-2 text-sm text-white border border-slate-600"
+          />
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Morning Erection?</p>
+          <div class="mt-2 grid grid-cols-2 gap-3">
+            <button data-morning="yes" class="daily-morning-toggle rounded-xl border border-neon-emerald/40 py-2 font-semibold text-neon-emerald">
+              Yes
+            </button>
+            <button data-morning="no" class="daily-morning-toggle rounded-xl border border-slate-600 py-2 font-semibold text-slate-300">
+              No
+            </button>
+          </div>
+        </div>
+        <div id="daily-quality" class="hidden rounded-xl bg-black/40 p-3">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Quality/Strength (1 = Weak)</span>
+            <span id="daily-quality-value" class="text-white font-semibold">3</span>
+          </div>
+          <input id="daily-quality-slider" type="range" min="1" max="5" value="3" class="mt-2 w-full accent-neon-emerald" />
+          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+            <span>1</span>
+            <span>5</span>
+          </div>
+        </div>
+        <div>
+          <label for="daily-notes" class="text-xs uppercase tracking-[0.3em] text-slate-400">Notes (Optional)</label>
+          <textarea
+            id="daily-notes"
+            rows="3"
+            class="mt-2 w-full rounded-xl bg-black/40 px-3 py-2 text-sm text-white border border-slate-600"
+            placeholder="Sleep quality, stress, libido..."
+          ></textarea>
+        </div>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <button id="cancel-daily-log" class="w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Cancel</button>
+        <button id="save-daily-log" class="w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">Save</button>
+      </div>
     </div>
   </div>
 
@@ -507,14 +543,20 @@
     const infoText = document.getElementById("info-text");
     const closeInfo = document.getElementById("close-info");
     const saveLogButton = document.getElementById("save-log");
+    const logDailyButton = document.getElementById("log-daily");
+    const dailyLogModal = document.getElementById("daily-log-modal");
+    const dailyDateInput = document.getElementById("daily-date");
+    const dailyMorningToggleButtons = document.querySelectorAll(".daily-morning-toggle");
+    const dailyQuality = document.getElementById("daily-quality");
+    const dailyQualitySlider = document.getElementById("daily-quality-slider");
+    const dailyQualityValue = document.getElementById("daily-quality-value");
+    const dailyNotes = document.getElementById("daily-notes");
+    const saveDailyLogButton = document.getElementById("save-daily-log");
+    const cancelDailyLogButton = document.getElementById("cancel-daily-log");
     const streakLabel = document.getElementById("streak");
     const weeklyMorning = document.getElementById("weekly-morning");
     const weeklyStreak = document.getElementById("weekly-streak");
     const weeklyEq = document.getElementById("weekly-eq");
-    const morningToggleButtons = document.querySelectorAll(".morning-toggle");
-    const morningQuality = document.getElementById("morning-quality");
-    const morningQualitySlider = document.getElementById("morning-quality-slider");
-    const morningQualityValue = document.getElementById("morning-quality-value");
     const postFeeling = document.getElementById("post-feeling");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const infoTriggers = document.querySelectorAll(".info-trigger");
@@ -527,7 +569,7 @@
     let sessionStart = null;
     let lastLogPending = null;
     let preStartAdjustment = 0;
-    let morningErection = false;
+    let dailyMorningErection = false;
     let scheduleKey = "standard";
 
     const ringLength = 377;
@@ -607,11 +649,11 @@
       if (type === "morning") {
         infoTitle.textContent = "Morning Glory";
         infoText.textContent =
-          "Tracks how many days this week you woke up with an erection. Goal: 5-7 days/week as a sign of high testosterone and vascular health.";
+          "Tracks how many days this week you logged a morning erection in your Daily Health Check. Goal: 5-7 days/week as a sign of high testosterone and vascular health.";
       } else {
         infoTitle.textContent = "EQ Score";
         infoText.textContent =
-          "Your average Morning Wood quality rating (1-5) over the last 7 days. 1=Soft/Partial, 5=Rock Hard/100%.";
+          "Your average Morning Wood quality rating (1-5) from Daily Health Checks over the last 7 days. 1=Soft/Partial, 5=Rock Hard/100%.";
       }
       infoModal.classList.remove("hidden");
       infoModal.classList.add("flex");
@@ -638,24 +680,36 @@
       arousalFeedback.className = `mt-2 text-sm font-semibold ${color}`;
     }
 
-    function updateMorningToggle(nextValue) {
-      morningErection = nextValue;
-      morningToggleButtons.forEach((btn) => {
+    function updateDailyMorningToggle(nextValue) {
+      dailyMorningErection = nextValue;
+      dailyMorningToggleButtons.forEach((btn) => {
         const isActive = (btn.dataset.morning === "yes") === nextValue;
         btn.classList.toggle("border-neon-emerald/40", isActive);
         btn.classList.toggle("text-neon-emerald", isActive);
         btn.classList.toggle("border-slate-600", !isActive);
         btn.classList.toggle("text-slate-300", !isActive);
       });
-      morningQuality.classList.toggle("hidden", !nextValue);
+      dailyQuality.classList.toggle("hidden", !nextValue);
       if (nextValue) {
-        morningQualitySlider.value = 3;
-        morningQualityValue.textContent = "3";
+        dailyQualitySlider.value = 3;
+        dailyQualityValue.textContent = "3";
       }
     }
 
-    function updateMorningQualityDisplay(value) {
-      morningQualityValue.textContent = value;
+    function updateDailyQualityDisplay(value) {
+      dailyQualityValue.textContent = value;
+    }
+
+    function setDailyDefaultDate(value) {
+      dailyDateInput.value = value || new Date().toISOString().split("T")[0];
+    }
+
+    function openDailyLogModal() {
+      setDailyDefaultDate();
+      updateDailyMorningToggle(false);
+      dailyNotes.value = "";
+      dailyLogModal.classList.remove("hidden");
+      dailyLogModal.classList.add("flex");
     }
 
     function adjustTime(delta) {
@@ -746,7 +800,6 @@
         aborted: Boolean(reason)
       };
       sessionStart = null;
-      updateMorningToggle(false);
       postFeeling.value = "Energized";
       logModal.classList.remove("hidden");
       logModal.classList.add("flex");
@@ -758,9 +811,8 @@
       );
       if (lastLogPending) {
         lastLogPending.redFlags = [...new Set([...lastLogPending.redFlags, ...flags])];
-        lastLogPending.morningErection = morningErection;
-        lastLogPending.morningQuality = morningErection ? Number(morningQualitySlider.value) : null;
         lastLogPending.postFeeling = postFeeling.value;
+        lastLogPending.type = "session";
         const logs = getLogs();
         logs.unshift(lastLogPending);
         localStorage.setItem("usph_logs", JSON.stringify(logs));
@@ -774,44 +826,92 @@
     }
 
     function getLogs() {
-      return JSON.parse(localStorage.getItem("usph_logs") || "[]");
+      return JSON.parse(localStorage.getItem("usph_logs") || "[]").map((log) => ({
+        type: log.type || "session",
+        ...log
+      }));
+    }
+
+    function getDailyLogs() {
+      return getLogs().filter((log) => log.type === "dailyLog");
+    }
+
+    function getSessionLogs() {
+      return getLogs().filter((log) => log.type !== "dailyLog");
+    }
+
+    function saveDailyLog() {
+      const dateValue = dailyDateInput.value || new Date().toISOString().split("T")[0];
+      const logDate = new Date(`${dateValue}T00:00:00`);
+      const logDay = new Date(logDate.getFullYear(), logDate.getMonth(), logDate.getDate()).getTime();
+      const logs = getLogs().filter((log) => {
+        if (log.type !== "dailyLog") return true;
+        const date = new Date(log.date);
+        const day = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+        return day !== logDay;
+      });
+      logs.unshift({
+        type: "dailyLog",
+        date: logDate.toISOString(),
+        morningErection: dailyMorningErection,
+        morningQuality: dailyMorningErection ? Number(dailyQualitySlider.value) : null,
+        notes: dailyNotes.value.trim()
+      });
+      localStorage.setItem("usph_logs", JSON.stringify(logs));
+      dailyLogModal.classList.add("hidden");
+      dailyLogModal.classList.remove("flex");
+      updateLogs();
+      updateWeeklyStatus();
     }
 
     function updateLogs() {
       const logs = getLogs();
       if (!logs.length) {
-        logList.innerHTML = '<p class="text-slate-400">No sessions logged yet.</p>';
+        logList.innerHTML = '<p class="text-slate-400">No logs yet.</p>';
         updateWeeklyStatus();
         return;
       }
       logList.innerHTML = logs
         .map((log) => {
           const date = new Date(log.date).toLocaleDateString();
+          if (log.type === "dailyLog") {
+            const morningStatus = log.morningErection
+              ? `Yes (${log.morningQuality || "?"}/5)`
+              : "No";
+            const notes = log.notes ? log.notes : "—";
+            return `
+              <div class="rounded-xl bg-black/40 p-4">
+                <div class="flex items-center justify-between">
+                  <p class="font-semibold text-white">Daily Health Check</p>
+                  <span class="text-xs uppercase tracking-[0.2em] text-neon-emerald">Daily Log</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">${date}</p>
+                <p class="text-xs text-slate-400 mt-1">Morning Erection: <span class="text-white">${morningStatus}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Notes: <span class="text-white">${notes}</span></p>
+              </div>
+            `;
+          }
           const flags = log.redFlags?.length ? log.redFlags.join(", ") : "None";
           const badge = log.aborted ? "ABORTED" : "Completed";
-          const morningStatus = log.morningErection
-            ? `Yes (${log.morningQuality || "?"}/5)`
-            : "No";
           const feeling = log.postFeeling || "—";
           return `
-            <div class="rounded-xl bg-black/40 p-4">
-              <div class="flex items-center justify-between">
-                <p class="font-semibold text-white">${log.sessionType}</p>
-                <span class="text-xs uppercase tracking-[0.2em] text-neon-amber">${badge}</span>
+              <div class="rounded-xl bg-black/40 p-4">
+                <div class="flex items-center justify-between">
+                  <p class="font-semibold text-white">${log.sessionType}</p>
+                  <span class="text-xs uppercase tracking-[0.2em] text-neon-amber">${badge}</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
+                <p class="text-xs text-slate-400 mt-1">Red Flags: <span class="text-white">${flags}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Post-Session: <span class="text-white">${feeling}</span></p>
               </div>
-              <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
-              <p class="text-xs text-slate-400 mt-1">Red Flags: <span class="text-white">${flags}</span></p>
-              <p class="text-xs text-slate-400 mt-1">Morning Erection: <span class="text-white">${morningStatus}</span></p>
-              <p class="text-xs text-slate-400 mt-1">Post-Session: <span class="text-white">${feeling}</span></p>
-            </div>
-          `;
+            `;
         })
         .join("");
       updateWeeklyStatus();
     }
 
     function updateStreak() {
-      const logs = getLogs();
+      const logs = getSessionLogs();
       if (!logs.length) {
         streakLabel.textContent = "0 days";
         weeklyStreak.textContent = "0 days";
@@ -835,7 +935,7 @@
     }
 
     function updateWeeklyStatus() {
-      const logs = getLogs();
+      const logs = getDailyLogs();
       const today = new Date();
       const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const weekStart = new Date(todayMidnight);
@@ -933,19 +1033,27 @@
     });
 
     saveLogButton.addEventListener("click", saveLog);
+    saveDailyLogButton.addEventListener("click", saveDailyLog);
 
     arousalSlider.addEventListener("input", (event) => {
       updateArousalFeedback(event.target.value);
     });
 
-    morningToggleButtons.forEach((btn) => {
+    logDailyButton.addEventListener("click", openDailyLogModal);
+
+    cancelDailyLogButton.addEventListener("click", () => {
+      dailyLogModal.classList.add("hidden");
+      dailyLogModal.classList.remove("flex");
+    });
+
+    dailyMorningToggleButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
-        updateMorningToggle(btn.dataset.morning === "yes");
+        updateDailyMorningToggle(btn.dataset.morning === "yes");
       });
     });
 
-    morningQualitySlider.addEventListener("input", (event) => {
-      updateMorningQualityDisplay(event.target.value);
+    dailyQualitySlider.addEventListener("input", (event) => {
+      updateDailyQualityDisplay(event.target.value);
     });
 
     postFeeling.addEventListener("change", (event) => {
@@ -1015,8 +1123,9 @@
         : "Follow the guided timer with audio cues.";
       updateLogs();
       updateStreak();
-      updateMorningToggle(false);
-      updateMorningQualityDisplay(morningQualitySlider.value);
+      updateDailyMorningToggle(false);
+      updateDailyQualityDisplay(dailyQualitySlider.value);
+      setDailyDefaultDate();
       setSession("A");
     }
 
