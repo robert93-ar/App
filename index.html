@@ -65,6 +65,31 @@
           </div>
         </div>
       </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Weekly Status</p>
+            <h2 class="text-xl font-semibold mt-2">The Stud Score</h2>
+          </div>
+          <div class="flex items-center justify-center w-14 h-14 rounded-full bg-black/30 text-neon-emerald text-xl">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+        </div>
+        <div class="grid gap-3 text-sm text-slate-300">
+          <div class="rounded-xl bg-black/40 p-3 flex items-center justify-between">
+            <span>Morning Glory</span>
+            <span id="weekly-morning" class="text-white font-semibold">0/7 days</span>
+          </div>
+          <div class="rounded-xl bg-black/40 p-3 flex items-center justify-between">
+            <span>Consistency Streak</span>
+            <span id="weekly-streak" class="text-white font-semibold">0 days</span>
+          </div>
+          <div class="rounded-xl bg-black/40 p-3 flex items-center justify-between">
+            <span>EQ Score</span>
+            <span id="weekly-eq" class="text-white font-semibold">--/5</span>
+          </div>
+        </div>
+      </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today’s Plan</p>
         <h2 id="today-plan" class="text-xl font-semibold mt-2">Session A</h2>
@@ -112,16 +137,24 @@
             <h3 id="phase-title" class="text-xl font-semibold">—</h3>
             <p id="phase-text" class="text-sm text-slate-300 mt-2">Start a session to begin guidance.</p>
           </div>
-          <div class="relative w-24 h-24">
-            <svg viewBox="0 0 120 120" class="w-full h-full">
-              <circle cx="60" cy="60" r="52" stroke="#374151" stroke-width="10" fill="none"></circle>
-              <circle id="progress-ring" class="ring" cx="60" cy="60" r="52" stroke="#06b6d4" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="326" stroke-dashoffset="326"></circle>
+          <div class="relative w-32 h-32">
+            <svg viewBox="0 0 140 140" class="w-full h-full">
+              <circle cx="70" cy="70" r="60" stroke="#374151" stroke-width="10" fill="none"></circle>
+              <circle id="progress-ring" class="ring" cx="70" cy="70" r="60" stroke="#06b6d4" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377"></circle>
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
-              <p id="phase-time" class="text-lg font-bold">00:00</p>
-              <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
+              <p id="phase-time" class="text-xl font-bold">00:00</p>
+              <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
             </div>
           </div>
+        </div>
+        <div class="flex items-center justify-center gap-3">
+          <button id="minus-30" class="rounded-lg border border-neon-cyan/40 px-3 py-2 text-xs font-semibold text-neon-cyan">
+            -30s
+          </button>
+          <button id="plus-30" class="rounded-lg border border-neon-emerald/40 px-3 py-2 text-xs font-semibold text-neon-emerald">
+            +30s
+          </button>
         </div>
         <div id="arousal-panel" class="hidden bg-black/40 rounded-xl p-4">
           <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Arousal Check</p>
@@ -227,6 +260,38 @@
           <input type="checkbox" value="Eq Quality" class="red-flag accent-neon-rose" />
           Eq Quality
         </label>
+      </div>
+      <div class="mt-5 space-y-3 text-sm text-slate-300">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Morning Erection Today?</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button data-morning="yes" class="morning-toggle rounded-xl border border-neon-emerald/40 py-2 font-semibold text-neon-emerald">
+            Yes
+          </button>
+          <button data-morning="no" class="morning-toggle rounded-xl border border-slate-600 py-2 font-semibold text-slate-300">
+            No
+          </button>
+        </div>
+        <div id="morning-quality" class="hidden rounded-xl bg-black/40 p-3">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Quality (1 = Weak)</span>
+            <span id="morning-quality-value" class="text-white font-semibold">3</span>
+          </div>
+          <input id="morning-quality-slider" type="range" min="1" max="5" value="3" class="mt-2 w-full accent-neon-emerald" />
+          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+            <span>1</span>
+            <span>5</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 space-y-2 text-sm text-slate-300">
+        <label for="post-feeling" class="text-xs uppercase tracking-[0.3em] text-slate-400">Post-Session Feeling</label>
+        <select id="post-feeling" class="w-full rounded-xl bg-black/40 px-3 py-2 text-sm text-white border border-slate-600">
+          <option value="Energized">Energized</option>
+          <option value="Neutral">Neutral</option>
+          <option value="Relaxed">Relaxed</option>
+          <option value="Sore/Tight">Sore/Tight</option>
+          <option value="Numb/Cold">Numb/Cold</option>
+        </select>
       </div>
       <button id="save-log" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">Save Log</button>
     </div>
@@ -347,6 +412,8 @@
     const phaseText = document.getElementById("phase-text");
     const phaseTime = document.getElementById("phase-time");
     const progressRing = document.getElementById("progress-ring");
+    const minus30 = document.getElementById("minus-30");
+    const plus30 = document.getElementById("plus-30");
     const toggleSession = document.getElementById("toggle-session");
     const abortSession = document.getElementById("abort-session");
     const arousalPanel = document.getElementById("arousal-panel");
@@ -359,6 +426,14 @@
     const logModal = document.getElementById("log-modal");
     const saveLogButton = document.getElementById("save-log");
     const streakLabel = document.getElementById("streak");
+    const weeklyMorning = document.getElementById("weekly-morning");
+    const weeklyStreak = document.getElementById("weekly-streak");
+    const weeklyEq = document.getElementById("weekly-eq");
+    const morningToggleButtons = document.querySelectorAll(".morning-toggle");
+    const morningQuality = document.getElementById("morning-quality");
+    const morningQualitySlider = document.getElementById("morning-quality-slider");
+    const morningQualityValue = document.getElementById("morning-quality-value");
+    const postFeeling = document.getElementById("post-feeling");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -367,8 +442,10 @@
     let timerId = null;
     let sessionStart = null;
     let lastLogPending = null;
+    let preStartAdjustment = 0;
+    let morningErection = false;
 
-    const ringLength = 326;
+    const ringLength = 377;
 
     function formatTime(seconds) {
       const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -377,6 +454,10 @@
     }
 
     function updateRing() {
+      if (!total) {
+        progressRing.style.strokeDashoffset = `${ringLength}`;
+        return;
+      }
       const ratio = remaining / total;
       progressRing.style.strokeDashoffset = `${ringLength - ringLength * ratio}`;
     }
@@ -416,6 +497,7 @@
 
     function setSession(key) {
       currentSessionKey = key;
+      preStartAdjustment = 0;
       const session = sessions[key];
       sessionTitle.textContent = session.name;
       sessionNote.textContent = "Press start to begin the interval timer.";
@@ -423,9 +505,12 @@
       sessionWarning.classList.toggle("hidden", session.warning.length === 0);
       phaseTitle.textContent = "Ready";
       phaseText.textContent = "Set up your space and prepare to begin.";
-      phaseTime.textContent = "00:00";
+      currentStepIndex = 0;
+      remaining = session.steps[0].duration;
+      total = session.steps[0].duration;
+      phaseTime.textContent = formatTime(remaining);
       progressRing.style.stroke = session.steps[0].color;
-      progressRing.style.strokeDashoffset = ringLength;
+      updateRing();
       toggleSession.textContent = "Start";
       clearInterval(timerId);
       timerId = null;
@@ -452,6 +537,44 @@
       arousalFeedback.className = `mt-2 text-sm font-semibold ${color}`;
     }
 
+    function updateMorningToggle(nextValue) {
+      morningErection = nextValue;
+      morningToggleButtons.forEach((btn) => {
+        const isActive = (btn.dataset.morning === "yes") === nextValue;
+        btn.classList.toggle("border-neon-emerald/40", isActive);
+        btn.classList.toggle("text-neon-emerald", isActive);
+        btn.classList.toggle("border-slate-600", !isActive);
+        btn.classList.toggle("text-slate-300", !isActive);
+      });
+      morningQuality.classList.toggle("hidden", !nextValue);
+      if (nextValue) {
+        morningQualitySlider.value = 3;
+        morningQualityValue.textContent = "3";
+      }
+    }
+
+    function updateMorningQualityDisplay(value) {
+      morningQualityValue.textContent = value;
+    }
+
+    function adjustTime(delta) {
+      if (!currentSessionKey) return;
+      if (!sessionStart) {
+        const baseDuration = sessions[currentSessionKey].steps[0].duration;
+        preStartAdjustment = Math.max(-baseDuration, preStartAdjustment + delta);
+        const adjusted = Math.max(0, baseDuration + preStartAdjustment);
+        remaining = adjusted;
+        total = Math.max(1, adjusted);
+        phaseTime.textContent = formatTime(remaining);
+        updateRing();
+        return;
+      }
+      remaining = Math.max(0, remaining + delta);
+      total = Math.max(1, total + delta);
+      phaseTime.textContent = formatTime(remaining);
+      updateRing();
+    }
+
     function setStep(index) {
       const session = sessions[currentSessionKey];
       const step = session.steps[index];
@@ -460,8 +583,9 @@
         return;
       }
       currentStepIndex = index;
-      remaining = step.duration;
-      total = step.duration;
+      const adjustedDuration = step.duration + (index === 0 ? preStartAdjustment : 0);
+      remaining = Math.max(0, adjustedDuration);
+      total = Math.max(1, adjustedDuration);
       phaseTitle.textContent = step.title;
       phaseText.textContent = step.text;
       phaseTime.textContent = formatTime(remaining);
@@ -473,10 +597,13 @@
         updateArousalFeedback(3);
       }
       speak(`${step.title}. ${step.text}`);
+      if (index === 0) {
+        preStartAdjustment = 0;
+      }
     }
 
     function tick() {
-      remaining -= 1;
+      remaining = Math.max(0, remaining - 1);
       phaseTime.textContent = formatTime(remaining);
       updateRing();
       if (remaining <= 0) {
@@ -513,6 +640,8 @@
         aborted: Boolean(reason)
       };
       sessionStart = null;
+      updateMorningToggle(false);
+      postFeeling.value = "Energized";
       logModal.classList.remove("hidden");
       logModal.classList.add("flex");
     }
@@ -523,6 +652,9 @@
       );
       if (lastLogPending) {
         lastLogPending.redFlags = [...new Set([...lastLogPending.redFlags, ...flags])];
+        lastLogPending.morningErection = morningErection;
+        lastLogPending.morningQuality = morningErection ? Number(morningQualitySlider.value) : null;
+        lastLogPending.postFeeling = postFeeling.value;
         const logs = getLogs();
         logs.unshift(lastLogPending);
         localStorage.setItem("usph_logs", JSON.stringify(logs));
@@ -543,13 +675,18 @@
       const logs = getLogs();
       if (!logs.length) {
         logList.innerHTML = '<p class="text-slate-400">No sessions logged yet.</p>';
+        updateWeeklyStatus();
         return;
       }
       logList.innerHTML = logs
         .map((log) => {
           const date = new Date(log.date).toLocaleDateString();
-          const flags = log.redFlags.length ? log.redFlags.join(", ") : "None";
+          const flags = log.redFlags?.length ? log.redFlags.join(", ") : "None";
           const badge = log.aborted ? "ABORTED" : "Completed";
+          const morningStatus = log.morningErection
+            ? `Yes (${log.morningQuality || "?"}/5)`
+            : "No";
+          const feeling = log.postFeeling || "—";
           return `
             <div class="rounded-xl bg-black/40 p-4">
               <div class="flex items-center justify-between">
@@ -558,16 +695,20 @@
               </div>
               <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
               <p class="text-xs text-slate-400 mt-1">Red Flags: <span class="text-white">${flags}</span></p>
+              <p class="text-xs text-slate-400 mt-1">Morning Erection: <span class="text-white">${morningStatus}</span></p>
+              <p class="text-xs text-slate-400 mt-1">Post-Session: <span class="text-white">${feeling}</span></p>
             </div>
           `;
         })
         .join("");
+      updateWeeklyStatus();
     }
 
     function updateStreak() {
       const logs = getLogs();
       if (!logs.length) {
         streakLabel.textContent = "0 days";
+        weeklyStreak.textContent = "0 days";
         return;
       }
       const dates = logs
@@ -584,6 +725,36 @@
         }
       }
       streakLabel.textContent = `${streak} day${streak === 1 ? "" : "s"}`;
+      weeklyStreak.textContent = streakLabel.textContent;
+    }
+
+    function updateWeeklyStatus() {
+      const logs = getLogs();
+      const today = new Date();
+      const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date(todayMidnight);
+        date.setDate(todayMidnight.getDate() - i);
+        return date.getTime();
+      });
+      const morningCount = last7Days.reduce((count, dayTimestamp) => {
+        const hasMorning = logs.some((log) => {
+          if (!log.morningErection) return false;
+          const date = new Date(log.date);
+          const logDay = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+          return logDay === dayTimestamp;
+        });
+        return count + (hasMorning ? 1 : 0);
+      }, 0);
+      weeklyMorning.textContent = `${morningCount}/7 days`;
+
+      const recentLogs = logs.slice(0, 7).filter((log) => Number.isFinite(Number(log.morningQuality)));
+      if (!recentLogs.length) {
+        weeklyEq.textContent = "--/5";
+        return;
+      }
+      const totalQuality = recentLogs.reduce((sum, log) => sum + Number(log.morningQuality), 0);
+      weeklyEq.textContent = `${(totalQuality / recentLogs.length).toFixed(1)}/5`;
     }
 
     navButtons.forEach((btn) => {
@@ -632,6 +803,26 @@
       updateArousalFeedback(event.target.value);
     });
 
+    morningToggleButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        updateMorningToggle(btn.dataset.morning === "yes");
+      });
+    });
+
+    morningQualitySlider.addEventListener("input", (event) => {
+      updateMorningQualityDisplay(event.target.value);
+    });
+
+    postFeeling.addEventListener("change", (event) => {
+      const value = event.target.value;
+      if (/(Sore|Numb|Cold)/i.test(value)) {
+        alert("Safety Warning: Please take 48 hours of rest.");
+      }
+    });
+
+    minus30.addEventListener("click", () => adjustTime(-30));
+    plus30.addEventListener("click", () => adjustTime(30));
+
     exportData.addEventListener("click", () => {
       const logs = getLogs();
       const blob = new Blob([JSON.stringify(logs, null, 2)], { type: "application/json" });
@@ -672,6 +863,8 @@
         : "Follow the guided timer with audio cues.";
       updateLogs();
       updateStreak();
+      updateMorningToggle(false);
+      updateMorningQualityDisplay(morningQualitySlider.value);
       setSession("A");
     }
 
