@@ -325,6 +325,25 @@
         </button>
       </div>
 
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Relief Protocol</p>
+            <h3 class="text-xl font-semibold mt-1 text-neon-cyan">Expansion (Reverse Kegel)</h3>
+            <p class="text-sm text-slate-300 mt-1">Inhale 4s, push 5s, relax 5s to release pelvic tension.</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-cyan text-lg">
+            <i class="fa-solid fa-wind"></i>
+          </div>
+        </div>
+        <button
+          id="start-reverse-kegel"
+          class="w-full rounded-xl border border-neon-cyan/60 py-3 font-semibold text-neon-cyan hover:bg-neon-cyan/10"
+        >
+          Expansion (Reverse Kegel)
+        </button>
+      </div>
+
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
         <div class="flex items-center justify-between">
           <div>
@@ -566,156 +585,173 @@
           </div>
         </div>
       </div>
-      <div class="bg-gym-card rounded-2xl p-3 shadow-lg">
-        <div class="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-[0.2em]">
-          <button
-            type="button"
-            data-handbook-tab="basics"
-            class="handbook-tab rounded-xl border border-neon-cyan/60 bg-neon-cyan/10 px-2 py-2 text-neon-cyan"
-            aria-selected="true"
+      <div class="bg-gym-card rounded-2xl p-4 shadow-lg space-y-2">
+        <label for="handbook-search" class="text-[10px] uppercase tracking-[0.3em] text-slate-400">Search Handbook</label>
+        <input
+          id="handbook-search"
+          type="text"
+          class="w-full rounded-xl border border-slate-700 bg-black/40 px-4 py-2 text-sm text-white"
+          placeholder="Search symptoms, protocols, or keywords..."
+        />
+      </div>
+      <details data-handbook-section class="rounded-2xl border border-neon-rose/70 bg-black/40 p-4">
+        <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+          <span class="flex items-center gap-2 text-neon-rose">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            🚨 Urgent / Symptoms
+          </span>
+          <span class="text-[10px] uppercase tracking-[0.3em] text-neon-amber">Red / Amber</span>
+        </summary>
+        <div class="mt-4 space-y-3">
+          <details
+            class="handbook-card rounded-2xl border border-neon-amber/60 bg-black/60 p-4"
+            data-search="blue balls epididymal hypertension vasocongestion ache treatment protocol warm bath cold rinse briefs squats"
           >
-            Performance Basics
-          </button>
-          <button
-            type="button"
-            data-handbook-tab="health"
-            class="handbook-tab rounded-xl border border-slate-700 px-2 py-2 text-slate-300"
-            aria-selected="false"
+            <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+              Blue Balls (Epididymal Hypertension)
+              <i class="fa-solid fa-chevron-down text-xs text-neon-amber"></i>
+            </summary>
+            <div class="mt-3 space-y-3 text-base leading-relaxed text-slate-100">
+              <p>
+                <span class="font-semibold text-neon-amber">The Cause:</span>
+                Vasocongestion. Blood enters arteries faster than it leaves veins. Retention keeps this blood trapped, causing a dull ache.
+              </p>
+              <div class="space-y-2">
+                <p class="text-xs uppercase tracking-[0.3em] text-neon-amber">Treatment Protocol</p>
+                <ol class="list-decimal pl-5 space-y-1">
+                  <li><span class="font-semibold text-white">Do NOT Edge:</span> Touching makes it worse.</li>
+                  <li><span class="font-semibold text-white">Fire &amp; Ice:</span> Warm bath (vasodilation) then cold rinse (vasoconstriction) to pump blood out.</li>
+                  <li><span class="font-semibold text-white">Support:</span> Wear supportive briefs (not boxers) for 1-2 hours.</li>
+                  <li><span class="font-semibold text-white">Movement:</span> 20 Air Squats.</li>
+                </ol>
+              </div>
+            </div>
+          </details>
+          <details
+            class="handbook-card rounded-2xl border border-neon-cyan/60 bg-black/60 p-4"
+            data-search="donut lymphatic edema puffy ring below glans lymph fluid pumping pressure warm compress milking massage"
           >
-            Health &amp; Symptoms
-          </button>
+            <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+              The Donut (Lymphatic Edema)
+              <i class="fa-solid fa-chevron-down text-xs text-neon-cyan"></i>
+            </summary>
+            <div class="mt-3 space-y-3 text-base leading-relaxed text-slate-100">
+              <p><span class="font-semibold text-neon-cyan">The Look:</span> A puffy, fluid-filled ring below the glans.</p>
+              <p><span class="font-semibold text-neon-cyan">The Cause:</span> Pumping too long or high pressure trapped lymph fluid (not blood).</p>
+              <div class="space-y-2">
+                <p class="text-xs uppercase tracking-[0.3em] text-neon-cyan">Treatment Protocol</p>
+                <ol class="list-decimal pl-5 space-y-1">
+                  <li><span class="font-semibold text-white">The “Milking” Massage:</span> Gently stroke from the glans down toward the base to push fluid back in.</li>
+                  <li><span class="font-semibold text-white">Warm Compress:</span> Apply a warm washcloth for 5 mins.</li>
+                  <li><span class="font-semibold text-white">Rest:</span> Usually absorbs in 2-12 hours. Do not pump again until gone.</li>
+                </ol>
+              </div>
+            </div>
+          </details>
+          <details
+            class="handbook-card rounded-2xl border border-neon-rose/60 bg-black/60 p-4"
+            data-search="petechiae red dots capillaries burst vacuum vitamin k arnica rest 48-72 hours"
+          >
+            <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+              Petechiae (Red Dots)
+              <i class="fa-solid fa-chevron-down text-xs text-neon-rose"></i>
+            </summary>
+            <div class="mt-3 space-y-3 text-base leading-relaxed text-slate-100">
+              <p><span class="font-semibold text-neon-rose">The Cause:</span> Capillaries (tiny blood vessels) burst under vacuum.</p>
+              <div class="space-y-2">
+                <p class="text-xs uppercase tracking-[0.3em] text-neon-rose">Treatment Protocol</p>
+                <ol class="list-decimal pl-5 space-y-1">
+                  <li><span class="font-semibold text-white">Vitamin K / Arnica:</span> Apply a cream containing Arnica or Vitamin K.</li>
+                  <li><span class="font-semibold text-white">Total Rest:</span> 48-72 hours. No exceptions.</li>
+                </ol>
+              </div>
+            </div>
+          </details>
         </div>
-      </div>
-      <div data-handbook-panel="basics" class="space-y-4">
-        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-          <h3 class="text-lg font-semibold text-white">Arousal Scale</h3>
-          <div class="space-y-2 text-base text-slate-100">
-            <p><span class="font-semibold text-neon-cyan">Level 1-2:</span> Neutral</p>
-            <p><span class="font-semibold text-neon-emerald">Level 3-4:</span> Downshift Practice (Best Zone)</p>
-            <p><span class="font-semibold text-neon-amber">Level 6-7:</span> Vascular Holds</p>
-            <p><span class="font-semibold text-neon-rose">Level 8-10:</span> DANGER - Reset</p>
-          </div>
-        </div>
-        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-          <h3 class="text-lg font-semibold text-white">The Red Flags (Stop Signs)</h3>
-          <ul class="list-disc pl-5 text-base text-slate-100 space-y-1">
-            <li>Pelvic Ache</li>
-            <li>Numbness/Coldness</li>
-            <li>Worse Morning Wood</li>
-          </ul>
-        </div>
-        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-          <h3 class="text-lg font-semibold text-white">Quick Fixes</h3>
-          <ul class="space-y-2 text-base text-slate-100">
-            <li><span class="font-semibold text-neon-amber">Too Fast?</span> → Exhale 8s.</li>
-            <li><span class="font-semibold text-neon-emerald">Turtle Mode?</span> → Heat + Deep Squat.</li>
-          </ul>
-        </div>
-      </div>
-      <div data-handbook-panel="health" class="hidden space-y-4">
-        <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-white">Health Guide</h3>
-            <span class="text-[10px] uppercase tracking-[0.3em] text-slate-400">Symptoms</span>
-          </div>
-          <p class="text-sm text-slate-300">
-            Tap each card for symptoms, causes, and exact stop/go protocols.
-          </p>
-        </div>
-        <details class="rounded-2xl border border-neon-amber/70 bg-black/40 p-4">
-          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
-            Blue Balls (Epididymal Hypertension)
-            <i class="fa-solid fa-chevron-down text-xs text-neon-amber"></i>
-          </summary>
-          <div class="mt-3 space-y-3 text-base leading-relaxed text-slate-100">
-            <p>
-              <span class="font-semibold text-neon-amber">The Science:</span>
-              Also known as vasocongestion. During arousal, blood flows into the genitals faster than it leaves.
-              If you maintain high arousal (retention) without release, that trapped blood feels heavy or aching in
-              the testicles and perineum.
-            </p>
-            <p><span class="font-semibold text-neon-amber">Is it dangerous?</span> No, but it is uncomfortable.</p>
-            <p><span class="font-semibold text-neon-amber">The “Relief” Trap:</span> Most men ejaculate to fix it. This breaks your retention streak.</p>
+      </details>
+      <details data-handbook-section class="rounded-2xl border border-neon-violet/70 bg-black/40 p-4">
+        <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+          <span class="flex items-center gap-2 text-neon-violet">
+            <i class="fa-solid fa-wave-square"></i>
+            📉 The "Hard Flaccid" Guide
+          </span>
+          <i class="fa-solid fa-chevron-down text-xs text-neon-violet"></i>
+        </summary>
+        <div class="mt-4 space-y-3">
+          <div
+            class="handbook-card rounded-2xl border border-neon-violet/50 bg-black/60 p-4 space-y-3 text-base leading-relaxed text-slate-100"
+            data-search="hard flaccid hf rigid rubbery glans cold scrotum tight pelvic floor spasm reverse kegels happy baby deep squat"
+          >
+            <p><span class="font-semibold text-neon-violet">The Signs:</span> Penis feels rigid/rubbery while soft. Glans is cold. Scrotum is tight/high.</p>
+            <p><span class="font-semibold text-neon-violet">The Cause:</span> Your pelvic floor is in a protective spasm (chronic clench).</p>
             <div class="space-y-2">
-              <p class="text-xs uppercase tracking-[0.3em] text-neon-amber">The Real Fix (Circulation)</p>
+              <p class="text-xs uppercase tracking-[0.3em] text-neon-violet">The Cure (Reverse Kegels)</p>
               <ul class="list-disc pl-5 space-y-1">
-                <li><span class="font-semibold text-white">Protocol:</span> 10 minutes of “Pelvic Softening” breathing (in 4s, out 8s).</li>
-                <li><span class="font-semibold text-white">Protocol:</span> “Urge SOS” (cold water + squats) constricts vessels and pushes blood back to the core.</li>
+                <li><span class="font-semibold text-white">Do NOT do regular Kegels (squeezing).</span></li>
+                <li><span class="font-semibold text-white">The Move:</span> Inhale and gently push your perineum out (like starting to pee). Hold for 5s.</li>
+                <li><span class="font-semibold text-white">The Stretch:</span> Happy Baby Pose or Deep Squat for 2 minutes.</li>
               </ul>
             </div>
           </div>
-        </details>
-        <details class="rounded-2xl border border-neon-rose/70 bg-black/40 p-4">
-          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
-            Red Dots &amp; The Donut (Pump Safety)
-            <i class="fa-solid fa-chevron-down text-xs text-neon-rose"></i>
-          </summary>
-          <div class="mt-3 space-y-4 text-base leading-relaxed text-slate-100">
-            <div class="space-y-2">
-              <p>
-                <span class="font-semibold text-neon-rose">Red Dots (Petechiae):</span>
-                Tiny red pinpricks. These are capillaries that burst under vacuum.
-              </p>
-              <ul class="list-disc pl-5 space-y-1">
-                <li><span class="font-semibold text-white">Cause:</span> Pressure too high or pumping too fast without a warm-up.</li>
-                <li><span class="font-semibold text-white">Action:</span> Stop immediately. Do not pump until 100% gone (2-4 days).</li>
-              </ul>
-            </div>
-            <div class="space-y-2">
-              <p>
-                <span class="font-semibold text-neon-rose">The “Donut” (Edema):</span>
-                A swollen, fluid-filled ring below the glans.
-              </p>
-              <ul class="list-disc pl-5 space-y-1">
-                <li><span class="font-semibold text-white">Cause:</span> Lymph fluid buildup from holding suction too long or using a cylinder that is too wide.</li>
-                <li><span class="font-semibold text-white">Action:</span> Massage gently. It usually absorbs in 2-24 hours. Reduce time/pressure next session.</li>
-              </ul>
+        </div>
+      </details>
+      <details data-handbook-section class="rounded-2xl border border-neon-amber/70 bg-black/40 p-4">
+        <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+          <span class="flex items-center gap-2 text-neon-amber">
+            <i class="fa-solid fa-gauge-high"></i>
+            📊 The Arousal Scale
+          </span>
+          <i class="fa-solid fa-chevron-down text-xs text-neon-amber"></i>
+        </summary>
+        <div class="mt-4 space-y-3">
+          <div
+            class="handbook-card rounded-2xl border border-neon-amber/50 bg-black/60 p-4"
+            data-search="arousal scale level 1 2 3 4 6 7 8 9 10 danger learning zone"
+          >
+            <div class="space-y-2 text-base text-slate-100">
+              <p><span class="font-semibold text-neon-cyan">Level 1-2:</span> Neutral</p>
+              <p><span class="font-semibold text-neon-emerald">Level 3-4:</span> Downshift Practice (Best Zone)</p>
+              <p><span class="font-semibold text-neon-amber">Level 6-7:</span> Vascular Holds</p>
+              <p><span class="font-semibold text-neon-rose">Level 8-10:</span> DANGER - Reset</p>
             </div>
           </div>
-        </details>
-        <details class="rounded-2xl border border-neon-rose/70 bg-black/40 p-4">
-          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
-            The Cold Signal (Nerve Warning)
-            <i class="fa-solid fa-chevron-down text-xs text-neon-rose"></i>
-          </summary>
-          <div class="mt-3 space-y-2 text-base leading-relaxed text-slate-100">
-            <p><span class="font-semibold text-neon-rose">The Sensation:</span> Feeling cold, numb, or pins-and-needles in the glans during a session.</p>
-            <p><span class="font-semibold text-neon-rose">What it means:</span> You are compressing a nerve or cutting off arterial oxygen supply.</p>
-            <p><span class="font-semibold text-neon-rose">Why it’s bad:</span> Nerves heal slowly. Ignoring this leads to desensitization.</p>
-            <div class="space-y-2">
-              <p class="text-xs uppercase tracking-[0.3em] text-neon-rose">Immediate Action</p>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>ABORT. Remove device.</li>
-                <li>Massage to restore warmth.</li>
-                <li>No training for 48h.</li>
-              </ul>
-            </div>
+        </div>
+      </details>
+      <details data-handbook-section class="rounded-2xl border border-neon-emerald/70 bg-black/40 p-4">
+        <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
+          <span class="flex items-center gap-2 text-neon-emerald">
+            <i class="fa-solid fa-leaf"></i>
+            🧬 EQ Killers (Lifestyle)
+          </span>
+          <i class="fa-solid fa-chevron-down text-xs text-neon-emerald"></i>
+        </summary>
+        <div class="mt-4 space-y-3">
+          <div
+            class="handbook-card rounded-2xl border border-neon-emerald/50 bg-black/60 p-4 space-y-3 text-base leading-relaxed text-slate-100"
+            data-search="eq killers alcohol rem sleep sugar insulin testosterone cortisol stress box breathing"
+          >
+            <p><span class="font-semibold text-neon-emerald">Alcohol:</span> Sedates the nervous system and kills REM sleep (where erections happen).</p>
+            <p><span class="font-semibold text-neon-emerald">Late Sugar:</span> Insulin spikes crash testosterone production overnight.</p>
+            <p><span class="font-semibold text-neon-emerald">Cortisol:</span> High stress clamps blood vessels. (Fix: Box Breathing).</p>
           </div>
-        </details>
-        <details class="rounded-2xl border border-neon-emerald/70 bg-black/40 p-4">
-          <summary class="flex cursor-pointer items-center justify-between text-base font-semibold text-white">
-            Progress Markers: Good vs. Bad
-            <i class="fa-solid fa-chevron-down text-xs text-neon-emerald"></i>
-          </summary>
-          <div class="mt-3 grid gap-4 text-base leading-relaxed text-slate-100">
-            <div>
-              <p class="text-xs uppercase tracking-[0.3em] text-neon-emerald">Green Flags (It’s working)</p>
-              <ul class="mt-2 list-disc pl-5 space-y-1">
-                <li><span class="font-semibold text-white">The “Heavy” Hang:</span> Flaccid penis feels heavier/fuller during the day.</li>
-                <li><span class="font-semibold text-white">Morning Glory:</span> 5-7 days/week of quality erections.</li>
-                <li><span class="font-semibold text-white">Disconnect:</span> Physically Level 8 (hard) while mentally Level 2 (calm).</li>
-              </ul>
+          <div
+            class="handbook-card rounded-2xl border border-neon-cyan/50 bg-black/60 p-4 space-y-3 text-base leading-relaxed text-slate-100"
+            data-search="lifestyle audit sleep stress hydration movement sunlight porn caffeine late night sugar alcohol"
+          >
+            <div class="flex items-center justify-between">
+              <h4 class="text-base font-semibold text-white">Lifestyle Audit</h4>
+              <span class="text-[10px] uppercase tracking-[0.3em] text-slate-400">Quick Check</span>
             </div>
-            <div>
-              <p class="text-xs uppercase tracking-[0.3em] text-neon-rose">Red Flags (Over-training)</p>
-              <ul class="mt-2 list-disc pl-5 space-y-1">
-                <li><span class="font-semibold text-white">Hard Flaccid:</span> Penis feels rigid/shriveled when not erect. Do “softening” immediately.</li>
-                <li><span class="font-semibold text-white">Turtle Mode:</span> Excessive retraction during the day. Take a rest week.</li>
-              </ul>
-            </div>
+            <ul class="space-y-2 text-sm text-slate-200">
+              <li class="flex items-center gap-2"><input type="checkbox" class="accent-neon-cyan" /> Slept 7-9 hours?</li>
+              <li class="flex items-center gap-2"><input type="checkbox" class="accent-neon-cyan" /> Hydrated + balanced electrolytes?</li>
+              <li class="flex items-center gap-2"><input type="checkbox" class="accent-neon-cyan" /> No late-night sugar or alcohol?</li>
+              <li class="flex items-center gap-2"><input type="checkbox" class="accent-neon-cyan" /> 20+ minutes sunlight or walk?</li>
+              <li class="flex items-center gap-2"><input type="checkbox" class="accent-neon-cyan" /> Low stress (box breathing done)?</li>
+            </ul>
           </div>
-        </details>
-      </div>
+        </div>
+      </details>
       <div class="rounded-2xl border border-slate-700 bg-black/50 px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
         Educational Information Only. Not Medical Advice. See a doctor for persistent pain.
       </div>
@@ -1057,6 +1093,27 @@
     </div>
   </div>
 
+  <div id="reverse-kegel-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Relief Protocol</p>
+      <h3 class="mt-2 text-xl font-semibold text-neon-cyan">Expansion (Reverse Kegel)</h3>
+      <p class="mt-1 text-sm text-slate-300">Breathe into the belly, gently push, then release.</p>
+      <div class="mt-5 flex flex-col items-center gap-3">
+        <div id="reverse-kegel-circle" class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-neon-cyan/70 bg-neon-cyan/20 text-center">
+          <span id="reverse-kegel-phase" class="text-sm font-semibold text-neon-cyan">Ready</span>
+        </div>
+        <p id="reverse-kegel-instruction" class="text-sm text-slate-300 text-center">Press start to begin.</p>
+        <div class="text-xs uppercase tracking-[0.3em] text-slate-400">
+          <span id="reverse-kegel-timer">00:00</span>
+        </div>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <button id="reverse-kegel-toggle" class="rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark">Start</button>
+        <button id="reverse-kegel-close" class="rounded-xl border border-slate-500 py-3 text-sm text-slate-300">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div id="strength-lock-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Recovery Required</p>
@@ -1204,6 +1261,11 @@
       "I can downshift any time.",
       "Sensation is information, not urgency."
     ];
+    const reverseKegelPhases = [
+      { label: "Inhale", duration: 4, instruction: "Breathe into belly." },
+      { label: "Push", duration: 5, instruction: "Gently Push Out (Reverse Kegel)." },
+      { label: "Relax", duration: 5, instruction: "Release." }
+    ];
 
     const navButtons = document.querySelectorAll(".nav-btn");
     const sections = document.querySelectorAll("main section");
@@ -1277,8 +1339,9 @@
     const lightModeHint = document.getElementById("light-mode-hint");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const infoTriggers = document.querySelectorAll(".info-trigger");
-    const handbookTabButtons = document.querySelectorAll("[data-handbook-tab]");
-    const handbookPanels = document.querySelectorAll("[data-handbook-panel]");
+    const handbookSearch = document.getElementById("handbook-search");
+    const handbookCards = document.querySelectorAll(".handbook-card");
+    const handbookSections = document.querySelectorAll("[data-handbook-section]");
     const helpButton = document.getElementById("help-button");
     const closeHelp = document.getElementById("close-help");
     const sessionALock = document.getElementById("session-a-lock");
@@ -1297,6 +1360,13 @@
     const strengthCloseButton = document.getElementById("strength-close");
     const strengthLockModal = document.getElementById("strength-lock-modal");
     const closeStrengthLock = document.getElementById("close-strength-lock");
+    const startReverseKegel = document.getElementById("start-reverse-kegel");
+    const reverseKegelModal = document.getElementById("reverse-kegel-modal");
+    const reverseKegelPhase = document.getElementById("reverse-kegel-phase");
+    const reverseKegelInstruction = document.getElementById("reverse-kegel-instruction");
+    const reverseKegelTimer = document.getElementById("reverse-kegel-timer");
+    const reverseKegelToggle = document.getElementById("reverse-kegel-toggle");
+    const reverseKegelClose = document.getElementById("reverse-kegel-close");
     const soundToggle = document.getElementById("sound-toggle");
     const soundModeButton = document.getElementById("sound-mode");
     const panicButton = document.getElementById("panic-button");
@@ -1357,6 +1427,10 @@
     let strengthPhaseRemaining = 0;
     let strengthRepCount = 0;
     let strengthPhaseKey = "ready";
+    let reverseKegelTimerId = null;
+    let reverseKegelPhaseIndex = 0;
+    let reverseKegelRemaining = 0;
+    let reverseKegelActive = false;
     let vacationModeEnabled = false;
     let lightModeEnabled = false;
     let sessionLightModeActive = false;
@@ -1690,20 +1764,25 @@
       });
     }
 
-    function setHandbookTab(tab) {
-      if (!handbookTabButtons.length) return;
-      handbookTabButtons.forEach((button) => {
-        const isActive = button.dataset.handbookTab === tab;
-        button.classList.toggle("border-neon-cyan/60", isActive);
-        button.classList.toggle("bg-neon-cyan/10", isActive);
-        button.classList.toggle("text-neon-cyan", isActive);
-        button.classList.toggle("border-slate-700", !isActive);
-        button.classList.toggle("text-slate-300", !isActive);
-        button.setAttribute("aria-selected", isActive ? "true" : "false");
+    function applyHandbookFilter(query) {
+      if (!handbookCards.length) return;
+      const trimmedQuery = query.trim().toLowerCase();
+      handbookCards.forEach((card) => {
+        if (!trimmedQuery) {
+          card.classList.remove("hidden");
+          return;
+        }
+        const searchable = card.dataset.search || "";
+        card.classList.toggle("hidden", !searchable.includes(trimmedQuery));
       });
 
-      handbookPanels.forEach((panel) => {
-        panel.classList.toggle("hidden", panel.dataset.handbookPanel !== tab);
+      handbookSections.forEach((section) => {
+        const visibleCards = section.querySelectorAll(".handbook-card:not(.hidden)");
+        const hasMatch = visibleCards.length > 0;
+        section.classList.toggle("hidden", !hasMatch);
+        if (trimmedQuery && hasMatch) {
+          section.open = true;
+        }
       });
     }
 
@@ -1960,6 +2039,52 @@
       localStorage.setItem("usph_logs", JSON.stringify(logs));
       updateLogs();
       updateStreak();
+    }
+
+    function updateReverseKegelDisplay() {
+      const phase = reverseKegelPhases[reverseKegelPhaseIndex];
+      reverseKegelPhase.textContent = phase.label;
+      reverseKegelInstruction.textContent = phase.instruction;
+      reverseKegelTimer.textContent = formatTime(reverseKegelRemaining);
+    }
+
+    function advanceReverseKegelPhase() {
+      reverseKegelPhaseIndex = (reverseKegelPhaseIndex + 1) % reverseKegelPhases.length;
+      reverseKegelRemaining = reverseKegelPhases[reverseKegelPhaseIndex].duration;
+      updateReverseKegelDisplay();
+    }
+
+    function reverseKegelTick() {
+      reverseKegelRemaining = Math.max(0, reverseKegelRemaining - 1);
+      reverseKegelTimer.textContent = formatTime(reverseKegelRemaining);
+      if (reverseKegelRemaining > 0) return;
+      advanceReverseKegelPhase();
+    }
+
+    function startReverseKegelTimer() {
+      if (reverseKegelTimerId) return;
+      reverseKegelActive = true;
+      reverseKegelToggle.textContent = "Pause";
+      reverseKegelTimerId = setInterval(reverseKegelTick, 1000);
+    }
+
+    function pauseReverseKegelTimer() {
+      clearInterval(reverseKegelTimerId);
+      reverseKegelTimerId = null;
+      reverseKegelActive = false;
+      reverseKegelToggle.textContent = "Resume";
+    }
+
+    function resetReverseKegelTimer() {
+      clearInterval(reverseKegelTimerId);
+      reverseKegelTimerId = null;
+      reverseKegelActive = false;
+      reverseKegelPhaseIndex = 0;
+      reverseKegelRemaining = reverseKegelPhases[0].duration;
+      reverseKegelPhase.textContent = "Ready";
+      reverseKegelInstruction.textContent = "Press start to begin.";
+      reverseKegelTimer.textContent = "00:00";
+      reverseKegelToggle.textContent = "Start";
     }
 
     function setSession(key) {
@@ -2886,9 +3011,11 @@
       btn.addEventListener("click", () => showSection(btn.dataset.target));
     });
 
-    handbookTabButtons.forEach((button) => {
-      button.addEventListener("click", () => setHandbookTab(button.dataset.handbookTab));
-    });
+    if (handbookSearch) {
+      handbookSearch.addEventListener("input", (event) => {
+        applyHandbookFilter(event.target.value);
+      });
+    }
 
     selectAButton.addEventListener("click", () => setSession("A"));
     selectBButton.addEventListener("click", () => setSession("B"));
@@ -3141,6 +3268,37 @@
       strengthLockModal.classList.remove("flex");
     });
 
+    if (startReverseKegel) {
+      startReverseKegel.addEventListener("click", () => {
+        resetReverseKegelTimer();
+        reverseKegelModal.classList.remove("hidden");
+        reverseKegelModal.classList.add("flex");
+      });
+    }
+
+    if (reverseKegelToggle) {
+      reverseKegelToggle.addEventListener("click", () => {
+        if (!reverseKegelActive && reverseKegelPhase.textContent === "Ready") {
+          reverseKegelPhaseIndex = 0;
+          reverseKegelRemaining = reverseKegelPhases[0].duration;
+          updateReverseKegelDisplay();
+        }
+        if (reverseKegelTimerId) {
+          pauseReverseKegelTimer();
+        } else {
+          startReverseKegelTimer();
+        }
+      });
+    }
+
+    if (reverseKegelClose) {
+      reverseKegelClose.addEventListener("click", () => {
+        resetReverseKegelTimer();
+        reverseKegelModal.classList.add("hidden");
+        reverseKegelModal.classList.remove("flex");
+      });
+    }
+
     startToday.addEventListener("click", () => {
       showSection("train");
       const today = getScheduleForToday();
@@ -3192,7 +3350,7 @@
       updateDailyRetentionToggle(false);
       updateDailyQualityDisplay(dailyQualitySlider.value);
       setDailyDefaultDate();
-      setHandbookTab("basics");
+      applyHandbookFilter("");
       setSession("A");
       if (gameDayModal) {
         resetGameDayPrimer();
