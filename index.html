@@ -459,6 +459,20 @@
         transform: translateY(0);
       }
     }
+    .subliminal-overlay {
+      margin-top: 6px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(94, 234, 212, 0.9);
+      opacity: 0;
+      transition: opacity 1s ease, transform 1s ease;
+      transform: translateY(6px);
+    }
+    .subliminal-overlay--active {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .device-guides-grid {
       display: grid;
       gap: 16px;
@@ -746,20 +760,13 @@
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
             <h2 id="session-title" class="text-2xl font-semibold mt-1">Select a Session</h2>
+            <span
+              id="saturday-badge"
+              class="mt-2 inline-flex hidden items-center rounded-full border border-neon-emerald/40 bg-neon-emerald/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-neon-emerald"
+            >
+              Saturday Light Protocol Active
+            </span>
             <p id="session-note" class="text-sm text-slate-300 mt-2">Choose Session A, B, or C to begin.</p>
-            <div id="light-mode-row" class="mt-3 hidden rounded-xl border border-slate-700 bg-black/40 p-3">
-              <label class="flex items-center justify-between gap-3 text-sm text-slate-200">
-                <span class="font-semibold">Light Mode (Saturday)</span>
-                <input
-                  id="light-mode-toggle"
-                  type="checkbox"
-                  class="h-5 w-10 cursor-pointer rounded-full border border-slate-600 bg-black/40 accent-neon-emerald"
-                />
-              </label>
-              <p id="light-mode-hint" class="mt-2 text-xs text-slate-400">
-                Reduce intensity: shorter ramp + softer control cycles focused on breath.
-              </p>
-            </div>
             <p id="session-settings-note" class="mt-2 text-xs text-neon-cyan hidden"></p>
           </div>
           <div class="flex flex-col items-center gap-2">
@@ -884,26 +891,6 @@
         </div>
       </div>
 
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session C Mode 2</p>
-            <h3 class="text-xl font-semibold mt-1 text-neon-amber">Flow (Trance)</h3>
-            <p class="text-sm text-slate-300 mt-1">Open-ended flow with zone tracking + breathe reminders.</p>
-          </div>
-          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-amber text-lg">
-            <i class="fa-solid fa-infinity"></i>
-          </div>
-        </div>
-        <button
-          id="start-trance"
-          class="w-full rounded-xl border border-neon-amber/60 py-3 font-semibold text-neon-amber hover:bg-neon-amber/10"
-        >
-          <i class="fa-solid fa-infinity"></i>
-          Flow (Trance)
-        </button>
-      </div>
-
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
         <div class="flex items-center justify-between">
           <div>
@@ -938,6 +925,7 @@
                 <p id="bio-monitor-label" class="text-[9px] uppercase tracking-[0.3em] text-slate-300">Standby</p>
                 <p id="phase-time" class="text-xl font-bold">00:00</p>
                 <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
+                <p id="subliminal-overlay" class="subliminal-overlay">Slow is Strong.</p>
               </div>
             </div>
           </div>
@@ -1167,7 +1155,7 @@
             />
             <span>
               <span class="block font-semibold text-white">Standard (Recommended)</span>
-              <span class="block text-xs text-slate-400">Mon(A), Tue(B), Wed(Rest), Thu(A), Fri(B), Sat(A-Light), Sun(Rest).</span>
+              <span class="block text-xs text-slate-400">Mon(A), Tue(B), Wed(Rest), Thu(A), Fri(B), Sat(A auto-light), Sun(Rest).</span>
             </span>
           </label>
           <label class="flex items-start gap-3 rounded-xl border border-slate-700 bg-black/40 p-3">
@@ -1792,6 +1780,89 @@
     </div>
   </div>
 
+  <div id="session-c-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Select Mode</p>
+      <h3 class="mt-2 text-xl font-semibold text-neon-amber">Session C Options</h3>
+      <p class="mt-2 text-sm text-slate-300">Choose guided protocol or trance flow.</p>
+      <div class="mt-5 grid gap-3 text-sm">
+        <button
+          id="session-c-guided"
+          class="rounded-xl border border-neon-amber/60 bg-black/40 py-3 font-semibold text-neon-amber hover:bg-neon-amber/10"
+        >
+          Mode A: Guided Protocol
+        </button>
+        <button
+          id="session-c-trance"
+          class="rounded-xl border border-neon-cyan/60 bg-black/40 py-3 font-semibold text-neon-cyan hover:bg-neon-cyan/10"
+        >
+          Mode B: Trance / Freestyle
+        </button>
+      </div>
+      <button id="session-c-close" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div id="morning-briefing-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Morning Status Report</p>
+      <h3 class="mt-2 text-xl font-semibold">Morning Executive Briefing</h3>
+      <div class="mt-4 space-y-4 text-sm text-slate-300">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Morning Wood Presence?</p>
+          <div class="mt-2 grid grid-cols-2 gap-3">
+            <button
+              data-morning-briefing="yes"
+              class="morning-briefing-toggle rounded-xl border border-neon-emerald/40 py-2 font-semibold text-neon-emerald"
+            >
+              Yes
+            </button>
+            <button
+              data-morning-briefing="no"
+              class="morning-briefing-toggle rounded-xl border border-slate-600 py-2 font-semibold text-slate-300"
+            >
+              No
+            </button>
+          </div>
+        </div>
+        <div class="rounded-xl bg-black/40 p-3">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span id="morning-hang-label">Hang Quality: 3 - Neutral</span>
+            <span id="morning-hang-value" class="text-white font-semibold">3</span>
+          </div>
+          <input id="morning-hang-slider" type="range" min="1" max="5" value="3" class="mt-2 w-full accent-neon-amber" />
+          <div class="mt-2 grid grid-cols-3 text-[10px] text-slate-400">
+            <span class="text-left">Turtled</span>
+            <span class="text-center">Neutral</span>
+            <span class="text-right">Full</span>
+          </div>
+        </div>
+        <div class="rounded-xl bg-black/40 p-3">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span id="morning-sleep-label">Sleep Quality: 3 - Neutral</span>
+            <span id="morning-sleep-value" class="text-white font-semibold">3</span>
+          </div>
+          <input id="morning-sleep-slider" type="range" min="1" max="5" value="3" class="mt-2 w-full accent-neon-violet" />
+          <div class="mt-2 grid grid-cols-3 text-[10px] text-slate-400">
+            <span class="text-left">Poor</span>
+            <span class="text-center">Neutral</span>
+            <span class="text-right">Rested</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <button id="cancel-morning-briefing" class="w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">
+          Later
+        </button>
+        <button id="save-morning-briefing" class="w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="daily-log-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Daily Check-In</p>
@@ -2228,7 +2299,7 @@
         { day: "Wed", plan: "Rest (Breathing only)" },
         { day: "Thu", plan: "Session A" },
         { day: "Fri", plan: "Session B" },
-        { day: "Sat", plan: "Session A (Light)" },
+        { day: "Sat", plan: "Session A (Saturday Light)" },
         { day: "Sun", plan: "Rest" }
       ],
       advanced: [
@@ -2263,6 +2334,12 @@
       "I control the pace.",
       "I can downshift any time.",
       "Sensation is information, not urgency."
+    ];
+    const subliminalScripts = [
+      "Slow is Strong.",
+      "I can downshift any time.",
+      "Sensation is information, not urgency.",
+      "Soften the Glutes."
     ];
     const reverseKegelPhases = [
       { label: "Inhale", duration: 4, instruction: "Breathe into belly." },
@@ -2344,9 +2421,7 @@
     const postFeeling = document.getElementById("post-feeling");
     const sessionSettingsInput = document.getElementById("session-settings");
     const sessionSettingsNote = document.getElementById("session-settings-note");
-    const lightModeRow = document.getElementById("light-mode-row");
-    const lightModeToggle = document.getElementById("light-mode-toggle");
-    const lightModeHint = document.getElementById("light-mode-hint");
+    const saturdayBadge = document.getElementById("saturday-badge");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const customScheduleEditor = document.getElementById("custom-schedule-editor");
     const customScheduleSelects = document.querySelectorAll(".custom-schedule-select");
@@ -2457,7 +2532,20 @@
     const deTurtleTotalTimer = document.getElementById("de-turtle-total-timer");
     const deTurtleProgress = document.getElementById("de-turtle-progress");
     const deTurtleStatus = document.getElementById("de-turtle-status");
-    const startTrance = document.getElementById("start-trance");
+    const sessionCModal = document.getElementById("session-c-modal");
+    const sessionCModalClose = document.getElementById("session-c-close");
+    const sessionCGuided = document.getElementById("session-c-guided");
+    const sessionCTrance = document.getElementById("session-c-trance");
+    const morningBriefingModal = document.getElementById("morning-briefing-modal");
+    const morningBriefingButtons = document.querySelectorAll(".morning-briefing-toggle");
+    const morningHangSlider = document.getElementById("morning-hang-slider");
+    const morningHangLabel = document.getElementById("morning-hang-label");
+    const morningHangValue = document.getElementById("morning-hang-value");
+    const morningSleepSlider = document.getElementById("morning-sleep-slider");
+    const morningSleepLabel = document.getElementById("morning-sleep-label");
+    const morningSleepValue = document.getElementById("morning-sleep-value");
+    const saveMorningBriefingButton = document.getElementById("save-morning-briefing");
+    const cancelMorningBriefingButton = document.getElementById("cancel-morning-briefing");
     const tranceModal = document.getElementById("trance-modal");
     const tranceElapsedLabel = document.getElementById("trance-elapsed");
     const tranceZoneTimeLabel = document.getElementById("trance-zone-time");
@@ -2469,6 +2557,7 @@
     const tranceToggle = document.getElementById("trance-toggle");
     const tranceClose = document.getElementById("trance-close");
     const startRecoveryTrain = document.getElementById("start-recovery-train");
+    const subliminalOverlay = document.getElementById("subliminal-overlay");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -2479,6 +2568,7 @@
     let lastLogPending = null;
     let preStartAdjustment = 0;
     let dailyMorningErection = false;
+    let morningBriefingPresence = false;
     let scheduleKey = "standard";
     let recoveryStart = null;
     let recoveryIntervalId = null;
@@ -2501,7 +2591,6 @@
     let reverseKegelActive = false;
     let vacationModeEnabled = false;
     let growerModeEnabled = true;
-    let lightModeEnabled = false;
     let audioGuidanceEnabled = true;
     let sessionLightModeActive = false;
     let controlCycleMessages = [...controlCycleAffirmations];
@@ -2513,12 +2602,13 @@
       return `Cycles: ${holdSeconds}s hold, ${restSeconds}s downshift. Slow is strong.${suffix}`;
     }
 
+    function isSaturdayProtocol() {
+      return new Date().getDay() === 6;
+    }
+
     function isLightModeActiveForKey(key) {
       if (key !== "A") return false;
-      if (sessionStart && currentSessionKey === "A") {
-        return sessionLightModeActive;
-      }
-      return lightModeEnabled;
+      return sessionLightModeActive;
     }
 
     function getSessionDisplayName(key) {
@@ -2556,16 +2646,9 @@
     }
 
     function updateLightModeUi() {
-      if (!lightModeRow || !lightModeToggle) return;
-      const showLightMode = currentSessionKey === "A" && !selectAButton.disabled;
-      lightModeRow.classList.toggle("hidden", !showLightMode);
-      lightModeToggle.checked = lightModeEnabled;
-      lightModeToggle.disabled = Boolean(sessionStart);
-      if (lightModeHint) {
-        lightModeHint.textContent = lightModeEnabled
-          ? "Light Mode active: shorter ramp, 15s holds, +30s downshift."
-          : "Reduce intensity: shorter ramp + softer control cycles focused on breath.";
-      }
+      if (!saturdayBadge) return;
+      const showBadge = currentSessionKey === "A" && isLightModeActiveForKey("A");
+      saturdayBadge.classList.toggle("hidden", !showBadge);
     }
 
     function updateSessionWaveform(mode) {
@@ -2595,6 +2678,9 @@
     let controlCycleIntervalId = null;
     let controlCycleTimeoutId = null;
     let controlCycleIndex = 0;
+    let subliminalIntervalId = null;
+    let subliminalTimeoutId = null;
+    let lastSubliminalIndex = -1;
     let lastConsistencyStreak = 0;
     let lastRetentionStreak = 0;
     let deTurtleTimerId = null;
@@ -2940,7 +3026,7 @@
         return "Choose Strengthen, Lengthen, or Reset inside Pelvic Tuning.";
       }
       if (plan.includes("Session C")) {
-        return "Manual work: structural steps or Flow (Trance) mode.";
+        return "Select Mode A (guided protocol) or Mode B (trance/freestyle).";
       }
       return "Follow the guided timer with audio cues.";
     }
@@ -3490,6 +3576,7 @@
             : selectCButton?.disabled;
       if (isLocked) {
         currentSessionKey = null;
+        sessionLightModeActive = false;
         sessionTitle.textContent = "Session Locked";
         sessionNote.textContent =
           key === "A"
@@ -3507,14 +3594,15 @@
         return;
       }
       currentSessionKey = key;
+      sessionLightModeActive = key === "A" && isSaturdayProtocol();
       neuroAudioMode = key === "B" ? "relax" : "focus";
       updateSoundUi();
       preStartAdjustment = 0;
       const session = sessions[key];
       sessionTitle.textContent = getSessionDisplayName(key);
       sessionNote.textContent = "Press start to begin the interval timer.";
-      if (key === "A" && lightModeEnabled) {
-        sessionNote.textContent = "Light Mode active. Press start to begin the interval timer.";
+      if (key === "A" && sessionLightModeActive) {
+        sessionNote.textContent = "Saturday Light Protocol active. Press start to begin the interval timer.";
       }
       sessionWarning.textContent = session.warning;
       sessionWarning.classList.toggle("hidden", session.warning.length === 0);
@@ -3537,6 +3625,7 @@
       clearInterval(timerId);
       timerId = null;
       stopControlCycleAffirmations();
+      stopSubliminalScripts();
       updateSessionSettingsNote();
       updatePositionGuideVisibility();
       updateLightModeUi();
@@ -3654,6 +3743,55 @@
       }
       hangQualityValue.textContent = value;
       hangQualityLabel.textContent = `Flaccid Hang Quality: ${value} - ${descriptor}`;
+    }
+
+    function updateMorningBriefingToggle(nextValue) {
+      if (!morningBriefingButtons.length) return;
+      morningBriefingPresence = nextValue;
+      morningBriefingButtons.forEach((btn) => {
+        const isActive = (btn.dataset.morningBriefing === "yes") === nextValue;
+        btn.classList.toggle("border-neon-emerald/40", isActive);
+        btn.classList.toggle("text-neon-emerald", isActive);
+        btn.classList.toggle("border-slate-600", !isActive);
+        btn.classList.toggle("text-slate-300", !isActive);
+      });
+    }
+
+    function updateMorningHangDisplay(value) {
+      if (!morningHangValue || !morningHangLabel) return;
+      const numeric = Number(value);
+      let descriptor = "Neutral";
+      if (numeric <= 2) {
+        descriptor = "Turtled";
+      } else if (numeric >= 4) {
+        descriptor = "Full";
+      }
+      morningHangValue.textContent = value;
+      morningHangLabel.textContent = `Hang Quality: ${value} - ${descriptor}`;
+    }
+
+    function updateMorningSleepDisplay(value) {
+      if (!morningSleepValue || !morningSleepLabel) return;
+      const numeric = Number(value);
+      let descriptor = "Neutral";
+      if (numeric <= 2) {
+        descriptor = "Poor";
+      } else if (numeric >= 4) {
+        descriptor = "Rested";
+      }
+      morningSleepValue.textContent = value;
+      morningSleepLabel.textContent = `Sleep Quality: ${value} - ${descriptor}`;
+    }
+
+    function openMorningBriefingModal() {
+      if (!morningBriefingModal || !morningHangSlider || !morningSleepSlider) return;
+      updateMorningBriefingToggle(false);
+      morningHangSlider.value = 3;
+      morningSleepSlider.value = 3;
+      updateMorningHangDisplay(3);
+      updateMorningSleepDisplay(3);
+      morningBriefingModal.classList.remove("hidden");
+      morningBriefingModal.classList.add("flex");
     }
 
     function setDailyDefaultDate(value) {
@@ -3829,6 +3967,44 @@
       }, 15000);
     }
 
+    function stopSubliminalScripts() {
+      if (!subliminalOverlay) return;
+      clearInterval(subliminalIntervalId);
+      clearTimeout(subliminalTimeoutId);
+      subliminalIntervalId = null;
+      subliminalTimeoutId = null;
+      subliminalOverlay.classList.remove("subliminal-overlay--active");
+    }
+
+    function pickSubliminalScript() {
+      if (!subliminalScripts.length) return "";
+      let index = Math.floor(Math.random() * subliminalScripts.length);
+      if (subliminalScripts.length > 1) {
+        while (index === lastSubliminalIndex) {
+          index = Math.floor(Math.random() * subliminalScripts.length);
+        }
+      }
+      lastSubliminalIndex = index;
+      return subliminalScripts[index];
+    }
+
+    function showSubliminalScript() {
+      if (!subliminalOverlay) return;
+      subliminalOverlay.textContent = pickSubliminalScript();
+      subliminalOverlay.classList.add("subliminal-overlay--active");
+      clearTimeout(subliminalTimeoutId);
+      subliminalTimeoutId = setTimeout(() => {
+        subliminalOverlay.classList.remove("subliminal-overlay--active");
+      }, 8000);
+    }
+
+    function startSubliminalScripts() {
+      if (!subliminalOverlay) return;
+      stopSubliminalScripts();
+      showSubliminalScript();
+      subliminalIntervalId = setInterval(showSubliminalScript, 15000);
+    }
+
     function refreshControlCycleAffirmations() {
       const step = getSessionSteps(currentSessionKey)[currentStepIndex];
       if (
@@ -3840,8 +4016,12 @@
         if (!controlCycleIntervalId) {
           startControlCycleAffirmations(step.text);
         }
+        if (!subliminalIntervalId) {
+          startSubliminalScripts();
+        }
       } else {
         stopControlCycleAffirmations();
+        stopSubliminalScripts();
       }
     }
 
@@ -3909,8 +4089,10 @@
       }
       if (currentSessionKey === "A" && step.title === "Phase 4: Control Cycle") {
         startControlCycleAffirmations(step.text);
+        startSubliminalScripts();
       } else {
         stopControlCycleAffirmations();
+        stopSubliminalScripts();
         phaseText.textContent = step.text;
         phaseText.style.opacity = "1";
       }
@@ -3932,7 +4114,6 @@
 
     function startSession() {
       if (!currentSessionKey) return;
-      sessionLightModeActive = lightModeEnabled;
       sessionStart = new Date();
       setStep(0);
       timerId = setInterval(tick, 1000);
@@ -3946,6 +4127,7 @@
       timerId = null;
       toggleSession.textContent = "Resume";
       stopControlCycleAffirmations();
+      stopSubliminalScripts();
     }
 
     function endSession(reason) {
@@ -3955,6 +4137,7 @@
       arousalPanel.classList.add("hidden");
       stopNeuroAudio();
       stopControlCycleAffirmations();
+      stopSubliminalScripts();
       if (!sessionStart) return;
       const duration = Math.round((Date.now() - sessionStart.getTime()) / 60000);
       lastLogPending = {
@@ -4038,8 +4221,12 @@
       return getLogs().filter((log) => log.type === "dailyLog");
     }
 
+    function getMorningBriefings() {
+      return getLogs().filter((log) => log.type === "morningBriefing");
+    }
+
     function getSessionLogs() {
-      return getLogs().filter((log) => log.type !== "dailyLog");
+      return getLogs().filter((log) => log.type !== "dailyLog" && log.type !== "morningBriefing");
     }
 
     function saveDailyLog() {
@@ -4070,6 +4257,36 @@
       updateLogs();
       updateWeeklyStatus();
       updateRetentionStreak();
+    }
+
+    function saveMorningBriefing() {
+      if (!morningBriefingModal || !morningHangSlider || !morningSleepSlider) return;
+      const today = new Date();
+      const logs = getLogs().filter((log) => {
+        if (log.type !== "morningBriefing") return true;
+        return !isSameDay(new Date(log.date), today);
+      });
+      logs.unshift({
+        type: "morningBriefing",
+        date: today.toISOString(),
+        morningErection: morningBriefingPresence,
+        hangQuality: Number(morningHangSlider.value),
+        sleepQuality: Number(morningSleepSlider.value)
+      });
+      localStorage.setItem("usph_logs", JSON.stringify(logs));
+      morningBriefingModal.classList.add("hidden");
+      morningBriefingModal.classList.remove("flex");
+      updateLogs();
+    }
+
+    function shouldOpenMorningBriefing() {
+      if (!morningBriefingModal) return false;
+      const now = new Date();
+      const hour = now.getHours();
+      if (hour < 5 || hour >= 10) return false;
+      const hasDailyLog = getDailyLogs().some((log) => isSameDay(new Date(log.date), now));
+      const hasMorningBriefing = getMorningBriefings().some((log) => isSameDay(new Date(log.date), now));
+      return !(hasDailyLog || hasMorningBriefing);
     }
 
     function updateLogs() {
@@ -4112,6 +4329,23 @@
                 <p class="text-xs text-slate-400 mt-1">Cardio: <span class="text-white">${cardio}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Retention: <span class="text-white">${retentionStatus}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Notes: <span class="text-white">${notes}</span></p>
+              </div>
+            `;
+          }
+          if (log.type === "morningBriefing") {
+            const morningStatus = log.morningErection ? "Yes" : "No";
+            const sleepQuality = Number.isFinite(Number(log.sleepQuality)) ? `${log.sleepQuality}/5` : "—";
+            const hangQuality = Number.isFinite(Number(log.hangQuality)) ? `${log.hangQuality}/5` : "—";
+            return `
+              <div class="rounded-xl bg-black/40 p-4">
+                <div class="flex items-center justify-between">
+                  <p class="font-semibold text-white">Morning Status Report</p>
+                  <span class="text-xs uppercase tracking-[0.2em] text-neon-cyan">Briefing</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">${date}</p>
+                <p class="text-xs text-slate-400 mt-1">Morning Wood: <span class="text-white">${morningStatus}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Hang Quality: <span class="text-white">${hangQuality}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Sleep Quality: <span class="text-white">${sleepQuality}</span></p>
               </div>
             `;
           }
@@ -4725,17 +4959,7 @@
     selectAButton.addEventListener("click", () => setSession("A"));
     selectBButton.addEventListener("click", () => setSession("B"));
     if (selectCButton) {
-      selectCButton.addEventListener("click", () => setSession("C"));
-    }
-    if (lightModeToggle) {
-      lightModeToggle.addEventListener("change", (event) => {
-        lightModeEnabled = event.target.checked;
-        if (currentSessionKey === "A" && !sessionStart) {
-          setSession("A");
-        } else {
-          updateLightModeUi();
-        }
-      });
+      selectCButton.addEventListener("click", openSessionCModal);
     }
     soundToggle.addEventListener("click", toggleNeuroAudio);
     soundModeButton.addEventListener("click", toggleNeuroMode);
@@ -4804,6 +5028,12 @@
       });
     });
 
+    morningBriefingButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        updateMorningBriefingToggle(btn.dataset.morningBriefing === "yes");
+      });
+    });
+
     dailyRetentionButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         updateDailyRetentionToggle(btn.dataset.retention === "yes");
@@ -4825,6 +5055,29 @@
     hangQualitySlider.addEventListener("input", (event) => {
       updateHangQualityDisplay(event.target.value);
     });
+
+    if (morningHangSlider) {
+      morningHangSlider.addEventListener("input", (event) => {
+        updateMorningHangDisplay(event.target.value);
+      });
+    }
+
+    if (morningSleepSlider) {
+      morningSleepSlider.addEventListener("input", (event) => {
+        updateMorningSleepDisplay(event.target.value);
+      });
+    }
+
+    if (saveMorningBriefingButton) {
+      saveMorningBriefingButton.addEventListener("click", saveMorningBriefing);
+    }
+
+    if (cancelMorningBriefingButton) {
+      cancelMorningBriefingButton.addEventListener("click", () => {
+        morningBriefingModal.classList.add("hidden");
+        morningBriefingModal.classList.remove("flex");
+      });
+    }
 
     postFeeling.addEventListener("change", (event) => {
       const value = event.target.value;
@@ -5106,12 +5359,23 @@
       });
     }
 
-    if (startTrance) {
-      startTrance.addEventListener("click", () => {
-        resetTranceTimer();
-        tranceModal.classList.remove("hidden");
-        tranceModal.classList.add("flex");
-      });
+    function openTranceModal() {
+      if (!tranceModal) return;
+      resetTranceTimer();
+      tranceModal.classList.remove("hidden");
+      tranceModal.classList.add("flex");
+    }
+
+    function openSessionCModal() {
+      if (!sessionCModal) return;
+      sessionCModal.classList.remove("hidden");
+      sessionCModal.classList.add("flex");
+    }
+
+    function closeSessionCModal() {
+      if (!sessionCModal) return;
+      sessionCModal.classList.add("hidden");
+      sessionCModal.classList.remove("flex");
     }
 
     if (tranceToggle) {
@@ -5132,6 +5396,24 @@
       });
     }
 
+    if (sessionCModalClose) {
+      sessionCModalClose.addEventListener("click", closeSessionCModal);
+    }
+
+    if (sessionCGuided) {
+      sessionCGuided.addEventListener("click", () => {
+        closeSessionCModal();
+        setSession("C");
+      });
+    }
+
+    if (sessionCTrance) {
+      sessionCTrance.addEventListener("click", () => {
+        closeSessionCModal();
+        openTranceModal();
+      });
+    }
+
     if (tranceSlider) {
       tranceSlider.addEventListener("input", (event) => {
         updateTranceLevel(event.target.value);
@@ -5148,23 +5430,11 @@
       showSection("train");
       const today = getScheduleForToday();
       if (today.plan.includes("Session A")) {
-        lightModeEnabled = today.plan.includes("Light");
-        if (lightModeToggle) {
-          lightModeToggle.checked = lightModeEnabled;
-        }
         setSession("A");
       } else if (today.plan.includes("Session B")) {
-        lightModeEnabled = false;
-        if (lightModeToggle) {
-          lightModeToggle.checked = false;
-        }
         setSession("B");
       } else if (today.plan.includes("Session C")) {
-        lightModeEnabled = false;
-        if (lightModeToggle) {
-          lightModeToggle.checked = false;
-        }
-        setSession("C");
+        openSessionCModal();
       } else if (today.plan.includes("Pelvic Tuning")) {
         currentSessionKey = null;
         sessionTitle.textContent = "Pelvic Tuning";
@@ -5274,6 +5544,9 @@
       updateStrengthAvailability();
       updateSystemReadiness();
       updateHangAlert();
+      if (shouldOpenMorningBriefing()) {
+        openMorningBriefingModal();
+      }
     }
 
     init();
