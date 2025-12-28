@@ -593,10 +593,10 @@
         System Tightness Detected. Recommend Heat Therapy.
       </div>
       <button
-        id="urge-sos"
+        id="emergency-button"
         class="w-full rounded-2xl border-2 border-neon-rose/70 bg-black/40 py-4 text-center text-sm font-semibold uppercase tracking-[0.25em] text-neon-rose shadow-lg hover:bg-neon-rose/10"
       >
-        ⚠️ URGE SOS
+        ⚡ EMERGENCY
       </button>
       <button
         id="game-day-primer"
@@ -820,70 +820,76 @@
         </p>
       </div>
 
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Strength Coach</p>
-            <h3 class="text-xl font-semibold mt-1 text-neon-violet">Pelvic Strength (2x/Week)</h3>
-            <p class="text-sm text-slate-300 mt-1">10 reps of 3s engage + 8s full release.</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Pelvic Tuning</p>
+            <h3 class="text-xl font-semibold mt-1 text-neon-violet">Strengthen • Lengthen • Reset</h3>
+            <p class="text-sm text-slate-300 mt-1">Dial in tension, release, and recovery with one hub.</p>
           </div>
           <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-violet text-lg">
-            <i class="fa-solid fa-dumbbell"></i>
+            <i class="fa-solid fa-sliders"></i>
           </div>
         </div>
-        <p id="strength-lock-message" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
-        <button
-          id="start-strength"
-          class="w-full rounded-xl border border-neon-violet/60 py-3 font-semibold text-neon-violet hover:bg-neon-violet/10"
-        >
-          Start Strength Session
-        </button>
+        <div class="grid grid-cols-3 gap-2 text-[10px] uppercase tracking-[0.2em]">
+          <button
+            type="button"
+            class="pelvic-tab rounded-xl border border-neon-violet/60 bg-black/40 py-2 font-semibold text-neon-violet"
+            data-pelvic-tab="strength"
+          >
+            Strengthen
+          </button>
+          <button
+            type="button"
+            class="pelvic-tab rounded-xl border border-slate-600 bg-black/20 py-2 font-semibold text-slate-300"
+            data-pelvic-tab="lengthen"
+          >
+            Lengthen
+          </button>
+          <button
+            type="button"
+            class="pelvic-tab rounded-xl border border-slate-600 bg-black/20 py-2 font-semibold text-slate-300"
+            data-pelvic-tab="reset"
+          >
+            Reset
+          </button>
+        </div>
+        <div id="pelvic-panel-strength" data-pelvic-panel="strength" class="space-y-3">
+          <p class="text-sm text-slate-300">Strengthen (Kegel): 10 reps of 3s engage + 8s full release.</p>
+          <p id="strength-lock-message" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
+          <button
+            id="start-strength"
+            class="w-full rounded-xl border border-neon-violet/60 py-3 font-semibold text-neon-violet hover:bg-neon-violet/10"
+          >
+            Start Strength Session
+          </button>
+        </div>
+        <div id="pelvic-panel-lengthen" data-pelvic-panel="lengthen" class="hidden space-y-3">
+          <p class="text-sm text-slate-300">Lengthen (Reverse Kegel): inhale 4s, push 5s, relax 5s.</p>
+          <button
+            id="start-reverse-kegel"
+            class="w-full rounded-xl border border-neon-cyan/60 py-3 font-semibold text-neon-cyan hover:bg-neon-cyan/10"
+          >
+            Lengthen (Reverse Kegel)
+          </button>
+        </div>
+        <div id="pelvic-panel-reset" data-pelvic-panel="reset" class="hidden space-y-3">
+          <p class="text-sm text-slate-300">Reset (Breathing): visual pacer to downshift and relax.</p>
+          <button
+            id="start-recovery-train"
+            class="w-full rounded-xl border border-neon-emerald/60 py-3 font-semibold text-neon-emerald hover:bg-neon-emerald/10"
+          >
+            Start Reset Breathing
+          </button>
+        </div>
       </div>
 
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Relief Protocol</p>
-            <h3 class="text-xl font-semibold mt-1 text-neon-cyan">Expansion (Reverse Kegel)</h3>
-            <p class="text-sm text-slate-300 mt-1">Inhale 4s, push 5s, relax 5s to release pelvic tension.</p>
-          </div>
-          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-cyan text-lg">
-            <i class="fa-solid fa-wind"></i>
-          </div>
-        </div>
-        <button
-          id="start-reverse-kegel"
-          class="w-full rounded-xl border border-neon-cyan/60 py-3 font-semibold text-neon-cyan hover:bg-neon-cyan/10"
-        >
-          Expansion (Reverse Kegel)
-        </button>
-      </div>
-
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Urge SOS</p>
-            <h3 class="text-xl font-semibold mt-1 text-neon-amber">De-Turtle Protocol</h3>
-            <p class="text-sm text-slate-300 mt-1">3-minute reset for retraction: heat, traction, shake out.</p>
-          </div>
-          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-amber text-lg">
-            <i class="fa-solid fa-temperature-half"></i>
-          </div>
-        </div>
-        <button
-          id="start-de-turtle"
-          class="w-full rounded-xl border border-neon-amber/60 py-3 font-semibold text-neon-amber hover:bg-neon-amber/10"
-        >
-          Start De-Turtle
-        </button>
-      </div>
-
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-3">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Trance Timer</p>
-            <h3 class="text-xl font-semibold mt-1 text-neon-amber">Freestyle / Trance Mode</h3>
-            <p class="text-sm text-slate-300 mt-1">Open-ended edging with zone tracking + anchor reminders.</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session C Mode 2</p>
+            <h3 class="text-xl font-semibold mt-1 text-neon-amber">Flow (Trance)</h3>
+            <p class="text-sm text-slate-300 mt-1">Open-ended flow with zone tracking + breathe reminders.</p>
           </div>
           <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-amber text-lg">
             <i class="fa-solid fa-infinity"></i>
@@ -894,7 +900,7 @@
           class="w-full rounded-xl border border-neon-amber/60 py-3 font-semibold text-neon-amber hover:bg-neon-amber/10"
         >
           <i class="fa-solid fa-infinity"></i>
-          Freestyle / Trance Mode
+          Flow (Trance)
         </button>
       </div>
 
@@ -1176,6 +1182,94 @@
               <span class="block text-xs text-slate-400">Mon(A), Tue(B), Wed(A), Thu(B), Fri(A), Sat(B), Sun(Rest).</span>
             </span>
           </label>
+          <label class="flex items-start gap-3 rounded-xl border border-slate-700 bg-black/40 p-3">
+            <input
+              type="radio"
+              name="training-schedule"
+              value="custom"
+              class="mt-1 accent-neon-cyan"
+            />
+            <span>
+              <span class="block font-semibold text-white">Custom (Weekly Architect)</span>
+              <span class="block text-xs text-slate-400">Use the weekly schedule editor below.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Weekly Schedule</p>
+        <p class="mt-2 text-xs text-slate-400">Build your own weekly cadence. Select "Custom" above to activate.</p>
+        <div id="custom-schedule-editor" class="mt-4 space-y-3 text-sm text-slate-300">
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Monday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Mon">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Tuesday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Tue">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Wednesday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Wed">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Thursday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Thu">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Friday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Fri">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Saturday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Sat">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 px-3 py-2">
+            <span>Sunday</span>
+            <select class="custom-schedule-select rounded-lg bg-black/40 px-3 py-1 text-sm text-white" data-custom-day="Sun">
+              <option>Session A (Prostate)</option>
+              <option>Session B (Pump)</option>
+              <option>Session C (Manual/Lingam)</option>
+              <option>Pelvic Tuning (Strength/Reverse)</option>
+              <option>Rest (Recovery)</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
@@ -1559,6 +1653,36 @@
     </div>
   </div>
 
+  <div id="emergency-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-neon-rose">Emergency Toolkit</p>
+      <h3 class="mt-2 text-xl font-semibold">Status Report?</h3>
+      <div class="mt-4 grid gap-3 text-sm text-slate-300">
+        <button
+          id="emergency-urge"
+          class="rounded-xl border border-neon-rose/60 bg-black/40 py-3 font-semibold text-neon-rose hover:bg-neon-rose/10"
+        >
+          High Urge
+        </button>
+        <button
+          id="emergency-turtle"
+          class="rounded-xl border border-neon-amber/60 bg-black/40 py-3 font-semibold text-neon-amber hover:bg-neon-amber/10"
+        >
+          Turtled / Shrinkage
+        </button>
+        <button
+          id="emergency-pain"
+          class="rounded-xl border border-neon-cyan/60 bg-black/40 py-3 font-semibold text-neon-cyan hover:bg-neon-cyan/10"
+        >
+          Pain / Ache
+        </button>
+      </div>
+      <button id="close-emergency" class="mt-4 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">
+        Cancel
+      </button>
+    </div>
+  </div>
+
   <div id="urge-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Discipline Protocol</p>
@@ -1579,6 +1703,25 @@
         </div>
       </div>
       <button id="urge-resolve" class="mt-5 w-full rounded-xl bg-neon-emerald py-3 font-semibold text-gym-dark">I Beat The Urge</button>
+    </div>
+  </div>
+
+  <div id="blue-balls-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-neon-amber">Vasocongestion Relief</p>
+      <h3 class="mt-2 text-xl font-semibold">Blue Balls Fix</h3>
+      <div class="mt-4 space-y-3 text-sm text-slate-300">
+        <p class="text-xs uppercase tracking-[0.3em] text-neon-amber">Quick Protocol</p>
+        <ol class="list-decimal pl-5 space-y-1">
+          <li><span class="font-semibold text-white">Stop stimulation:</span> no edging.</li>
+          <li><span class="font-semibold text-white">Fire &amp; Ice:</span> warm bath then cold rinse to push blood out.</li>
+          <li><span class="font-semibold text-white">Support:</span> wear supportive briefs for 1-2 hours.</li>
+          <li><span class="font-semibold text-white">Move:</span> 20 slow air squats.</li>
+        </ol>
+      </div>
+      <button id="close-blue-balls" class="mt-5 w-full rounded-xl border border-slate-500 py-3 text-sm text-slate-300">
+        Close
+      </button>
     </div>
   </div>
 
@@ -1890,9 +2033,9 @@
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Trance Timer</p>
-          <h3 class="mt-2 text-xl font-semibold text-neon-amber">Freestyle / Trance Mode</h3>
-          <p class="mt-1 text-sm text-slate-300">Count up and hold the 7-8 zone without release.</p>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Flow Timer</p>
+          <h3 class="mt-2 text-xl font-semibold text-neon-amber">Session C: Flow (Trance)</h3>
+          <p class="mt-1 text-sm text-slate-300">Open-ended flow with breathe anchors and arousal checks.</p>
         </div>
         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-amber text-lg">
           <i class="fa-solid fa-infinity"></i>
@@ -1961,25 +2104,31 @@
             color: "#06b6d4"
           },
           {
-            title: "Phase 1: Stillness",
+            title: "Phase 1: Warmup",
             duration: 120,
-            text: "Body Scan. Soften glutes/abs. Device still.",
+            text: "Body scan. Soften glutes/abs. Device still.",
             color: "#06b6d4"
           },
           {
-            title: "Phase 2: Gentle Ramp",
+            title: "Phase 2: Active Milking",
+            duration: 240,
+            text: "Motion: Rock forward -> Pull back. Visual: 'Come Hither'. Goal: Fluid drainage.",
+            color: "#06b6d4"
+          },
+          {
+            title: "Phase 3: Gentle Ramp",
             duration: 480,
             text: "Low setting. Goal: Level 3-4 (Mild fullness).",
             color: "#06b6d4"
           },
           {
-            title: "Phase 3: Milking",
+            title: "Phase 4: Control Cycle",
             duration: 1080,
-            text: "Active Milking: Rock device forward (to navel) and pull back. 'Come hither' motion. 1 stroke per breath.",
+            text: "Hold steady, then downshift. Track sensation and breathe evenly.",
             color: "#06b6d4"
           },
           {
-            title: "Phase 4: Reset",
+            title: "Phase 5: Reset",
             duration: 600,
             text: "Pelvic Floor Reset. Device Off. Downshift breathing.",
             color: "#10b981",
@@ -2006,7 +2155,7 @@
           {
             title: "Step 3: Cycle 1",
             duration: 240,
-            text: "HOLD. Warm expansion. No pain.",
+            text: "HOLD. Warm expansion. No pain. Internal Pulse: Gently engage Kegel for 1s to push blood into the tube. Relax. Repeat every 10s.",
             color: "#06b6d4"
           },
           {
@@ -2019,7 +2168,7 @@
           {
             title: "Step 5: Cycle 2",
             duration: 240,
-            text: "HOLD. Consistent pressure.",
+            text: "HOLD. Consistent pressure. Internal Pulse: Gently engage Kegel for 1s to push blood into the tube. Relax. Repeat every 10s.",
             color: "#06b6d4"
           },
           {
@@ -2039,31 +2188,31 @@
         ]
       },
       C: {
-        name: "Manual Mastery (Lingam Focus)",
+        name: "Manual Mastery (Structural / Lingam)",
         warning: "",
         steps: [
           {
-            title: "Phase 1: The Base Lock",
+            title: "Mode 1: Base Lock (Trap Blood)",
             duration: 180,
-            text: "Form an 'OK' grip at the base. Squeeze firmly to trap blood. Massage the shaft with the other hand.",
+            text: "Form an 'OK' grip at the base. Trap blood, then massage the shaft with the other hand.",
             color: "#f59e0b"
           },
           {
-            title: "Phase 2: The Corkscrew",
+            title: "Mode 1: Fascia Twist (Corkscrew)",
             duration: 180,
             text: "Use a twisting motion from base to glans. Stretch the fascia gently.",
             color: "#f59e0b"
           },
           {
-            title: "Phase 3: The Sack Stretch",
+            title: "Mode 1: Scrotal Drag (Anti-Turtle)",
             duration: 120,
-            text: "Gently pull the scrotum downwards. Breathe into the stretch. Prevent turtling.",
+            text: "Gently pull the scrotum downward. Breathe into the stretch to prevent turtling.",
             color: "#f59e0b"
           },
           {
-            title: "Phase 4: Integration",
+            title: "Mode 1: Integration",
             duration: 120,
-            text: "Hands off. Stillness. Feel the vibration/warmth.",
+            text: "Hands off. Stillness. Feel the warmth and circulation.",
             color: "#10b981",
             showArousal: true
           }
@@ -2071,6 +2220,7 @@
       }
     };
 
+    const weekOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const scheduleOptions = {
       standard: [
         { day: "Mon", plan: "Session A" },
@@ -2089,7 +2239,8 @@
         { day: "Fri", plan: "Session A" },
         { day: "Sat", plan: "Session B" },
         { day: "Sun", plan: "Rest" }
-      ]
+      ],
+      custom: []
     };
 
     const gameDaySteps = [
@@ -2197,6 +2348,10 @@
     const lightModeToggle = document.getElementById("light-mode-toggle");
     const lightModeHint = document.getElementById("light-mode-hint");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
+    const customScheduleEditor = document.getElementById("custom-schedule-editor");
+    const customScheduleSelects = document.querySelectorAll(".custom-schedule-select");
+    const pelvicTabs = document.querySelectorAll(".pelvic-tab");
+    const pelvicPanels = document.querySelectorAll("[data-pelvic-panel]");
     const infoTriggers = document.querySelectorAll(".info-trigger");
     const handbookSearch = document.getElementById("handbook-search");
     const handbookCards = document.querySelectorAll(".handbook-card");
@@ -2237,9 +2392,16 @@
     const panicUnlock = document.getElementById("panic-unlock");
     const panicClock = document.getElementById("panic-clock");
     const panicDate = document.getElementById("panic-date");
-    const urgeButton = document.getElementById("urge-sos");
+    const emergencyButton = document.getElementById("emergency-button");
+    const emergencyModal = document.getElementById("emergency-modal");
+    const emergencyClose = document.getElementById("close-emergency");
+    const emergencyUrge = document.getElementById("emergency-urge");
+    const emergencyTurtle = document.getElementById("emergency-turtle");
+    const emergencyPain = document.getElementById("emergency-pain");
     const urgeModal = document.getElementById("urge-modal");
     const urgeResolveButton = document.getElementById("urge-resolve");
+    const blueBallsModal = document.getElementById("blue-balls-modal");
+    const closeBlueBalls = document.getElementById("close-blue-balls");
     const urgeToast = document.getElementById("urge-toast");
     const appHeader = document.getElementById("app-header");
     const vacationToggle = document.getElementById("vacation-toggle");
@@ -2306,6 +2468,7 @@
     const tranceCheckerClose = document.getElementById("trance-checker-close");
     const tranceToggle = document.getElementById("trance-toggle");
     const tranceClose = document.getElementById("trance-close");
+    const startRecoveryTrain = document.getElementById("start-recovery-train");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -2372,10 +2535,10 @@
       if (key === "A" && isLightModeActiveForKey(key)) {
         steps = session.steps.map((step) => {
           const adjustedStep = { ...step };
-          if (step.title === "Phase 2: Gentle Ramp") {
+          if (step.title === "Phase 3: Gentle Ramp") {
             adjustedStep.duration = Math.max(0, step.duration - 120);
           }
-          if (step.title === "Phase 3: Milking") {
+          if (step.title === "Phase 4: Control Cycle") {
             adjustedStep.text = `${step.text} Slow and breath-led.`;
           }
           return adjustedStep;
@@ -2414,8 +2577,8 @@
 
     function getWaveformModeFromTitle(title) {
       const lower = (title || "").toLowerCase();
-      if (/(ramp)/.test(lower)) return "ramp";
-      if (/(hold|cycle|control|work|milking)/.test(lower)) return "hold";
+      if (/(ramp|twist)/.test(lower)) return "ramp";
+      if (/(hold|cycle|control|work|milking|lock|drag)/.test(lower)) return "hold";
       if (/(setup|warmup|release|reset|integration|stillness|seal)/.test(lower)) {
         return "rest";
       }
@@ -2641,6 +2804,22 @@
       logModal.classList.add("hidden");
       helpModal.classList.add("hidden");
       infoModal.classList.add("hidden");
+      if (emergencyModal) {
+        emergencyModal.classList.add("hidden");
+        emergencyModal.classList.remove("flex");
+      }
+      if (urgeModal) {
+        urgeModal.classList.add("hidden");
+        urgeModal.classList.remove("flex");
+      }
+      if (blueBallsModal) {
+        blueBallsModal.classList.add("hidden");
+        blueBallsModal.classList.remove("flex");
+      }
+      if (deTurtleModal) {
+        deTurtleModal.classList.add("hidden");
+        deTurtleModal.classList.remove("flex");
+      }
       panicOverlay.classList.remove("hidden");
       updatePanicClock();
       clearInterval(panicClockTimer);
@@ -2689,22 +2868,118 @@
       return getDayStart(date).getTime() === yesterday.getTime();
     }
 
+    function getDefaultCustomSchedule() {
+      return scheduleOptions.standard.map((item) => item.plan);
+    }
+
+    function loadCustomSchedule() {
+      const stored = localStorage.getItem("customSchedule");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length === 7) {
+            return parsed;
+          }
+        } catch (error) {
+          console.warn("Unable to parse custom schedule.");
+        }
+      }
+      const fallback = getDefaultCustomSchedule();
+      saveCustomSchedule(fallback);
+      return fallback;
+    }
+
+    function saveCustomSchedule(schedule) {
+      localStorage.setItem("customSchedule", JSON.stringify(schedule));
+    }
+
+    function getCustomScheduleList() {
+      const plans = loadCustomSchedule();
+      return weekOrder.map((day, index) => ({
+        day,
+        plan: plans[index] || "Rest (Recovery)"
+      }));
+    }
+
+    function getActiveSchedule() {
+      if (scheduleKey === "custom") {
+        return getCustomScheduleList();
+      }
+      return scheduleOptions[scheduleKey] || scheduleOptions.standard;
+    }
+
     function getScheduleForToday() {
       const dayIndex = new Date().getDay();
       const mapping = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const dayName = mapping[dayIndex];
-      const activeSchedule = scheduleOptions[scheduleKey] || scheduleOptions.standard;
+      const activeSchedule = getActiveSchedule();
       return activeSchedule.find((item) => item.day === dayName) || activeSchedule[0];
     }
 
     function buildSchedule() {
-      const activeSchedule = scheduleOptions[scheduleKey] || scheduleOptions.standard;
+      if (!scheduleList) return;
+      const activeSchedule = getActiveSchedule();
+      const today = getScheduleForToday().day;
       scheduleList.innerHTML = activeSchedule
-        .map(
-          (item) =>
-            `<li class="flex items-center justify-between"><span>${item.day}</span><span class="text-white">${item.plan}</span></li>`
-        )
+        .map((item) => {
+          const isToday = item.day === today;
+          const rowClass = isToday
+            ? "flex items-center justify-between rounded-lg bg-neon-cyan/10 px-2 py-1 text-neon-cyan"
+            : "flex items-center justify-between";
+          const planClass = isToday ? "text-neon-cyan font-semibold" : "text-white";
+          return `<li class="${rowClass}"><span>${item.day}</span><span class="${planClass}">${item.plan}</span></li>`;
+        })
         .join("");
+    }
+
+    function getPlanDescription(plan) {
+      if (plan.includes("Rest")) {
+        return "Breathing + pelvic floor relaxation only.";
+      }
+      if (plan.includes("Pelvic Tuning")) {
+        return "Choose Strengthen, Lengthen, or Reset inside Pelvic Tuning.";
+      }
+      if (plan.includes("Session C")) {
+        return "Manual work: structural steps or Flow (Trance) mode.";
+      }
+      return "Follow the guided timer with audio cues.";
+    }
+
+    function updateTodayPlanUi() {
+      const today = getScheduleForToday();
+      if (todayPlan) {
+        todayPlan.textContent = today.plan;
+      }
+      if (todayDescription) {
+        todayDescription.textContent = getPlanDescription(today.plan);
+      }
+    }
+
+    function syncCustomScheduleEditor() {
+      if (!customScheduleSelects.length) return;
+      const plans = loadCustomSchedule();
+      customScheduleSelects.forEach((select) => {
+        const day = select.dataset.customDay;
+        const dayIndex = weekOrder.indexOf(day);
+        if (dayIndex >= 0) {
+          select.value = plans[dayIndex] || "Rest (Recovery)";
+        }
+        select.disabled = scheduleKey !== "custom";
+        select.classList.toggle("opacity-60", scheduleKey !== "custom");
+        select.classList.toggle("cursor-not-allowed", scheduleKey !== "custom");
+      });
+      if (customScheduleEditor) {
+        customScheduleEditor.classList.toggle("opacity-60", scheduleKey !== "custom");
+      }
+    }
+
+    function saveCustomScheduleFromEditor() {
+      if (!customScheduleSelects.length) return;
+      const nextSchedule = weekOrder.map((day) => {
+        const select = Array.from(customScheduleSelects).find((item) => item.dataset.customDay === day);
+        return select ? select.value : "Rest (Recovery)";
+      });
+      saveCustomSchedule(nextSchedule);
     }
 
     function showSection(target) {
@@ -3422,16 +3697,19 @@
         if (stepTitle?.includes("Phase 0")) {
           bioMonitor.dataset.phase = "setup";
           bioMonitorLabel.textContent = "CALIBRATING...";
-        } else if (stepTitle?.includes("Phase 1")) {
+        } else if (stepTitle?.includes("Warmup")) {
           bioMonitor.dataset.phase = "stillness";
           bioMonitorLabel.textContent = "NO MOVEMENT";
-        } else if (stepTitle?.includes("Phase 2")) {
+        } else if (stepTitle?.includes("Active Milking")) {
+          bioMonitor.dataset.phase = "milking";
+          bioMonitorLabel.textContent = "FLOW DRAIN";
+        } else if (stepTitle?.includes("Gentle Ramp")) {
           bioMonitor.dataset.phase = "ramp";
           bioMonitorLabel.textContent = "TARGET ACQUIRE";
-        } else if (stepTitle?.includes("Milking")) {
-          bioMonitor.dataset.phase = "milking";
-          bioMonitorLabel.textContent = "FLOW PULSE";
-        } else if (stepTitle?.includes("Phase 4")) {
+        } else if (stepTitle?.includes("Control Cycle")) {
+          bioMonitor.dataset.phase = "hold";
+          bioMonitorLabel.textContent = "CONTROL HOLD";
+        } else if (stepTitle?.includes("Reset")) {
           bioMonitor.dataset.phase = "rest";
           bioMonitorLabel.textContent = "COOL DOWN";
         } else {
@@ -3461,10 +3739,10 @@
         if (stepTitle?.includes("Base Lock")) {
           bioMonitor.dataset.phase = "hold";
           bioMonitorLabel.textContent = "BASE LOCK";
-        } else if (stepTitle?.includes("Corkscrew")) {
+        } else if (stepTitle?.includes("Fascia Twist")) {
           bioMonitor.dataset.phase = "ramp";
           bioMonitorLabel.textContent = "SPIRAL FLOW";
-        } else if (stepTitle?.includes("Sack Stretch")) {
+        } else if (stepTitle?.includes("Scrotal Drag")) {
           bioMonitor.dataset.phase = "hold";
           bioMonitorLabel.textContent = "LOW TETHER";
         } else {
@@ -3556,7 +3834,7 @@
       if (
         currentSessionKey === "A" &&
         step &&
-        step.title === "Phase 3: Milking" &&
+        step.title === "Phase 4: Control Cycle" &&
         timerId
       ) {
         if (!controlCycleIntervalId) {
@@ -3629,7 +3907,7 @@
         arousalSlider.value = 3;
         updateArousalFeedback(3);
       }
-      if (currentSessionKey === "A" && step.title === "Phase 3: Milking") {
+      if (currentSessionKey === "A" && step.title === "Phase 4: Control Cycle") {
         startControlCycleAffirmations(step.text);
       } else {
         stopControlCycleAffirmations();
@@ -4309,6 +4587,22 @@
       });
     }
 
+    function setPelvicTab(tabKey) {
+      if (!pelvicTabs.length || !pelvicPanels.length) return;
+      pelvicTabs.forEach((tab) => {
+        const isActive = tab.dataset.pelvicTab === tabKey;
+        tab.classList.toggle("border-neon-violet/60", isActive);
+        tab.classList.toggle("text-neon-violet", isActive);
+        tab.classList.toggle("bg-black/40", isActive);
+        tab.classList.toggle("border-slate-600", !isActive);
+        tab.classList.toggle("text-slate-300", !isActive);
+        tab.classList.toggle("bg-black/20", !isActive);
+      });
+      pelvicPanels.forEach((panel) => {
+        panel.classList.toggle("hidden", panel.dataset.pelvicPanel !== tabKey);
+      });
+    }
+
     function setLockState(button, label, message) {
       if (message) {
         button.disabled = true;
@@ -4351,11 +4645,8 @@
       scheduleKey = nextKey;
       localStorage.setItem("usph_schedule", scheduleKey);
       buildSchedule();
-      const today = getScheduleForToday();
-      todayPlan.textContent = today.plan;
-      todayDescription.textContent = today.plan.includes("Rest")
-        ? "Breathing + pelvic floor relaxation only."
-        : "Follow the guided timer with audio cues.";
+      syncCustomScheduleEditor();
+      updateTodayPlanUi();
     }
 
     function collectLocalStorage() {
@@ -4565,10 +4856,45 @@
       helpModal.classList.remove("flex");
     });
 
-    if (urgeButton) {
-      urgeButton.addEventListener("click", () => {
+    if (emergencyButton) {
+      emergencyButton.addEventListener("click", () => {
+        emergencyModal.classList.remove("hidden");
+        emergencyModal.classList.add("flex");
+      });
+    }
+
+    if (emergencyClose) {
+      emergencyClose.addEventListener("click", () => {
+        emergencyModal.classList.add("hidden");
+        emergencyModal.classList.remove("flex");
+      });
+    }
+
+    if (emergencyUrge) {
+      emergencyUrge.addEventListener("click", () => {
+        emergencyModal.classList.add("hidden");
+        emergencyModal.classList.remove("flex");
         urgeModal.classList.remove("hidden");
         urgeModal.classList.add("flex");
+      });
+    }
+
+    if (emergencyTurtle) {
+      emergencyTurtle.addEventListener("click", () => {
+        emergencyModal.classList.add("hidden");
+        emergencyModal.classList.remove("flex");
+        resetDeTurtleProtocol();
+        deTurtleModal.classList.remove("hidden");
+        deTurtleModal.classList.add("flex");
+      });
+    }
+
+    if (emergencyPain) {
+      emergencyPain.addEventListener("click", () => {
+        emergencyModal.classList.add("hidden");
+        emergencyModal.classList.remove("flex");
+        blueBallsModal.classList.remove("hidden");
+        blueBallsModal.classList.add("flex");
       });
     }
 
@@ -4577,6 +4903,13 @@
         urgeModal.classList.add("hidden");
         urgeModal.classList.remove("flex");
         flashWillpowerToast();
+      });
+    }
+
+    if (closeBlueBalls) {
+      closeBlueBalls.addEventListener("click", () => {
+        blueBallsModal.classList.add("hidden");
+        blueBallsModal.classList.remove("flex");
       });
     }
 
@@ -4600,7 +4933,26 @@
       });
     });
 
+    customScheduleSelects.forEach((select) => {
+      select.addEventListener("change", () => {
+        saveCustomScheduleFromEditor();
+        if (scheduleKey === "custom") {
+          buildSchedule();
+          updateTodayPlanUi();
+        }
+      });
+    });
+
+    pelvicTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        setPelvicTab(tab.dataset.pelvicTab);
+      });
+    });
+
     startRecovery.addEventListener("click", startRecoverySession);
+    if (startRecoveryTrain) {
+      startRecoveryTrain.addEventListener("click", startRecoverySession);
+    }
 
     if (gameDayButton) {
       gameDayButton.addEventListener("click", () => {
@@ -4807,6 +5159,21 @@
           lightModeToggle.checked = false;
         }
         setSession("B");
+      } else if (today.plan.includes("Session C")) {
+        lightModeEnabled = false;
+        if (lightModeToggle) {
+          lightModeToggle.checked = false;
+        }
+        setSession("C");
+      } else if (today.plan.includes("Pelvic Tuning")) {
+        currentSessionKey = null;
+        sessionTitle.textContent = "Pelvic Tuning";
+        sessionNote.textContent = "Choose Strengthen, Lengthen, or Reset below.";
+        sessionWarning.classList.add("hidden");
+        updateBioMonitorState(null, null);
+        updateSessionWaveform("rest");
+        updateLightModeUi();
+        setPelvicTab("strength");
       } else {
         sessionTitle.textContent = "Rest Day";
         sessionNote.textContent = "Breathing only. No device work today.";
@@ -4880,11 +5247,8 @@
     function init() {
       loadSchedulePreference();
       buildSchedule();
-      const today = getScheduleForToday();
-      todayPlan.textContent = today.plan;
-      todayDescription.textContent = today.plan.includes("Rest")
-        ? "Breathing + pelvic floor relaxation only."
-        : "Follow the guided timer with audio cues.";
+      syncCustomScheduleEditor();
+      updateTodayPlanUi();
       loadAudioGuidancePreference();
       loadVacationMode();
       loadGrowerMode();
@@ -4900,6 +5264,7 @@
       setDailyDefaultDate();
       applyHandbookFilter("");
       setSession("A");
+      setPelvicTab("strength");
       if (gameDayModal) {
         resetGameDayPrimer();
       }
