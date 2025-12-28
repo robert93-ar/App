@@ -1033,10 +1033,6 @@
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Preferences</p>
         <div class="mt-4 space-y-4 text-sm text-slate-300">
           <div>
-            <p class="font-semibold text-white">Audio Guidance</p>
-            <p>Uses Text-to-Speech for phase changes. Ensure your device volume is on.</p>
-          </div>
-          <div>
             <p class="font-semibold text-white">Privacy First</p>
             <p>Everything stays local unless you export manually.</p>
           </div>
@@ -1063,6 +1059,25 @@
             </span>
           </label>
           <p id="grower-label" class="text-xs text-slate-400">Grower Mode: ON</p>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Audio &amp; Feedback</p>
+        <div class="mt-4 space-y-3 text-sm text-slate-300">
+          <label class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 p-3">
+            <span>
+              <span class="block font-semibold text-white">Enable Audio Guidance (TTS)</span>
+              <span class="block text-xs text-slate-400">
+                Announce phase changes and allow focus audio when enabled.
+              </span>
+            </span>
+            <span class="relative inline-flex items-center cursor-pointer">
+              <input id="audio-guidance-toggle" type="checkbox" class="sr-only peer" />
+              <span class="h-6 w-11 rounded-full bg-slate-700 peer-checked:bg-neon-cyan transition"></span>
+              <span class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-5"></span>
+            </span>
+          </label>
+          <p class="text-xs text-slate-400">Disable for silent, visuals-only sessions.</p>
         </div>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
@@ -2055,6 +2070,7 @@
     const vacationIcon = document.getElementById("vacation-icon");
     const growerToggle = document.getElementById("grower-toggle");
     const growerLabel = document.getElementById("grower-label");
+    const audioGuidanceToggle = document.getElementById("audio-guidance-toggle");
     const heatmapGrid = document.getElementById("heatmap-grid");
     const heatmapTooltip = document.getElementById("heatmap-tooltip");
     const heatmapMonth = document.getElementById("heatmap-month");
@@ -2136,6 +2152,7 @@
     let vacationModeEnabled = false;
     let growerModeEnabled = true;
     let lightModeEnabled = false;
+    let audioGuidanceEnabled = true;
     let sessionLightModeActive = false;
     let controlCycleMessages = [...controlCycleAffirmations];
 
@@ -2269,6 +2286,7 @@
     }
 
     function speak(text) {
+      if (!audioGuidanceEnabled) return;
       if (!("speechSynthesis" in window)) return;
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
@@ -2339,6 +2357,10 @@
     }
 
     function startNeuroAudio() {
+      if (!audioGuidanceEnabled) {
+        stopNeuroAudio(true);
+        return;
+      }
       ensureNeuroAudio();
       if (!neuroAudioContext || !neuroAudioGain) return;
       neuroAudioContext.resume();
@@ -2384,6 +2406,10 @@
     }
 
     function toggleNeuroAudio() {
+      if (!audioGuidanceEnabled) {
+        stopNeuroAudio(true);
+        return;
+      }
       if (neuroAudioEnabled) {
         stopNeuroAudio();
         return;
@@ -4439,6 +4465,25 @@
       vacationIcon.classList.toggle("hidden", !vacationModeEnabled);
     }
 
+    function applyAudioGuidanceSetting(isEnabled, shouldPersist = true) {
+      audioGuidanceEnabled = isEnabled;
+      if (audioGuidanceToggle) {
+        audioGuidanceToggle.checked = audioGuidanceEnabled;
+      }
+      if (shouldPersist) {
+        localStorage.setItem("usph_audio_guidance", String(audioGuidanceEnabled));
+      }
+      if (!audioGuidanceEnabled) {
+        window.speechSynthesis?.cancel();
+        stopNeuroAudio(true);
+      }
+    }
+
+    function loadAudioGuidancePreference() {
+      const stored = localStorage.getItem("usph_audio_guidance");
+      applyAudioGuidanceSetting(stored !== "false", false);
+    }
+
     function updateGrowerLabel() {
       if (!growerLabel) return;
       growerLabel.textContent = growerModeEnabled ? "Grower Mode: ON" : "Shower Mode: ON";
@@ -4460,6 +4505,12 @@
       updateStreak();
     });
 
+    if (audioGuidanceToggle) {
+      audioGuidanceToggle.addEventListener("change", (event) => {
+        applyAudioGuidanceSetting(event.target.checked);
+      });
+    }
+
     if (growerToggle) {
       growerToggle.addEventListener("change", (event) => {
         growerModeEnabled = event.target.checked;
@@ -4479,6 +4530,7 @@
       todayDescription.textContent = today.plan.includes("Rest")
         ? "Breathing + pelvic floor relaxation only."
         : "Follow the guided timer with audio cues.";
+      loadAudioGuidancePreference();
       loadVacationMode();
       loadGrowerMode();
       updateLogs();
