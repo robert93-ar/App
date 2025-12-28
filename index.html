@@ -235,6 +235,13 @@
       background: rgba(251, 191, 36, 0.9);
       box-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
     }
+    .bio-monitor[data-visual="vector_scope"] .vector-scope,
+    .bio-monitor[data-visual="flow_timer"] .vector-scope {
+      opacity: 1;
+    }
+    .bio-monitor[data-visual="expansion_cylinder"] .expansion-cylinder {
+      opacity: 1;
+    }
     .vector-scope {
       border-radius: 9999px;
       background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.18), rgba(6, 10, 20, 0.95));
@@ -578,6 +585,13 @@
     >
       Willpower +1
     </div>
+    <button
+      id="backup-toast"
+      class="fixed bottom-6 left-1/2 z-40 hidden -translate-x-1/2 rounded-full border border-neon-amber/60 bg-gym-card/95 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-neon-amber shadow-lg transition-opacity duration-300"
+      type="button"
+    >
+      Protect your Streak: Tap to Backup Data
+    </button>
 
     <section id="hub" class="px-6 space-y-4">
       <div class="bg-gym-card rounded-2xl p-4 shadow-lg space-y-3">
@@ -2318,11 +2332,13 @@
   </div>
 
   <script>
-    const sessions = {
-      A: {
+    const SESSIONS = {
+      session_a_rookie: {
+        key: "A",
         name: "Control & Endurance (Prostate Focus)",
         warning: "",
-        steps: [
+        visual: "vector_scope",
+        phases: [
           {
             title: "Phase 0: Setup",
             duration: 600,
@@ -2362,10 +2378,12 @@
           }
         ]
       },
-      B: {
+      session_b_standard: {
+        key: "B",
         name: "Pump Therapy (Vascular Focus)",
         warning: "STOP if numbness/coldness",
-        steps: [
+        visual: "expansion_cylinder",
+        phases: [
           {
             title: "Step 1: Warmup",
             duration: 300,
@@ -2413,10 +2431,12 @@
           }
         ]
       },
-      C: {
+      session_c_trance: {
+        key: "C",
         name: "Manual Mastery (Structural / Lingam)",
         warning: "",
-        steps: [
+        visual: "flow_timer",
+        phases: [
           {
             title: "Mode 1: Base Lock (Trap Blood)",
             duration: 180,
@@ -2444,6 +2464,12 @@
           }
         ]
       }
+    };
+
+    const SESSION_KEY_MAP = {
+      A: "session_a_rookie",
+      B: "session_b_standard",
+      C: "session_c_trance"
     };
 
     const masteryLevels = {
@@ -2741,6 +2767,8 @@
     const startRecoveryTrain = document.getElementById("start-recovery-train");
     const subliminalOverlay = document.getElementById("subliminal-overlay");
     const masteryBadge = document.getElementById("mastery-badge");
+    const hubSection = document.getElementById("hub");
+    const backupToast = document.getElementById("backup-toast");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -2780,6 +2808,11 @@
     let sessionAIntensity = 1;
     let sessionATimeMode = "standard";
     let sessionCTimeMode = "standard";
+    let wakeLockHandle = null;
+    let wakeLockFallbackContext = null;
+    let wakeLockFallbackGain = null;
+    let wakeLockFallbackSource = null;
+    let speechDuckRestoreGain = null;
 
     function getSessionATimeConfig() {
       return sessionTimeModes[sessionATimeMode] || sessionTimeModes.standard;
@@ -2791,6 +2824,11 @@
 
     function getSessionAIntensityConfig() {
       return masteryLevels[sessionAIntensity] || masteryLevels[1];
+    }
+
+    function getSessionConfig(key) {
+      const configKey = SESSION_KEY_MAP[key] || key;
+      return SESSIONS[configKey];
     }
 
     function getMasteryLabel(level) {
@@ -2822,7 +2860,7 @@
         const timeConfig = getSessionCTimeConfig();
         return `Manual Mastery (${timeConfig.label})`;
       }
-      return sessions[key]?.name || "Session";
+      return getSessionConfig(key)?.name || "Session";
     }
 
     function adjustStepDurationsToTarget(steps, targetTotal) {
@@ -2846,7 +2884,8 @@
       const restSeconds = intensity.rest;
       const controlDuration = cycles * (holdSeconds + restSeconds);
       const targetTotal = timeConfig.minutes * 60;
-      let steps = sessions.A.steps.map((step) => ({ ...step }));
+      const sessionConfig = getSessionConfig("A");
+      let steps = sessionConfig?.phases.map((step) => ({ ...step })) || [];
 
       steps = steps.map((step) => {
         if (step.title === "Phase 4: Control Cycle") {
@@ -2896,7 +2935,8 @@
       const timeConfig = getSessionCTimeConfig();
       const cycles = timeConfig.cycles;
       const targetTotal = timeConfig.minutes * 60;
-      const baseSteps = sessions.C.steps.map((step) => ({ ...step }));
+      const sessionConfig = getSessionConfig("C");
+      const baseSteps = sessionConfig?.phases.map((step) => ({ ...step })) || [];
       const baseCycleTotal = baseSteps.reduce((sum, step) => sum + step.duration, 0);
       const targetCycleTotal = targetTotal / cycles;
       const scale = baseCycleTotal ? targetCycleTotal / baseCycleTotal : 1;
@@ -2916,10 +2956,9 @@
       return steps;
     }
 
-    function getSessionSteps(key) {
-      const session = sessions[key];
-      if (!session) return [];
-      let steps = session.steps;
+    function getSessionSteps(key, sessionConfig = getSessionConfig(key)) {
+      if (!sessionConfig) return [];
+      let steps = sessionConfig.phases;
       if (key === "A") {
         steps = buildSessionASteps();
       }
@@ -2958,6 +2997,70 @@
         return "rest";
       }
       return "rest";
+    }
+
+    function startWakeLockFallback() {
+      if (wakeLockFallbackSource) return;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      if (!wakeLockFallbackContext) {
+        wakeLockFallbackContext = new AudioContextClass();
+      }
+      const buffer = wakeLockFallbackContext.createBuffer(
+        1,
+        Math.floor(wakeLockFallbackContext.sampleRate * 0.5),
+        wakeLockFallbackContext.sampleRate
+      );
+      const source = wakeLockFallbackContext.createBufferSource();
+      const gainNode = wakeLockFallbackContext.createGain();
+      gainNode.gain.value = 0.0001;
+      source.buffer = buffer;
+      source.loop = true;
+      source.connect(gainNode).connect(wakeLockFallbackContext.destination);
+      source.start();
+      wakeLockFallbackSource = source;
+      wakeLockFallbackGain = gainNode;
+      wakeLockFallbackContext.resume?.();
+    }
+
+    function stopWakeLockFallback() {
+      if (wakeLockFallbackSource) {
+        wakeLockFallbackSource.stop();
+        wakeLockFallbackSource.disconnect();
+      }
+      if (wakeLockFallbackGain) {
+        wakeLockFallbackGain.disconnect();
+      }
+      wakeLockFallbackSource = null;
+      wakeLockFallbackGain = null;
+    }
+
+    async function requestWakeLock() {
+      if (!sessionStart) return;
+      if (!("wakeLock" in navigator)) {
+        startWakeLockFallback();
+        return;
+      }
+      try {
+        wakeLockHandle = await navigator.wakeLock.request("screen");
+        wakeLockHandle.addEventListener("release", () => {
+          wakeLockHandle = null;
+          if (sessionStart) {
+            startWakeLockFallback();
+          }
+        });
+        stopWakeLockFallback();
+      } catch (error) {
+        startWakeLockFallback();
+      }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLockHandle) {
+        wakeLockHandle.release().catch(() => undefined);
+        wakeLockHandle = null;
+      }
+      stopWakeLockFallback();
     }
     let dailyRetentionBreached = false;
     let gameDayTimerId = null;
@@ -3018,12 +3121,31 @@
       progressRing.style.strokeDashoffset = `${ringLength - ringLength * ratio}`;
     }
 
+    function duckNeuroAudioForSpeech() {
+      if (!neuroAudioEnabled || neuroAudioMode !== "focus") return;
+      if (!neuroAudioGain || !neuroAudioContext) return;
+      if (speechDuckRestoreGain !== null) {
+        fadeNeuroAudio(speechDuckRestoreGain, 0.2);
+      }
+      speechDuckRestoreGain = neuroAudioGain.gain.value;
+      fadeNeuroAudio(speechDuckRestoreGain * 0.2, 0.2);
+    }
+
+    function restoreNeuroAudioAfterSpeech() {
+      if (speechDuckRestoreGain === null) return;
+      fadeNeuroAudio(speechDuckRestoreGain, 0.3);
+      speechDuckRestoreGain = null;
+    }
+
     function speak(text) {
       if (!audioGuidanceEnabled) return;
       if (!("speechSynthesis" in window)) return;
       window.speechSynthesis.cancel();
+      duckNeuroAudioForSpeech();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1;
+      utterance.onend = () => restoreNeuroAudioAfterSpeech();
+      utterance.onerror = () => restoreNeuroAudioAfterSpeech();
       window.speechSynthesis.speak(utterance);
     }
 
@@ -3367,6 +3489,7 @@
       navButtons.forEach((btn) => {
         btn.classList.toggle("text-neon-cyan", btn.dataset.target === target);
       });
+      updateBackupReminderVisibility();
     }
 
     function applyHandbookFilter(query) {
@@ -3890,7 +4013,8 @@
       neuroAudioMode = key === "B" ? "relax" : "focus";
       updateSoundUi();
       preStartAdjustment = 0;
-      const session = sessions[key];
+      const session = getSessionConfig(key);
+      if (!session) return;
       sessionTitle.textContent = getSessionDisplayName(key);
       sessionNote.textContent = "Press start to begin the interval timer.";
       if (key === "A") {
@@ -4118,8 +4242,8 @@
     function updatePositionGuideVisibility() {
       if (!positionGuideButton) return;
       const isSessionA = currentSessionKey === "A";
-      const session = isSessionA ? sessions[currentSessionKey] : null;
-      const isSetupPhase = session && session.steps[currentStepIndex]?.title === "Phase 0: Setup";
+      const steps = isSessionA ? getSessionSteps(currentSessionKey) : [];
+      const isSetupPhase = steps[currentStepIndex]?.title === "Phase 0: Setup";
       positionGuideButton.classList.toggle("hidden", !(isSessionA && isSetupPhase));
     }
 
@@ -4128,9 +4252,12 @@
       if (!sessionKey) {
         bioMonitor.dataset.session = "idle";
         bioMonitor.dataset.phase = "idle";
+        bioMonitor.dataset.visual = "idle";
         bioMonitorLabel.textContent = "Standby";
         return;
       }
+      const sessionConfig = getSessionConfig(sessionKey);
+      bioMonitor.dataset.visual = sessionConfig?.visual || "vector_scope";
       if (sessionKey === "A") {
         bioMonitor.dataset.session = "A";
         if (stepTitle?.includes("Phase 0")) {
@@ -4364,7 +4491,6 @@
     }
 
     function setStep(index) {
-      const session = sessions[currentSessionKey];
       const steps = getSessionSteps(currentSessionKey);
       const step = steps[index];
       if (!step) {
@@ -4387,6 +4513,9 @@
       if (step.showArousal) {
         arousalSlider.value = 3;
         updateArousalFeedback(3);
+      }
+      if (navigator.vibrate) {
+        navigator.vibrate([200]);
       }
       if (currentSessionKey === "A" && step.title === "Phase 4: Control Cycle") {
         startControlCycleAffirmations(step.text);
@@ -4413,14 +4542,16 @@
       }
     }
 
-    function startSession() {
-      if (!currentSessionKey) return;
+    function startSession(sessionConfig) {
+      const activeConfig = sessionConfig || getSessionConfig(currentSessionKey);
+      if (!currentSessionKey || !activeConfig) return;
       sessionStart = new Date();
       setStep(0);
       timerId = setInterval(tick, 1000);
       toggleSession.textContent = "Pause";
       updateSessionSettingsNote();
       updateLightModeUi();
+      requestWakeLock();
     }
 
     function pauseSession() {
@@ -4439,6 +4570,7 @@
       stopNeuroAudio();
       stopControlCycleAffirmations();
       stopSubliminalScripts();
+      releaseWakeLock();
       if (!sessionStart) return;
       const duration = Math.round((Date.now() - sessionStart.getTime()) / 60000);
       const intensity = currentSessionKey === "A" ? getSessionAIntensityConfig() : null;
@@ -5444,6 +5576,22 @@
       updateTodayPlanUi();
     }
 
+    function shouldShowBackupReminder() {
+      const lastBackup = localStorage.getItem("lastBackupDate");
+      if (!lastBackup) return true;
+      const lastBackupTime = new Date(lastBackup).getTime();
+      if (Number.isNaN(lastBackupTime)) return true;
+      const weekMs = 7 * 24 * 60 * 60 * 1000;
+      return Date.now() - lastBackupTime > weekMs;
+    }
+
+    function updateBackupReminderVisibility() {
+      if (!backupToast) return;
+      const isHubVisible = hubSection ? !hubSection.classList.contains("hidden") : true;
+      const shouldShow = shouldShowBackupReminder() && isHubVisible;
+      backupToast.classList.toggle("hidden", !shouldShow);
+    }
+
     function collectLocalStorage() {
       const data = {};
       for (let i = 0; i < localStorage.length; i += 1) {
@@ -5466,6 +5614,8 @@
       link.download = "performance-hub-backup.json";
       link.click();
       URL.revokeObjectURL(url);
+      localStorage.setItem("lastBackupDate", new Date().toISOString());
+      updateBackupReminderVisibility();
     }
 
     function importBackupData(file) {
@@ -5534,6 +5684,17 @@
       }
       lastHeaderTap = now;
     });
+    document.addEventListener("visibilitychange", () => {
+      if (!sessionStart) {
+        stopWakeLockFallback();
+        return;
+      }
+      if (document.visibilityState === "visible") {
+        requestWakeLock();
+      } else {
+        startWakeLockFallback();
+      }
+    });
 
     toggleSession.addEventListener("click", () => {
       if (!currentSessionKey) return;
@@ -5542,8 +5703,9 @@
           timerId = setInterval(tick, 1000);
           toggleSession.textContent = "Pause";
           refreshControlCycleAffirmations();
+          requestWakeLock();
         } else {
-          startSession();
+          startSession(getSessionConfig(currentSessionKey));
         }
       } else {
         pauseSession();
@@ -5816,6 +5978,17 @@
     });
 
     exportBackup.addEventListener("click", exportBackupData);
+
+    if (backupToast) {
+      backupToast.addEventListener("click", () => {
+        showSection("hub");
+        exportBackup.scrollIntoView({ behavior: "smooth", block: "center" });
+        exportBackup.classList.add("ring-2", "ring-neon-amber");
+        setTimeout(() => {
+          exportBackup.classList.remove("ring-2", "ring-neon-amber");
+        }, 1200);
+      });
+    }
 
     importBackup.addEventListener("change", (event) => {
       const file = event.target.files[0];
@@ -6137,6 +6310,7 @@
       updateStrengthAvailability();
       updateSystemReadiness();
       updateHangAlert();
+      updateBackupReminderVisibility();
       if (shouldOpenMorningBriefing()) {
         openMorningBriefingModal();
       }
