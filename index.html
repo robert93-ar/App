@@ -811,20 +811,14 @@
             <div class="flex flex-col items-center gap-1">
               <button
                 id="sound-toggle"
-                class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-200 hover:text-neon-cyan"
+                class="flex items-center gap-2 rounded-full border border-slate-600 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-200 hover:text-neon-cyan"
                 type="button"
                 aria-pressed="false"
-                aria-label="Toggle neuro-audio"
-                title="Toggle neuro-audio"
+                aria-label="Toggle focus noise"
+                title="Toggle focus noise"
               >
-                <i class="fa-solid fa-volume-low"></i>
-              </button>
-              <button
-                id="sound-mode"
-                class="rounded-full border border-slate-700 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-300 hover:text-neon-emerald"
-                type="button"
-              >
-                Focus
+                <i class="fa-solid fa-wave-square"></i>
+                <span id="sound-toggle-label">Focus: OFF</span>
               </button>
             </div>
             <button
@@ -1157,25 +1151,6 @@
             </span>
           </label>
           <p id="grower-label" class="text-xs text-slate-400">Grower Mode: ON</p>
-        </div>
-      </div>
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Audio &amp; Feedback</p>
-        <div class="mt-4 space-y-3 text-sm text-slate-300">
-          <label class="flex items-center justify-between rounded-xl border border-slate-700 bg-black/40 p-3">
-            <span>
-              <span class="block font-semibold text-white">Enable Audio Guidance (TTS)</span>
-              <span class="block text-xs text-slate-400">
-                Announce phase changes and allow focus audio when enabled.
-              </span>
-            </span>
-            <span class="relative inline-flex items-center cursor-pointer">
-              <input id="audio-guidance-toggle" type="checkbox" class="sr-only peer" />
-              <span class="h-6 w-11 rounded-full bg-slate-700 peer-checked:bg-neon-cyan transition"></span>
-              <span class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-5"></span>
-            </span>
-          </label>
-          <p class="text-xs text-slate-400">Disable for silent, visuals-only sessions.</p>
         </div>
       </div>
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
@@ -2332,10 +2307,10 @@
   </div>
 
   <script>
-    const SESSIONS = {
+    const SESSION_LIBRARY = {
       session_a_rookie: {
         key: "A",
-        name: "Control & Endurance (Prostate Focus)",
+        title: "Control & Endurance (Prostate Focus)",
         warning: "",
         visual: "vector_scope",
         phases: [
@@ -2380,7 +2355,7 @@
       },
       session_b_standard: {
         key: "B",
-        name: "Pump Therapy (Vascular Focus)",
+        title: "Pump Therapy (Vascular Focus)",
         warning: "STOP if numbness/coldness",
         visual: "expansion_cylinder",
         phases: [
@@ -2433,7 +2408,7 @@
       },
       session_c_trance: {
         key: "C",
-        name: "Manual Mastery (Structural / Lingam)",
+        title: "Manual Mastery (Structural / Lingam)",
         warning: "",
         visual: "flow_timer",
         phases: [
@@ -2659,7 +2634,7 @@
     const reverseKegelToggle = document.getElementById("reverse-kegel-toggle");
     const reverseKegelClose = document.getElementById("reverse-kegel-close");
     const soundToggle = document.getElementById("sound-toggle");
-    const soundModeButton = document.getElementById("sound-mode");
+    const soundToggleLabel = document.getElementById("sound-toggle-label");
     const panicButton = document.getElementById("panic-button");
     const panicOverlay = document.getElementById("panic-overlay");
     const panicUnlock = document.getElementById("panic-unlock");
@@ -2681,7 +2656,6 @@
     const vacationIcon = document.getElementById("vacation-icon");
     const growerToggle = document.getElementById("grower-toggle");
     const growerLabel = document.getElementById("grower-label");
-    const audioGuidanceToggle = document.getElementById("audio-guidance-toggle");
     const heatmapGrid = document.getElementById("heatmap-grid");
     const heatmapTooltip = document.getElementById("heatmap-tooltip");
     const heatmapMonth = document.getElementById("heatmap-month");
@@ -2784,12 +2758,7 @@
     let recoveryStart = null;
     let recoveryIntervalId = null;
     let recoveryTimeoutId = null;
-    let neuroAudioContext = null;
-    let neuroAudioGain = null;
-    let neuroAudioSource = null;
-    let neuroAudioNodes = [];
-    let neuroAudioEnabled = false;
-    let neuroAudioMode = "focus";
+    let soundEngine = null;
     let panicClockTimer = null;
     let lastHeaderTap = 0;
     let strengthTimerId = null;
@@ -2802,7 +2771,6 @@
     let reverseKegelActive = false;
     let vacationModeEnabled = false;
     let growerModeEnabled = true;
-    let audioGuidanceEnabled = true;
     let sessionLightModeActive = false;
     let controlCycleMessages = [...controlCycleAffirmations];
     let sessionAIntensity = 1;
@@ -2812,7 +2780,6 @@
     let wakeLockFallbackContext = null;
     let wakeLockFallbackGain = null;
     let wakeLockFallbackSource = null;
-    let speechDuckRestoreGain = null;
 
     function getSessionATimeConfig() {
       return sessionTimeModes[sessionATimeMode] || sessionTimeModes.standard;
@@ -2828,7 +2795,7 @@
 
     function getSessionConfig(key) {
       const configKey = SESSION_KEY_MAP[key] || key;
-      return SESSIONS[configKey];
+      return SESSION_LIBRARY[configKey];
     }
 
     function getMasteryLabel(level) {
@@ -2860,7 +2827,7 @@
         const timeConfig = getSessionCTimeConfig();
         return `Manual Mastery (${timeConfig.label})`;
       }
-      return getSessionConfig(key)?.name || "Session";
+      return getSessionConfig(key)?.title || "Session";
     }
 
     function adjustStepDurationsToTarget(steps, targetTotal) {
@@ -3121,163 +3088,79 @@
       progressRing.style.strokeDashoffset = `${ringLength - ringLength * ratio}`;
     }
 
-    function duckNeuroAudioForSpeech() {
-      if (!neuroAudioEnabled || neuroAudioMode !== "focus") return;
-      if (!neuroAudioGain || !neuroAudioContext) return;
-      if (speechDuckRestoreGain !== null) {
-        fadeNeuroAudio(speechDuckRestoreGain, 0.2);
-      }
-      speechDuckRestoreGain = neuroAudioGain.gain.value;
-      fadeNeuroAudio(speechDuckRestoreGain * 0.2, 0.2);
-    }
-
-    function restoreNeuroAudioAfterSpeech() {
-      if (speechDuckRestoreGain === null) return;
-      fadeNeuroAudio(speechDuckRestoreGain, 0.3);
-      speechDuckRestoreGain = null;
-    }
-
-    function speak(text) {
-      if (!audioGuidanceEnabled) return;
-      if (!("speechSynthesis" in window)) return;
-      window.speechSynthesis.cancel();
-      duckNeuroAudioForSpeech();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1;
-      utterance.onend = () => restoreNeuroAudioAfterSpeech();
-      utterance.onerror = () => restoreNeuroAudioAfterSpeech();
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function ensureNeuroAudio() {
-      if (neuroAudioContext) return;
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) return;
-      neuroAudioContext = new AudioContextClass();
-      neuroAudioGain = neuroAudioContext.createGain();
-      neuroAudioGain.gain.value = 0;
-      neuroAudioGain.connect(neuroAudioContext.destination);
-    }
-
-    function fadeNeuroAudio(targetValue, duration = 1.2) {
-      if (!neuroAudioGain || !neuroAudioContext) return;
-      const now = neuroAudioContext.currentTime;
-      neuroAudioGain.gain.cancelScheduledValues(now);
-      neuroAudioGain.gain.setValueAtTime(neuroAudioGain.gain.value, now);
-      neuroAudioGain.gain.linearRampToValueAtTime(targetValue, now + duration);
-    }
-
-    function createBrownNoise() {
-      const bufferSize = 4096;
-      const node = neuroAudioContext.createScriptProcessor(bufferSize, 1, 1);
-      let lastOut = 0;
-      node.onaudioprocess = (event) => {
-        const output = event.outputBuffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i += 1) {
-          const white = Math.random() * 2 - 1;
-          lastOut = (lastOut + 0.02 * white) / 1.02;
-          output[i] = lastOut * 3.5;
+    class SoundEngine {
+      constructor() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = AudioContextClass ? new AudioContextClass() : null;
+        this.gainNode = null;
+        this.source = null;
+        this.filter = null;
+        this.isActive = false;
+        if (this.audioCtx) {
+          this.gainNode = this.audioCtx.createGain();
+          this.gainNode.gain.value = 0;
+          this.gainNode.connect(this.audioCtx.destination);
+          this.buildNoiseSource();
         }
-      };
-      node.connect(neuroAudioGain);
-      neuroAudioNodes.push(node);
-      return node;
+      }
+
+      buildNoiseSource() {
+        if (!this.audioCtx || !this.gainNode) return;
+        const bufferLength = Math.floor(this.audioCtx.sampleRate * 5);
+        const buffer = this.audioCtx.createBuffer(1, bufferLength, this.audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferLength; i += 1) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const source = this.audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
+        const filter = this.audioCtx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 150;
+        source.connect(filter).connect(this.gainNode);
+        source.start();
+        this.source = source;
+        this.filter = filter;
+      }
+
+      resumeIfNeeded() {
+        if (!this.audioCtx) return;
+        if (this.audioCtx.state === "suspended") {
+          this.audioCtx.resume();
+        }
+      }
+
+      setFocus(active) {
+        if (!this.audioCtx || !this.gainNode) return;
+        this.isActive = active;
+        this.gainNode.gain.setValueAtTime(active ? 0.5 : 0, this.audioCtx.currentTime);
+      }
+
+      toggleFocus() {
+        this.setFocus(!this.isActive);
+      }
     }
 
-    function createBinauralBeat() {
-      const baseFrequency = 200;
-      const beatOffset = 40;
-      const leftOsc = neuroAudioContext.createOscillator();
-      const rightOsc = neuroAudioContext.createOscillator();
-      const leftPan = neuroAudioContext.createStereoPanner();
-      const rightPan = neuroAudioContext.createStereoPanner();
-      leftOsc.type = "sine";
-      rightOsc.type = "sine";
-      leftOsc.frequency.value = baseFrequency;
-      rightOsc.frequency.value = baseFrequency + beatOffset;
-      leftPan.pan.value = -0.7;
-      rightPan.pan.value = 0.7;
-      leftOsc.connect(leftPan).connect(neuroAudioGain);
-      rightOsc.connect(rightPan).connect(neuroAudioGain);
-      leftOsc.start();
-      rightOsc.start();
-      neuroAudioNodes.push(leftOsc, rightOsc, leftPan, rightPan);
+    function initSoundEngine() {
+      if (!soundEngine) {
+        soundEngine = new SoundEngine();
+      }
     }
 
     function updateSoundUi() {
-      if (!soundToggle || !soundModeButton) return;
-      soundToggle.setAttribute("aria-pressed", String(neuroAudioEnabled));
-      soundToggle.classList.toggle("text-neon-cyan", neuroAudioEnabled);
-      soundModeButton.textContent = neuroAudioMode === "focus" ? "Focus" : "Relax";
+      if (!soundToggle || !soundToggleLabel) return;
+      const isActive = Boolean(soundEngine && soundEngine.isActive);
+      soundToggle.setAttribute("aria-pressed", String(isActive));
+      soundToggle.classList.toggle("text-neon-cyan", isActive);
+      soundToggleLabel.textContent = `Focus: ${isActive ? "ON" : "OFF"}`;
     }
 
-    function startNeuroAudio() {
-      if (!audioGuidanceEnabled) {
-        stopNeuroAudio(true);
-        return;
-      }
-      ensureNeuroAudio();
-      if (!neuroAudioContext || !neuroAudioGain) return;
-      neuroAudioContext.resume();
-      stopNeuroAudio(true);
-      neuroAudioEnabled = true;
-      if (neuroAudioMode === "focus") {
-        neuroAudioSource = createBrownNoise();
-      } else {
-        createBinauralBeat();
-      }
-      neuroAudioGain.gain.setValueAtTime(0, neuroAudioContext.currentTime);
-      fadeNeuroAudio(0.1, 1.5);
+    function toggleFocusNoise() {
+      initSoundEngine();
+      if (!soundEngine || !soundEngine.audioCtx) return;
+      soundEngine.toggleFocus();
       updateSoundUi();
-    }
-
-    function stopNeuroAudio(immediate = false) {
-      if (!neuroAudioContext || !neuroAudioGain) {
-        neuroAudioEnabled = false;
-        updateSoundUi();
-        return;
-      }
-      const teardown = () => {
-        neuroAudioNodes.forEach((node) => {
-          if (node.stop) {
-            node.stop();
-          }
-          if (node.disconnect) {
-            node.disconnect();
-          }
-        });
-        neuroAudioNodes = [];
-        neuroAudioSource = null;
-      };
-      if (immediate) {
-        neuroAudioGain.gain.setValueAtTime(0, neuroAudioContext.currentTime);
-        teardown();
-      } else {
-        fadeNeuroAudio(0, 1.2);
-        window.setTimeout(teardown, 1400);
-      }
-      neuroAudioEnabled = false;
-      updateSoundUi();
-    }
-
-    function toggleNeuroAudio() {
-      if (!audioGuidanceEnabled) {
-        stopNeuroAudio(true);
-        return;
-      }
-      if (neuroAudioEnabled) {
-        stopNeuroAudio();
-        return;
-      }
-      startNeuroAudio();
-    }
-
-    function toggleNeuroMode() {
-      neuroAudioMode = neuroAudioMode === "focus" ? "relax" : "focus";
-      updateSoundUi();
-      if (neuroAudioEnabled) {
-        startNeuroAudio();
-      }
     }
 
     function updatePanicClock() {
@@ -3298,8 +3181,10 @@
       stopRecoveryPacer();
       stopStrengthSession();
       pauseTranceTimer();
-      window.speechSynthesis?.cancel();
-      stopNeuroAudio(true);
+      if (soundEngine) {
+        soundEngine.setFocus(false);
+      }
+      updateSoundUi();
       abortModal.classList.add("hidden");
       logModal.classList.add("hidden");
       helpModal.classList.add("hidden");
@@ -3900,7 +3785,6 @@
       strengthStartButton.textContent = "Running";
       strengthStartButton.disabled = true;
       strengthStartButton.classList.add("opacity-60", "cursor-not-allowed");
-      speak("Begin pelvic strength. Engage lightly.");
     }
 
     function stopStrengthSession() {
@@ -4010,7 +3894,6 @@
       }
       currentSessionKey = key;
       sessionLightModeActive = key === "A" && isSaturdayProtocol();
-      neuroAudioMode = key === "B" ? "relax" : "focus";
       updateSoundUi();
       preStartAdjustment = 0;
       const session = getSessionConfig(key);
@@ -4526,7 +4409,6 @@
         phaseText.textContent = step.text;
         phaseText.style.opacity = "1";
       }
-      speak(`${step.title}. ${step.text}`);
       if (index === 0) {
         preStartAdjustment = 0;
       }
@@ -4542,9 +4424,16 @@
       }
     }
 
-    function startSession(sessionConfig) {
-      const activeConfig = sessionConfig || getSessionConfig(currentSessionKey);
-      if (!currentSessionKey || !activeConfig) return;
+    function startSession(sessionKey) {
+      const activeKey = sessionKey || currentSessionKey;
+      const activeConfig = getSessionConfig(activeKey);
+      if (!activeKey || !activeConfig) return;
+      currentSessionKey = activeKey;
+      initSoundEngine();
+      const audioCtx = soundEngine?.audioCtx;
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
       sessionStart = new Date();
       setStep(0);
       timerId = setInterval(tick, 1000);
@@ -4567,7 +4456,10 @@
       timerId = null;
       toggleSession.textContent = "Start";
       arousalPanel.classList.add("hidden");
-      stopNeuroAudio();
+      if (soundEngine) {
+        soundEngine.setFocus(false);
+      }
+      updateSoundUi();
       stopControlCycleAffirmations();
       stopSubliminalScripts();
       releaseWakeLock();
@@ -5672,8 +5564,7 @@
     if (selectCButton) {
       selectCButton.addEventListener("click", openSessionCModal);
     }
-    soundToggle.addEventListener("click", toggleNeuroAudio);
-    soundModeButton.addEventListener("click", toggleNeuroMode);
+    soundToggle.addEventListener("click", toggleFocusNoise);
     panicButton.addEventListener("click", activatePanicMode);
     panicUnlock.addEventListener("click", exitPanicMode);
     appHeader.addEventListener("dblclick", activatePanicMode);
@@ -5705,7 +5596,7 @@
           refreshControlCycleAffirmations();
           requestWakeLock();
         } else {
-          startSession(getSessionConfig(currentSessionKey));
+          startSession(currentSessionKey);
         }
       } else {
         pauseSession();
@@ -6221,25 +6112,6 @@
       vacationIcon.classList.toggle("hidden", !vacationModeEnabled);
     }
 
-    function applyAudioGuidanceSetting(isEnabled, shouldPersist = true) {
-      audioGuidanceEnabled = isEnabled;
-      if (audioGuidanceToggle) {
-        audioGuidanceToggle.checked = audioGuidanceEnabled;
-      }
-      if (shouldPersist) {
-        localStorage.setItem("usph_audio_guidance", String(audioGuidanceEnabled));
-      }
-      if (!audioGuidanceEnabled) {
-        window.speechSynthesis?.cancel();
-        stopNeuroAudio(true);
-      }
-    }
-
-    function loadAudioGuidancePreference() {
-      const stored = localStorage.getItem("usph_audio_guidance");
-      applyAudioGuidanceSetting(stored !== "false", false);
-    }
-
     function updateGrowerLabel() {
       if (!growerLabel) return;
       growerLabel.textContent = growerModeEnabled ? "Grower Mode: ON" : "Shower Mode: ON";
@@ -6261,12 +6133,6 @@
       updateStreak();
     });
 
-    if (audioGuidanceToggle) {
-      audioGuidanceToggle.addEventListener("change", (event) => {
-        applyAudioGuidanceSetting(event.target.checked);
-      });
-    }
-
     if (growerToggle) {
       growerToggle.addEventListener("change", (event) => {
         growerModeEnabled = event.target.checked;
@@ -6283,7 +6149,6 @@
       buildSchedule();
       syncCustomScheduleEditor();
       updateTodayPlanUi();
-      loadAudioGuidancePreference();
       loadVacationMode();
       loadGrowerMode();
       loadSessionPreferences();
