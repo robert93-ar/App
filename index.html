@@ -561,6 +561,15 @@
       <p class="text-sm uppercase tracking-[0.4em] text-neon-emerald">Ultimate</p>
       <h1 class="text-3xl font-bold text-white">Solo Performance Hub</h1>
       <p class="mt-2 text-sm text-slate-300">High-performance guided protocols. Privacy first.</p>
+      <div class="mt-3 flex items-center gap-3">
+        <span
+          id="mastery-badge"
+          class="inline-flex items-center rounded-full border border-neon-amber/60 bg-neon-amber/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neon-amber"
+        >
+          Level 1 Rookie
+        </span>
+        <span class="text-xs text-slate-400">Mastery Level</span>
+      </div>
     </header>
 
     <div
@@ -667,6 +676,18 @@
           </div>
           <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-emerald text-lg">
             <i class="fa-solid fa-shield-heart"></i>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Clean Streak</p>
+            <p id="clean-streak" class="text-2xl font-bold text-neon-cyan">0 sessions</p>
+            <p class="mt-1 text-xs text-slate-400">Consecutive Clean Sessions</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black/30 text-neon-cyan text-lg">
+            <i class="fa-solid fa-shield"></i>
           </div>
         </div>
       </div>
@@ -1604,6 +1625,39 @@
           Eq Quality
         </label>
       </div>
+      <div class="mt-5 space-y-3 text-sm text-slate-300">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Control Score</p>
+        <label class="flex items-start gap-2 rounded-xl border border-neon-emerald/40 bg-black/40 p-3">
+          <input type="radio" name="control-score" value="clean" class="mt-1 accent-neon-emerald" checked />
+          <span>
+            <span class="block font-semibold text-neon-emerald">Clean Sheet (100%)</span>
+            <span class="block text-xs text-slate-400">I never passed Level 6 Arousal.</span>
+          </span>
+        </label>
+        <label class="flex items-start gap-2 rounded-xl border border-neon-amber/40 bg-black/40 p-3">
+          <input type="radio" name="control-score" value="slip" class="mt-1 accent-neon-amber" />
+          <span>
+            <span class="block font-semibold text-neon-amber">Slip (80%)</span>
+            <span class="block text-xs text-slate-400">I spiked to Level 8 but caught it.</span>
+          </span>
+        </label>
+        <label class="flex items-start gap-2 rounded-xl border border-neon-rose/40 bg-black/40 p-3">
+          <input type="radio" name="control-score" value="fail" class="mt-1 accent-neon-rose" />
+          <span>
+            <span class="block font-semibold text-neon-rose">Fail (0%)</span>
+            <span class="block text-xs text-slate-400">I hit the Point of No Return (PONR) or ejaculated.</span>
+          </span>
+        </label>
+      </div>
+      <div id="pump-log-field" class="mt-5 hidden space-y-2 text-sm text-slate-300">
+        <label for="fill-level" class="text-xs uppercase tracking-[0.3em] text-slate-400">Fill Level (1-10)</label>
+        <input id="fill-level" type="range" min="1" max="10" value="4" class="w-full accent-neon-amber" />
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>1</span>
+          <span>10</span>
+        </div>
+        <p id="fill-level-goal" class="text-xs text-neon-amber">No prior data yet.</p>
+      </div>
       <div class="mt-5 space-y-2 text-sm text-slate-300">
         <label for="post-feeling" class="text-xs uppercase tracking-[0.3em] text-slate-400">Post-Session Feeling</label>
         <select id="post-feeling" class="w-full rounded-xl bg-black/40 px-3 py-2 text-sm text-white border border-slate-600">
@@ -1780,11 +1834,112 @@
     </div>
   </div>
 
+  <div id="session-a-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
+    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Select Intensity</p>
+      <h3 class="mt-2 text-xl font-semibold text-neon-cyan">Session A: Mastery Level</h3>
+      <p class="mt-2 text-sm text-slate-300">Progressive overload unlocks higher levels.</p>
+      <div class="mt-5 grid gap-3 text-sm">
+        <button
+          class="session-a-level rounded-xl border border-neon-emerald/60 bg-black/40 py-3 font-semibold text-neon-emerald"
+          data-level="1"
+          type="button"
+        >
+          Level 1 • Rookie (20s hold / 90s rest)
+        </button>
+        <button
+          class="session-a-level rounded-xl border border-neon-cyan/60 bg-black/40 py-3 font-semibold text-neon-cyan"
+          data-level="2"
+          type="button"
+        >
+          Level 2 • Stud (45s hold / 60s rest)
+        </button>
+        <p id="session-a-level-lock" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
+        <button
+          class="session-a-level rounded-xl border border-neon-amber/60 bg-black/40 py-3 font-semibold text-neon-amber"
+          data-level="3"
+          type="button"
+        >
+          Level 3 • Monster (60s hold / 45s rest)
+        </button>
+        <p id="session-a-monster-lock" class="text-[10px] uppercase tracking-[0.2em] text-slate-400"></p>
+      </div>
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Time Select</p>
+        <div class="mt-3 grid grid-cols-3 gap-2 text-[10px] uppercase tracking-[0.2em]">
+          <button
+            type="button"
+            class="session-a-time rounded-xl border border-neon-cyan/60 bg-black/40 py-2 font-semibold text-neon-cyan"
+            data-time="express"
+          >
+            Express
+          </button>
+          <button
+            type="button"
+            class="session-a-time rounded-xl border border-neon-emerald/60 bg-black/40 py-2 font-semibold text-neon-emerald"
+            data-time="standard"
+          >
+            Standard
+          </button>
+          <button
+            type="button"
+            class="session-a-time rounded-xl border border-neon-amber/60 bg-black/40 py-2 font-semibold text-neon-amber"
+            data-time="deep"
+          >
+            Deep Dive
+          </button>
+        </div>
+        <p id="session-a-time-note" class="mt-2 text-xs text-slate-400">Standard (30 min • 5 cycles)</p>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <button
+          id="session-a-confirm"
+          class="rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark"
+        >
+          Continue
+        </button>
+        <button
+          id="session-a-cancel"
+          class="rounded-xl border border-slate-500 py-3 text-sm text-slate-300"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="session-c-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6">
     <div class="w-full max-w-md rounded-2xl bg-gym-card p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Select Mode</p>
       <h3 class="mt-2 text-xl font-semibold text-neon-amber">Session C Options</h3>
       <p class="mt-2 text-sm text-slate-300">Choose guided protocol or trance flow.</p>
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Time Select</p>
+        <div class="mt-3 grid grid-cols-3 gap-2 text-[10px] uppercase tracking-[0.2em]">
+          <button
+            type="button"
+            class="session-c-time rounded-xl border border-neon-cyan/60 bg-black/40 py-2 font-semibold text-neon-cyan"
+            data-time="express"
+          >
+            Express
+          </button>
+          <button
+            type="button"
+            class="session-c-time rounded-xl border border-neon-emerald/60 bg-black/40 py-2 font-semibold text-neon-emerald"
+            data-time="standard"
+          >
+            Standard
+          </button>
+          <button
+            type="button"
+            class="session-c-time rounded-xl border border-neon-amber/60 bg-black/40 py-2 font-semibold text-neon-amber"
+            data-time="deep"
+          >
+            Deep Dive
+          </button>
+        </div>
+        <p id="session-c-time-note" class="mt-2 text-xs text-slate-400">Standard (30 min • 5 cycles)</p>
+      </div>
       <div class="mt-5 grid gap-3 text-sm">
         <button
           id="session-c-guided"
@@ -2291,6 +2446,18 @@
       }
     };
 
+    const masteryLevels = {
+      1: { level: 1, label: "Rookie", hold: 20, rest: 90, focus: "Safety & Learning" },
+      2: { level: 2, label: "Stud", hold: 45, rest: 60, focus: "The Standard" },
+      3: { level: 3, label: "Monster", hold: 60, rest: 45, focus: "Deep Endurance" }
+    };
+
+    const sessionTimeModes = {
+      express: { label: "Express", minutes: 15, cycles: 3 },
+      standard: { label: "Standard", minutes: 30, cycles: 5 },
+      deep: { label: "Deep Dive", minutes: 45, cycles: 7 }
+    };
+
     const weekOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const scheduleOptions = {
       standard: [
@@ -2409,6 +2576,7 @@
     const cancelDailyLogButton = document.getElementById("cancel-daily-log");
     const streakLabel = document.getElementById("streak");
     const retentionStreakLabel = document.getElementById("retention-streak");
+    const cleanStreakLabel = document.getElementById("clean-streak");
     const rankLabel = document.getElementById("rank-label");
     const rankScore = document.getElementById("rank-score");
     const rankIcon = document.getElementById("rank-icon");
@@ -2419,6 +2587,10 @@
     const weeklyEq = document.getElementById("weekly-eq");
     const cardioIcon = document.getElementById("cardio-icon");
     const postFeeling = document.getElementById("post-feeling");
+    const controlScoreInputs = document.querySelectorAll('input[name="control-score"]');
+    const pumpLogField = document.getElementById("pump-log-field");
+    const fillLevelInput = document.getElementById("fill-level");
+    const fillLevelGoal = document.getElementById("fill-level-goal");
     const sessionSettingsInput = document.getElementById("session-settings");
     const sessionSettingsNote = document.getElementById("session-settings-note");
     const saturdayBadge = document.getElementById("saturday-badge");
@@ -2536,6 +2708,16 @@
     const sessionCModalClose = document.getElementById("session-c-close");
     const sessionCGuided = document.getElementById("session-c-guided");
     const sessionCTrance = document.getElementById("session-c-trance");
+    const sessionCTimeButtons = document.querySelectorAll(".session-c-time");
+    const sessionCTimeNote = document.getElementById("session-c-time-note");
+    const sessionAModal = document.getElementById("session-a-modal");
+    const sessionALevelButtons = document.querySelectorAll(".session-a-level");
+    const sessionALevelLock = document.getElementById("session-a-level-lock");
+    const sessionAMonsterLock = document.getElementById("session-a-monster-lock");
+    const sessionATimeButtons = document.querySelectorAll(".session-a-time");
+    const sessionATimeNote = document.getElementById("session-a-time-note");
+    const sessionAConfirm = document.getElementById("session-a-confirm");
+    const sessionACancel = document.getElementById("session-a-cancel");
     const morningBriefingModal = document.getElementById("morning-briefing-modal");
     const morningBriefingButtons = document.querySelectorAll(".morning-briefing-toggle");
     const morningHangSlider = document.getElementById("morning-hang-slider");
@@ -2558,6 +2740,7 @@
     const tranceClose = document.getElementById("trance-close");
     const startRecoveryTrain = document.getElementById("start-recovery-train");
     const subliminalOverlay = document.getElementById("subliminal-overlay");
+    const masteryBadge = document.getElementById("mastery-badge");
 
     let currentSessionKey = null;
     let currentStepIndex = 0;
@@ -2594,12 +2777,29 @@
     let audioGuidanceEnabled = true;
     let sessionLightModeActive = false;
     let controlCycleMessages = [...controlCycleAffirmations];
+    let sessionAIntensity = 1;
+    let sessionATimeMode = "standard";
+    let sessionCTimeMode = "standard";
 
-    function getControlCycleText(isLightMode) {
-      const holdSeconds = isLightMode ? 15 : 30;
-      const restSeconds = isLightMode ? 90 : 60;
-      const suffix = isLightMode ? " Focus on relaxation and breath." : "";
-      return `Cycles: ${holdSeconds}s hold, ${restSeconds}s downshift. Slow is strong.${suffix}`;
+    function getSessionATimeConfig() {
+      return sessionTimeModes[sessionATimeMode] || sessionTimeModes.standard;
+    }
+
+    function getSessionCTimeConfig() {
+      return sessionTimeModes[sessionCTimeMode] || sessionTimeModes.standard;
+    }
+
+    function getSessionAIntensityConfig() {
+      return masteryLevels[sessionAIntensity] || masteryLevels[1];
+    }
+
+    function getMasteryLabel(level) {
+      const config = masteryLevels[level] || masteryLevels[1];
+      return `Level ${config.level} ${config.label}`;
+    }
+
+    function getControlCycleText({ holdSeconds, restSeconds, cycles, focus }) {
+      return `Cycles: ${cycles} • Hold ${holdSeconds}s / Rest ${restSeconds}s. Focus: ${focus}.`;
     }
 
     function isSaturdayProtocol() {
@@ -2612,27 +2812,119 @@
     }
 
     function getSessionDisplayName(key) {
-      if (key === "A" && isLightModeActiveForKey(key)) {
-        return "Control & Endurance (Light Mode)";
+      if (key === "A") {
+        const intensity = getSessionAIntensityConfig();
+        const timeConfig = getSessionATimeConfig();
+        const lightTag = isLightModeActiveForKey(key) ? "Light Mode • " : "";
+        return `Control & Endurance (${lightTag}${getMasteryLabel(intensity.level)} • ${timeConfig.label})`;
+      }
+      if (key === "C") {
+        const timeConfig = getSessionCTimeConfig();
+        return `Manual Mastery (${timeConfig.label})`;
       }
       return sessions[key]?.name || "Session";
+    }
+
+    function adjustStepDurationsToTarget(steps, targetTotal) {
+      const nonControlSteps = steps.filter((step) => step.title !== "Phase 4: Control Cycle");
+      const baseNonControlTotal = nonControlSteps.reduce((sum, step) => sum + step.duration, 0);
+      const remaining = Math.max(0, targetTotal);
+      const scale = baseNonControlTotal ? remaining / baseNonControlTotal : 1;
+      return steps.map((step) => {
+        if (step.title === "Phase 4: Control Cycle") {
+          return { ...step };
+        }
+        return { ...step, duration: Math.max(30, Math.round(step.duration * scale)) };
+      });
+    }
+
+    function buildSessionASteps() {
+      const intensity = getSessionAIntensityConfig();
+      const timeConfig = getSessionATimeConfig();
+      const cycles = timeConfig.cycles;
+      const holdSeconds = intensity.hold;
+      const restSeconds = intensity.rest;
+      const controlDuration = cycles * (holdSeconds + restSeconds);
+      const targetTotal = timeConfig.minutes * 60;
+      let steps = sessions.A.steps.map((step) => ({ ...step }));
+
+      steps = steps.map((step) => {
+        if (step.title === "Phase 4: Control Cycle") {
+          return {
+            ...step,
+            duration: controlDuration,
+            text: getControlCycleText({
+              holdSeconds,
+              restSeconds,
+              cycles,
+              focus: intensity.focus
+            })
+          };
+        }
+        return step;
+      });
+
+      steps = adjustStepDurationsToTarget(
+        steps,
+        Math.max(0, targetTotal - controlDuration)
+      );
+
+      const adjustedTotal = steps.reduce((sum, step) => sum + step.duration, 0);
+      const diff = targetTotal - adjustedTotal;
+      if (diff !== 0) {
+        const resetStep = steps.find((step) => step.title === "Phase 5: Reset");
+        if (resetStep) {
+          resetStep.duration = Math.max(30, resetStep.duration + diff);
+        }
+      }
+
+      if (sessionLightModeActive) {
+        const rampStep = steps.find((step) => step.title === "Phase 3: Gentle Ramp");
+        const resetStep = steps.find((step) => step.title === "Phase 5: Reset");
+        if (rampStep && resetStep) {
+          const reduction = Math.min(120, Math.max(0, rampStep.duration - 30));
+          rampStep.duration -= reduction;
+          resetStep.duration += reduction;
+          rampStep.text = `${rampStep.text} Saturday light protocol.`;
+        }
+      }
+
+      return steps;
+    }
+
+    function buildSessionCSteps() {
+      const timeConfig = getSessionCTimeConfig();
+      const cycles = timeConfig.cycles;
+      const targetTotal = timeConfig.minutes * 60;
+      const baseSteps = sessions.C.steps.map((step) => ({ ...step }));
+      const baseCycleTotal = baseSteps.reduce((sum, step) => sum + step.duration, 0);
+      const targetCycleTotal = targetTotal / cycles;
+      const scale = baseCycleTotal ? targetCycleTotal / baseCycleTotal : 1;
+      const scaledCycleSteps = baseSteps.map((step) => ({
+        ...step,
+        duration: Math.max(30, Math.round(step.duration * scale))
+      }));
+      const steps = [];
+      for (let cycle = 1; cycle <= cycles; cycle += 1) {
+        scaledCycleSteps.forEach((step) => {
+          steps.push({
+            ...step,
+            title: `${step.title} (Cycle ${cycle}/${cycles})`
+          });
+        });
+      }
+      return steps;
     }
 
     function getSessionSteps(key) {
       const session = sessions[key];
       if (!session) return [];
       let steps = session.steps;
-      if (key === "A" && isLightModeActiveForKey(key)) {
-        steps = session.steps.map((step) => {
-          const adjustedStep = { ...step };
-          if (step.title === "Phase 3: Gentle Ramp") {
-            adjustedStep.duration = Math.max(0, step.duration - 120);
-          }
-          if (step.title === "Phase 4: Control Cycle") {
-            adjustedStep.text = `${step.text} Slow and breath-led.`;
-          }
-          return adjustedStep;
-        });
+      if (key === "A") {
+        steps = buildSessionASteps();
+      }
+      if (key === "C") {
+        steps = buildSessionCSteps();
       }
       if (key === "B" && growerModeEnabled) {
         steps = steps.map((step) => {
@@ -3601,8 +3893,17 @@
       const session = sessions[key];
       sessionTitle.textContent = getSessionDisplayName(key);
       sessionNote.textContent = "Press start to begin the interval timer.";
-      if (key === "A" && sessionLightModeActive) {
-        sessionNote.textContent = "Saturday Light Protocol active. Press start to begin the interval timer.";
+      if (key === "A") {
+        const intensity = getSessionAIntensityConfig();
+        const timeConfig = getSessionATimeConfig();
+        sessionNote.textContent = `${getMasteryLabel(intensity.level)} • ${timeConfig.label} (${timeConfig.minutes} min, ${timeConfig.cycles} cycles). Hold ${intensity.hold}s / Rest ${intensity.rest}s.`;
+        if (sessionLightModeActive) {
+          sessionNote.textContent += " Saturday light protocol active.";
+        }
+      }
+      if (key === "C") {
+        const timeConfig = getSessionCTimeConfig();
+        sessionNote.textContent = `${timeConfig.label} session (${timeConfig.minutes} min, ${timeConfig.cycles} cycles).`;
       }
       sessionWarning.textContent = session.warning;
       sessionWarning.classList.toggle("hidden", session.warning.length === 0);
@@ -4140,13 +4441,25 @@
       stopSubliminalScripts();
       if (!sessionStart) return;
       const duration = Math.round((Date.now() - sessionStart.getTime()) / 60000);
+      const intensity = currentSessionKey === "A" ? getSessionAIntensityConfig() : null;
+      const timeConfig =
+        currentSessionKey === "A"
+          ? getSessionATimeConfig()
+          : currentSessionKey === "C"
+            ? getSessionCTimeConfig()
+            : null;
       lastLogPending = {
         date: new Date().toISOString(),
         sessionType: getSessionDisplayName(currentSessionKey) || "Unknown",
         duration,
         redFlags: reason ? [reason] : [],
         aborted: Boolean(reason),
-        sessionKey: currentSessionKey
+        sessionKey: currentSessionKey,
+        sessionIntensity: intensity ? intensity.level : null,
+        sessionIntensityLabel: intensity ? getMasteryLabel(intensity.level) : null,
+        sessionTimeMode: timeConfig ? timeConfig.label : null,
+        sessionCycles: timeConfig ? timeConfig.cycles : null,
+        sessionMinutes: timeConfig ? timeConfig.minutes : null
       };
       sessionStart = null;
       sessionLightModeActive = false;
@@ -4155,6 +4468,8 @@
       updateSessionWaveform("rest");
       postFeeling.value = "Energized";
       sessionSettingsInput.value = "";
+      resetControlScoreSelection();
+      updatePumpLogField();
       logModal.classList.remove("hidden");
       logModal.classList.add("flex");
     }
@@ -4164,10 +4479,17 @@
         (input) => input.value
       );
       const deviceSettings = sessionSettingsInput.value.trim();
+      const controlSelection = getControlScoreSelection();
+      const controlData = getControlScoreData(controlSelection);
       if (lastLogPending) {
         lastLogPending.redFlags = [...new Set([...lastLogPending.redFlags, ...flags])];
         lastLogPending.postFeeling = postFeeling.value;
         lastLogPending.deviceSettings = deviceSettings;
+        lastLogPending.controlScore = controlData.score;
+        lastLogPending.controlScoreLabel = controlData.label;
+        if (lastLogPending.sessionKey === "B" && fillLevelInput) {
+          lastLogPending.fillLevel = Number(fillLevelInput.value);
+        }
         lastLogPending.type = "session";
         const logs = getLogs();
         logs.unshift(lastLogPending);
@@ -4179,6 +4501,7 @@
       }
       document.querySelectorAll(".red-flag").forEach((input) => (input.checked = false));
       sessionSettingsInput.value = "";
+      resetControlScoreSelection();
       logModal.classList.add("hidden");
       logModal.classList.remove("flex");
     }
@@ -4296,9 +4619,12 @@
         renderHeatmap();
         updateWeeklyStatus();
         updateRetentionStreak();
+        updateCleanStreak();
         updateHangChart();
         updateSystemReadiness();
         updateHangAlert();
+        updateSessionALevelLocks();
+        updateMasteryBadge();
         applySafetyLocks();
         return;
       }
@@ -4378,6 +4704,14 @@
           const badge = log.aborted ? "ABORTED" : "Completed";
           const feeling = log.postFeeling || "—";
           const settings = log.deviceSettings ? log.deviceSettings : "—";
+          const controlScore = log.controlScoreLabel
+            ? `${log.controlScoreLabel} (${log.controlScore ?? 0}%)`
+            : "—";
+          const intensityLabel = log.sessionIntensityLabel || "—";
+          const timeLabel = log.sessionTimeMode
+            ? `${log.sessionTimeMode}${log.sessionCycles ? ` • ${log.sessionCycles} cycles` : ""}`
+            : "—";
+          const fillLevel = Number.isFinite(Number(log.fillLevel)) ? `${log.fillLevel}/10` : "—";
           return `
               <div class="rounded-xl bg-black/40 p-4">
                 <div class="flex items-center justify-between">
@@ -4385,8 +4719,12 @@
                   <span class="text-xs uppercase tracking-[0.2em] text-neon-amber">${badge}</span>
                 </div>
                 <p class="text-xs text-slate-400 mt-1">${date} • ${log.duration} min</p>
+                <p class="text-xs text-slate-400 mt-1">Control Score: <span class="text-white">${controlScore}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Intensity: <span class="text-white">${intensityLabel}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Time Select: <span class="text-white">${timeLabel}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Red Flags: <span class="text-white">${flags}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Device Settings: <span class="text-white">${settings}</span></p>
+                <p class="text-xs text-slate-400 mt-1">Fill Level: <span class="text-white">${fillLevel}</span></p>
                 <p class="text-xs text-slate-400 mt-1">Post-Session: <span class="text-white">${feeling}</span></p>
               </div>
             `;
@@ -4395,9 +4733,12 @@
       renderHeatmap();
       updateWeeklyStatus();
       updateRetentionStreak();
+      updateCleanStreak();
       updateHangChart();
       updateSystemReadiness();
       updateHangAlert();
+      updateSessionALevelLocks();
+      updateMasteryBadge();
       applySafetyLocks();
     }
 
@@ -4447,6 +4788,50 @@
         lastDay = day;
       }
       return streak;
+    }
+
+    function isCleanSession(log) {
+      return Number(log.controlScore) === 100 && !log.aborted;
+    }
+
+    function calculateCleanStreak() {
+      const logs = getSessionLogs()
+        .slice()
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      let streak = 0;
+      for (const log of logs) {
+        if (!isCleanSession(log)) {
+          break;
+        }
+        streak += 1;
+      }
+      return streak;
+    }
+
+    function updateCleanStreak() {
+      if (!cleanStreakLabel) return;
+      const streak = calculateCleanStreak();
+      cleanStreakLabel.textContent = `${streak} session${streak === 1 ? "" : "s"}`;
+    }
+
+    function getCleanSessionsForLevel(level) {
+      return getSessionLogs().filter(
+        (log) => log.sessionKey === "A" && log.sessionIntensity === level && isCleanSession(log)
+      ).length;
+    }
+
+    function isLevelTwoUnlocked() {
+      return getCleanSessionsForLevel(1) >= 10;
+    }
+
+    function isLevelThreeUnlocked() {
+      return isLevelTwoUnlocked();
+    }
+
+    function updateMasteryBadge() {
+      if (!masteryBadge) return;
+      const label = getMasteryLabel(sessionAIntensity);
+      masteryBadge.textContent = label;
     }
 
     function updateStudRank() {
@@ -4714,6 +5099,182 @@
       }
     }
 
+    function formatTimeModeLabel(timeConfig) {
+      return `${timeConfig.label} (${timeConfig.minutes} min • ${timeConfig.cycles} cycles)`;
+    }
+
+    function updateSessionATimeUi() {
+      if (!sessionATimeButtons.length) return;
+      const timeConfig = getSessionATimeConfig();
+      sessionATimeButtons.forEach((btn) => {
+        const isActive = btn.dataset.time === sessionATimeMode;
+        btn.classList.toggle("ring-2", isActive);
+        btn.classList.toggle("ring-neon-emerald/60", isActive);
+      });
+      if (sessionATimeNote) {
+        sessionATimeNote.textContent = formatTimeModeLabel(timeConfig);
+      }
+    }
+
+    function updateSessionCTimeUi() {
+      if (!sessionCTimeButtons.length) return;
+      const timeConfig = getSessionCTimeConfig();
+      sessionCTimeButtons.forEach((btn) => {
+        const isActive = btn.dataset.time === sessionCTimeMode;
+        btn.classList.toggle("ring-2", isActive);
+        btn.classList.toggle("ring-neon-emerald/60", isActive);
+      });
+      if (sessionCTimeNote) {
+        sessionCTimeNote.textContent = formatTimeModeLabel(timeConfig);
+      }
+    }
+
+    function updateSessionALevelUi() {
+      if (!sessionALevelButtons.length) return;
+      sessionALevelButtons.forEach((btn) => {
+        const isActive = Number(btn.dataset.level) === sessionAIntensity;
+        btn.classList.toggle("ring-2", isActive);
+        btn.classList.toggle("ring-neon-emerald/60", isActive);
+      });
+    }
+
+    function updateSessionALevelLocks() {
+      if (!sessionALevelButtons.length) return;
+      const levelTwoUnlocked = isLevelTwoUnlocked();
+      const levelThreeUnlocked = isLevelThreeUnlocked();
+      if ((sessionAIntensity === 2 && !levelTwoUnlocked) || (sessionAIntensity === 3 && !levelThreeUnlocked)) {
+        sessionAIntensity = 1;
+        localStorage.setItem("usph_session_a_intensity", String(sessionAIntensity));
+      }
+      sessionALevelButtons.forEach((btn) => {
+        const level = Number(btn.dataset.level);
+        const isLocked =
+          (level === 2 && !levelTwoUnlocked) || (level === 3 && !levelThreeUnlocked);
+        btn.disabled = isLocked;
+        btn.classList.toggle("opacity-50", isLocked);
+        btn.classList.toggle("cursor-not-allowed", isLocked);
+      });
+      if (sessionALevelLock) {
+        const cleanCount = getCleanSessionsForLevel(1);
+        sessionALevelLock.textContent = levelTwoUnlocked
+          ? "Level 2 unlocked."
+          : `Complete 10 clean Level 1 sessions to unlock Level 2. (${cleanCount}/10)`;
+      }
+      if (sessionAMonsterLock) {
+        sessionAMonsterLock.textContent = levelThreeUnlocked
+          ? "Level 3 unlocked."
+          : "Level 3 unlocks after Level 2.";
+      }
+    }
+
+    function updateSessionASelectionUi() {
+      updateSessionALevelLocks();
+      updateSessionALevelUi();
+      updateSessionATimeUi();
+      updateMasteryBadge();
+    }
+
+    function updateSessionCSelectionUi() {
+      updateSessionCTimeUi();
+    }
+
+    function setSessionAIntensity(level) {
+      const levelTwoUnlocked = isLevelTwoUnlocked();
+      const levelThreeUnlocked = isLevelThreeUnlocked();
+      if (level === 2 && !levelTwoUnlocked) return;
+      if (level === 3 && !levelThreeUnlocked) return;
+      sessionAIntensity = level;
+      localStorage.setItem("usph_session_a_intensity", String(sessionAIntensity));
+      updateSessionASelectionUi();
+    }
+
+    function setSessionATimeMode(mode) {
+      if (!sessionTimeModes[mode]) return;
+      sessionATimeMode = mode;
+      localStorage.setItem("usph_session_a_time", sessionATimeMode);
+      updateSessionATimeUi();
+    }
+
+    function setSessionCTimeMode(mode) {
+      if (!sessionTimeModes[mode]) return;
+      sessionCTimeMode = mode;
+      localStorage.setItem("usph_session_c_time", sessionCTimeMode);
+      updateSessionCTimeUi();
+    }
+
+    function loadSessionPreferences() {
+      const storedIntensity = Number(localStorage.getItem("usph_session_a_intensity")) || 1;
+      sessionAIntensity = storedIntensity;
+      if ((sessionAIntensity === 2 && !isLevelTwoUnlocked()) || (sessionAIntensity === 3 && !isLevelThreeUnlocked())) {
+        sessionAIntensity = 1;
+      }
+      sessionATimeMode = sessionTimeModes[localStorage.getItem("usph_session_a_time")]
+        ? localStorage.getItem("usph_session_a_time")
+        : "standard";
+      sessionCTimeMode = sessionTimeModes[localStorage.getItem("usph_session_c_time")]
+        ? localStorage.getItem("usph_session_c_time")
+        : "standard";
+      updateSessionASelectionUi();
+      updateSessionCSelectionUi();
+    }
+
+    function getControlScoreSelection() {
+      const selected = Array.from(controlScoreInputs).find((input) => input.checked);
+      return selected ? selected.value : "clean";
+    }
+
+    function getControlScoreData(selection) {
+      if (selection === "slip") {
+        return { label: "Slip", score: 80 };
+      }
+      if (selection === "fail") {
+        return { label: "Fail", score: 0 };
+      }
+      return { label: "Clean Sheet", score: 100 };
+    }
+
+    function getFillLevelAverage() {
+      const logs = getSessionLogs()
+        .filter((log) => log.sessionKey === "B" && Number.isFinite(Number(log.fillLevel)));
+      if (!logs.length) return null;
+      const total = logs.reduce((sum, log) => sum + Number(log.fillLevel), 0);
+      return total / logs.length;
+    }
+
+    function updatePumpLogField() {
+      if (!pumpLogField || !fillLevelInput || !fillLevelGoal) return;
+      const isPump = lastLogPending && lastLogPending.sessionKey === "B";
+      pumpLogField.classList.toggle("hidden", !isPump);
+      if (!isPump) return;
+      fillLevelInput.value = "4";
+      const average = getFillLevelAverage();
+      if (average) {
+        const rounded = Math.round(average);
+        fillLevelGoal.textContent = `Last time you hit Level ${rounded}. Aim for consistent ${rounded} today.`;
+      } else {
+        fillLevelGoal.textContent = "No prior data yet.";
+      }
+    }
+
+    function resetControlScoreSelection() {
+      controlScoreInputs.forEach((input) => {
+        input.checked = input.value === "clean";
+      });
+    }
+
+    function openSessionAModal() {
+      if (!sessionAModal) return;
+      updateSessionASelectionUi();
+      sessionAModal.classList.remove("hidden");
+      sessionAModal.classList.add("flex");
+    }
+
+    function closeSessionAModal() {
+      if (!sessionAModal) return;
+      sessionAModal.classList.add("hidden");
+      sessionAModal.classList.remove("flex");
+    }
+
     function updateCardioIndicator() {
       if (!cardioIcon) return;
       const today = new Date();
@@ -4956,7 +5517,7 @@
       setHandbookTab("protocols");
     }
 
-    selectAButton.addEventListener("click", () => setSession("A"));
+    selectAButton.addEventListener("click", openSessionAModal);
     selectBButton.addEventListener("click", () => setSession("B"));
     if (selectCButton) {
       selectCButton.addEventListener("click", openSessionCModal);
@@ -5368,6 +5929,7 @@
 
     function openSessionCModal() {
       if (!sessionCModal) return;
+      updateSessionCSelectionUi();
       sessionCModal.classList.remove("hidden");
       sessionCModal.classList.add("flex");
     }
@@ -5400,6 +5962,35 @@
       sessionCModalClose.addEventListener("click", closeSessionCModal);
     }
 
+    sessionALevelButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSessionAIntensity(Number(btn.dataset.level));
+      });
+    });
+
+    sessionATimeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSessionATimeMode(btn.dataset.time);
+      });
+    });
+
+    if (sessionAConfirm) {
+      sessionAConfirm.addEventListener("click", () => {
+        closeSessionAModal();
+        setSession("A");
+      });
+    }
+
+    if (sessionACancel) {
+      sessionACancel.addEventListener("click", closeSessionAModal);
+    }
+
+    sessionCTimeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSessionCTimeMode(btn.dataset.time);
+      });
+    });
+
     if (sessionCGuided) {
       sessionCGuided.addEventListener("click", () => {
         closeSessionCModal();
@@ -5430,7 +6021,7 @@
       showSection("train");
       const today = getScheduleForToday();
       if (today.plan.includes("Session A")) {
-        setSession("A");
+        openSessionAModal();
       } else if (today.plan.includes("Session B")) {
         setSession("B");
       } else if (today.plan.includes("Session C")) {
@@ -5522,9 +6113,11 @@
       loadAudioGuidancePreference();
       loadVacationMode();
       loadGrowerMode();
+      loadSessionPreferences();
       updateLogs();
       updateStreak();
       updateRetentionStreak();
+      updateCleanStreak();
       updateDailyMorningToggle(false);
       updateDailyRetentionToggle(false);
       updateDailyQualityDisplay(dailyQualitySlider.value);
