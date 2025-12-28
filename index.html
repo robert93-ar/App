@@ -513,6 +513,12 @@
     >
       Willpower +1
     </div>
+    <div
+      id="definition-toast"
+      class="pointer-events-none fixed left-1/2 top-20 z-50 hidden -translate-x-1/2 rounded-2xl border border-neon-cyan/60 bg-gym-card/95 px-4 py-3 text-xs font-semibold text-neon-cyan opacity-0 shadow-lg transition-opacity duration-300"
+    >
+      Definition
+    </div>
 
     <section id="hub" class="px-6 space-y-4">
       <div class="bg-gym-card rounded-2xl p-4 shadow-lg space-y-3">
@@ -705,19 +711,6 @@
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
             <h2 id="session-title" class="text-2xl font-semibold mt-1">Select a Session</h2>
             <p id="session-note" class="text-sm text-slate-300 mt-2">Choose Session A or B to begin.</p>
-            <div id="light-mode-row" class="mt-3 hidden rounded-xl border border-slate-700 bg-black/40 p-3">
-              <label class="flex items-center justify-between gap-3 text-sm text-slate-200">
-                <span class="font-semibold">Light Mode (Saturday)</span>
-                <input
-                  id="light-mode-toggle"
-                  type="checkbox"
-                  class="h-5 w-10 cursor-pointer rounded-full border border-slate-600 bg-black/40 accent-neon-emerald"
-                />
-              </label>
-              <p id="light-mode-hint" class="mt-2 text-xs text-slate-400">
-                Reduce intensity: shorter ramp + softer control cycles focused on breath.
-              </p>
-            </div>
             <p id="session-settings-note" class="mt-2 text-xs text-neon-cyan hidden"></p>
           </div>
           <div class="flex flex-col items-center gap-2">
@@ -830,22 +823,9 @@
       </div>
 
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Current Phase</p>
-            <div class="flex items-center gap-2">
-              <h3 id="phase-title" class="text-xl font-semibold">—</h3>
-              <button
-                id="position-guide-button"
-                class="hidden rounded-full border border-neon-cyan/60 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-neon-cyan hover:bg-neon-cyan/10"
-                type="button"
-              >
-                Best Positions
-              </button>
-            </div>
-            <p id="phase-text" class="text-sm text-slate-300 mt-2 transition-opacity duration-700">Start a session to begin guidance.</p>
-          </div>
-          <div class="relative w-40 h-40">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Coached Session</p>
+        <div class="flex flex-col items-center gap-4">
+          <div class="relative w-44 h-44">
             <div id="bio-monitor" class="bio-monitor" data-session="idle" data-phase="idle">
               <div class="vector-scope">
                 <div class="scope-ring"></div>
@@ -861,10 +841,46 @@
               </div>
               <div class="bio-monitor__hud">
                 <p id="bio-monitor-label" class="text-[9px] uppercase tracking-[0.3em] text-slate-300">Standby</p>
-                <p id="phase-time" class="text-xl font-bold">00:00</p>
+                <p id="phase-time" class="text-2xl font-bold">00:00</p>
                 <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
               </div>
             </div>
+          </div>
+          <div id="session-waveform" class="session-waveform waveform--rest">
+            <div class="wave-bar" style="--bar-delay: 0s; height: 40%;"></div>
+            <div class="wave-bar" style="--bar-delay: 0.15s; height: 55%;"></div>
+            <div class="wave-bar" style="--bar-delay: 0.3s; height: 70%;"></div>
+            <div class="wave-bar" style="--bar-delay: 0.45s; height: 50%;"></div>
+            <div class="wave-bar" style="--bar-delay: 0.6s; height: 80%;"></div>
+            <div class="wave-bar" style="--bar-delay: 0.75s; height: 60%;"></div>
+            <div class="wave-bar" style="--bar-delay: 0.9s; height: 75%;"></div>
+            <div class="wave-bar" style="--bar-delay: 1.05s; height: 50%;"></div>
+            <div class="wave-bar" style="--bar-delay: 1.2s; height: 85%;"></div>
+            <div class="wave-bar" style="--bar-delay: 1.35s; height: 55%;"></div>
+            <div class="wave-bar" style="--bar-delay: 1.5s; height: 70%;"></div>
+            <div class="wave-bar" style="--bar-delay: 1.65s; height: 60%;"></div>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-slate-700 bg-black/40 p-4 space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Current Action</p>
+              <p id="phase-action" class="mt-2 text-lg font-semibold text-white">—</p>
+              <p id="phase-title" class="mt-1 text-[10px] uppercase tracking-[0.3em] text-slate-400">Phase —</p>
+            </div>
+            <button
+              id="position-guide-button"
+              class="hidden rounded-full border border-neon-cyan/60 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-neon-cyan hover:bg-neon-cyan/10"
+              type="button"
+            >
+              Best Positions
+            </button>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Micro-Instructions</p>
+            <ul id="phase-instructions" class="mt-2 space-y-1 pl-5 text-sm text-slate-300 list-disc">
+              <li>Start a session to begin guidance.</li>
+            </ul>
           </div>
         </div>
         <div class="flex items-center justify-center gap-3">
@@ -897,23 +913,6 @@
         <div class="grid grid-cols-2 gap-3">
           <button id="toggle-session" class="rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark">Start</button>
           <button id="abort-session" class="rounded-xl bg-neon-rose py-3 font-semibold text-white">ABORT</button>
-        </div>
-        <div class="mt-4">
-          <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400">Session Waveform</p>
-          <div id="session-waveform" class="session-waveform waveform--rest mt-3">
-            <div class="wave-bar" style="--bar-delay: 0s; height: 40%;"></div>
-            <div class="wave-bar" style="--bar-delay: 0.15s; height: 55%;"></div>
-            <div class="wave-bar" style="--bar-delay: 0.3s; height: 70%;"></div>
-            <div class="wave-bar" style="--bar-delay: 0.45s; height: 50%;"></div>
-            <div class="wave-bar" style="--bar-delay: 0.6s; height: 80%;"></div>
-            <div class="wave-bar" style="--bar-delay: 0.75s; height: 60%;"></div>
-            <div class="wave-bar" style="--bar-delay: 0.9s; height: 75%;"></div>
-            <div class="wave-bar" style="--bar-delay: 1.05s; height: 50%;"></div>
-            <div class="wave-bar" style="--bar-delay: 1.2s; height: 85%;"></div>
-            <div class="wave-bar" style="--bar-delay: 1.35s; height: 55%;"></div>
-            <div class="wave-bar" style="--bar-delay: 1.5s; height: 70%;"></div>
-            <div class="wave-bar" style="--bar-delay: 1.65s; height: 60%;"></div>
-          </div>
         </div>
       </div>
     </section>
@@ -1814,31 +1813,41 @@
           {
             title: "Phase 0: Setup",
             duration: 600,
-            text: "Hygiene, Warmth, Lube. Slow Insertion. No stimulation.",
+            action: "Preparation",
+            instructions: ["Exhale 3 times. Insert slowly. Goal is comfort, not depth."],
             color: "#06b6d4"
           },
           {
             title: "Phase 1: Stillness",
             duration: 120,
-            text: "Body Scan. Soften glutes/abs. Device still.",
+            action: "Body Scan",
+            instructions: ["NO MOVEMENT. Scan: Jaw? Glutes? Abs? Soften everything below ribs."],
             color: "#06b6d4"
           },
           {
             title: "Phase 2: Gentle Ramp",
             duration: 480,
-            text: "Low setting. Goal: Level 3-4 (Mild fullness).",
+            action: "Gentle Ramp",
+            instructions: ["Low setting. Target Level 3-4 (Warmth). If you spike, STOP and exhale."],
             color: "#06b6d4"
           },
           {
-            title: "Phase 3: Control Cycles",
+            title: "Phase 3: Control Cycle",
             duration: 1080,
-            text: "Cycles: 30s hold, 60s downshift. Slow is strong.",
+            action: "The Cycle Loop",
+            instructions: [
+              "1. Ramp to Level 6.",
+              "2. HOLD (Don't chase).",
+              "3. STOP (Hands off).",
+              "4. DOWNSHIFT (Exhale 8s)."
+            ],
             color: "#06b6d4"
           },
           {
             title: "Phase 4: Reset",
             duration: 600,
-            text: "Pelvic Floor Reset. Device Off. Downshift breathing.",
+            action: "Pelvic Reset",
+            instructions: ["Device OFF. Lie still. Inhale 4s, Exhale 8s. Remove when calm."],
             color: "#10b981",
             showArousal: true
           }
@@ -1851,45 +1860,52 @@
           {
             title: "Step 1: Warmup",
             duration: 300,
-            text: "Warm cloth/shower. Relax.",
+            action: "Warmup",
+            instructions: ["Warm cloth/shower. Relax."],
             color: "#06b6d4"
           },
           {
             title: "Step 2: Seal",
             duration: 60,
-            text: "Create seal. Mild pressure only.",
+            action: "Seal",
+            instructions: ["Create seal. Tiny pressure. Goal: Mild fullness only."],
             color: "#06b6d4"
           },
           {
             title: "Step 3: Cycle 1",
             duration: 240,
-            text: "HOLD. Warm expansion. No pain.",
+            action: "Hold",
+            instructions: ["Warm expansion. NO stretching pain. Keep breathing."],
             color: "#06b6d4"
           },
           {
             title: "Step 4: Release",
             duration: 90,
-            text: "FULL RELEASE. Mandatory rest.",
+            action: "Release",
+            instructions: ["Release ALL vacuum. Let tissue soften. Mandatory."],
             color: "#10b981",
             showArousal: true
           },
           {
             title: "Step 5: Cycle 2",
             duration: 240,
-            text: "HOLD. Consistent pressure.",
+            action: "Hold",
+            instructions: ["HOLD. Consistent pressure."],
             color: "#06b6d4"
           },
           {
             title: "Step 6: Release",
             duration: 90,
-            text: "FULL RELEASE.",
+            action: "Release",
+            instructions: ["FULL RELEASE."],
             color: "#10b981",
             showArousal: true
           },
           {
             title: "Step 7: Integration",
             duration: 300,
-            text: "Remove device. Deep breathing. Relax pelvic floor.",
+            action: "Integration",
+            instructions: ["Remove device. Deep breathing. Relax pelvic floor."],
             color: "#10b981",
             showArousal: true
           }
@@ -1933,12 +1949,10 @@
       }
     ];
 
-    const controlCycleAffirmations = [
-      "Slow is Strong.",
-      "I control the pace.",
-      "I can downshift any time.",
-      "Sensation is information, not urgency."
-    ];
+    const smartDefinitions = {
+      downshift: "Device OFF. Long Exhale (8s). Wait for arousal to drop.",
+      "reverse-kegel": "Gently push pelvic floor out (like starting to pee) to relax tension."
+    };
     const reverseKegelPhases = [
       { label: "Inhale", duration: 4, instruction: "Breathe into belly." },
       { label: "Push", duration: 5, instruction: "Gently Push Out (Reverse Kegel)." },
@@ -1964,7 +1978,8 @@
     const sessionNote = document.getElementById("session-note");
     const sessionWarning = document.getElementById("session-warning");
     const phaseTitle = document.getElementById("phase-title");
-    const phaseText = document.getElementById("phase-text");
+    const phaseAction = document.getElementById("phase-action");
+    const phaseInstructions = document.getElementById("phase-instructions");
     const phaseTime = document.getElementById("phase-time");
     const progressRing = document.getElementById("progress-ring");
     const bioMonitor = document.getElementById("bio-monitor");
@@ -2019,9 +2034,7 @@
     const postFeeling = document.getElementById("post-feeling");
     const sessionSettingsInput = document.getElementById("session-settings");
     const sessionSettingsNote = document.getElementById("session-settings-note");
-    const lightModeRow = document.getElementById("light-mode-row");
-    const lightModeToggle = document.getElementById("light-mode-toggle");
-    const lightModeHint = document.getElementById("light-mode-hint");
+    const definitionToast = document.getElementById("definition-toast");
     const scheduleRadios = document.querySelectorAll('input[name="training-schedule"]');
     const infoTriggers = document.querySelectorAll(".info-trigger");
     const handbookSearch = document.getElementById("handbook-search");
@@ -2151,16 +2164,11 @@
     let reverseKegelActive = false;
     let vacationModeEnabled = false;
     let growerModeEnabled = true;
-    let lightModeEnabled = false;
     let audioGuidanceEnabled = true;
     let sessionLightModeActive = false;
-    let controlCycleMessages = [...controlCycleAffirmations];
 
-    function getControlCycleText(isLightMode) {
-      const holdSeconds = isLightMode ? 15 : 30;
-      const restSeconds = isLightMode ? 90 : 60;
-      const suffix = isLightMode ? " Focus on relaxation and breath." : "";
-      return `Cycles: ${holdSeconds}s hold, ${restSeconds}s downshift. Slow is strong.${suffix}`;
+    function isLightModeDay(date = new Date()) {
+      return date.getDay() === 6;
     }
 
     function isLightModeActiveForKey(key) {
@@ -2168,7 +2176,7 @@
       if (sessionStart && currentSessionKey === "A") {
         return sessionLightModeActive;
       }
-      return lightModeEnabled;
+      return isLightModeDay();
     }
 
     function getSessionDisplayName(key) {
@@ -2188,9 +2196,6 @@
           if (step.title === "Phase 2: Gentle Ramp") {
             adjustedStep.duration = Math.max(0, step.duration - 120);
           }
-          if (step.title === "Phase 3: Control Cycles") {
-            adjustedStep.text = getControlCycleText(true);
-          }
           return adjustedStep;
         });
       }
@@ -2203,19 +2208,6 @@
         });
       }
       return steps;
-    }
-
-    function updateLightModeUi() {
-      if (!lightModeRow || !lightModeToggle) return;
-      const showLightMode = currentSessionKey === "A" && !selectAButton.disabled;
-      lightModeRow.classList.toggle("hidden", !showLightMode);
-      lightModeToggle.checked = lightModeEnabled;
-      lightModeToggle.disabled = Boolean(sessionStart);
-      if (lightModeHint) {
-        lightModeHint.textContent = lightModeEnabled
-          ? "Light Mode active: shorter ramp, 15s holds, +30s downshift."
-          : "Reduce intensity: shorter ramp + softer control cycles focused on breath.";
-      }
     }
 
     function updateSessionWaveform(mode) {
@@ -2242,9 +2234,6 @@
     let gameDayStart = null;
     let gameDayBreathPhaseIndex = 0;
     let gameDayBreathSecond = 4;
-    let controlCycleIntervalId = null;
-    let controlCycleTimeoutId = null;
-    let controlCycleIndex = 0;
     let lastConsistencyStreak = 0;
     let lastRetentionStreak = 0;
     let deTurtleTimerId = null;
@@ -2283,6 +2272,63 @@
       }
       const ratio = remaining / total;
       progressRing.style.strokeDashoffset = `${ringLength - ringLength * ratio}`;
+    }
+
+    function formatInstructionText(text) {
+      if (!text) return "";
+      return text.replace(/\b(Downshift|Reverse Kegel)\b/gi, (match) => {
+        const key = match.toLowerCase().replace(/\s+/g, "-");
+        if (!smartDefinitions[key]) return match;
+        return `<button type="button" class="definition-trigger font-semibold text-neon-cyan underline decoration-neon-cyan/60 underline-offset-2" data-definition="${key}">${match}</button>`;
+      });
+    }
+
+    function renderPhaseInstructions(instructions) {
+      if (!phaseInstructions) return;
+      const list = instructions && instructions.length ? instructions : ["Start a session to begin guidance."];
+      phaseInstructions.innerHTML = "";
+      list.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = formatInstructionText(item);
+        phaseInstructions.appendChild(li);
+      });
+    }
+
+    function setPhaseGuidance({ title, action, instructions }) {
+      if (phaseTitle) {
+        phaseTitle.textContent = title || "Phase —";
+      }
+      if (phaseAction) {
+        phaseAction.textContent = action || "—";
+      }
+      renderPhaseInstructions(instructions);
+    }
+
+    function getStepSpeech(step) {
+      if (!step) return "";
+      const actionText = step.action ? `${step.action}. ` : "";
+      const instructionText = (step.instructions || []).join(" ");
+      return `${step.title}. ${actionText}${instructionText}`.trim();
+    }
+
+    function showDefinitionToast(key) {
+      if (!definitionToast) return;
+      const text = smartDefinitions[key];
+      if (!text) return;
+      definitionToast.textContent = text;
+      definitionToast.classList.remove("hidden");
+      requestAnimationFrame(() => {
+        definitionToast.classList.remove("opacity-0");
+        definitionToast.classList.add("opacity-100");
+      });
+      clearTimeout(definitionToast.timeoutId);
+      definitionToast.timeoutId = setTimeout(() => {
+        definitionToast.classList.add("opacity-0");
+        definitionToast.classList.remove("opacity-100");
+        setTimeout(() => {
+          definitionToast.classList.add("hidden");
+        }, 300);
+      }, 2200);
     }
 
     function speak(text) {
@@ -2883,7 +2929,7 @@
     function updateReverseKegelDisplay() {
       const phase = reverseKegelPhases[reverseKegelPhaseIndex];
       reverseKegelPhase.textContent = phase.label;
-      reverseKegelInstruction.textContent = phase.instruction;
+      reverseKegelInstruction.innerHTML = formatInstructionText(phase.instruction);
       reverseKegelTimer.textContent = formatTime(reverseKegelRemaining);
     }
 
@@ -2939,7 +2985,6 @@
         }
         updateBioMonitorState(null, null);
         updateSessionSettingsNote();
-        updateLightModeUi();
         return;
       }
       currentSessionKey = key;
@@ -2948,17 +2993,20 @@
       preStartAdjustment = 0;
       const session = sessions[key];
       sessionTitle.textContent = getSessionDisplayName(key);
-      sessionNote.textContent = "Press start to begin the interval timer.";
-      if (key === "A" && lightModeEnabled) {
-        sessionNote.textContent = "Light Mode active. Press start to begin the interval timer.";
-      }
+      const lightModeActive = key === "A" && isLightModeActiveForKey(key);
+      sessionNote.textContent = lightModeActive
+        ? "Light Mode active (Saturday). Press start to begin the interval timer."
+        : "Press start to begin the interval timer.";
       sessionWarning.textContent = session.warning;
       sessionWarning.classList.toggle("hidden", session.warning.length === 0);
       if (growerWarning) {
         growerWarning.classList.toggle("hidden", !(key === "B" && growerModeEnabled));
       }
-      phaseTitle.textContent = "Ready";
-      phaseText.textContent = "Set up your space and prepare to begin.";
+      setPhaseGuidance({
+        title: "Phase —",
+        action: "Ready",
+        instructions: ["Set up your space and prepare to begin."]
+      });
       currentStepIndex = 0;
       const steps = getSessionSteps(key);
       remaining = steps[0].duration;
@@ -2972,10 +3020,8 @@
       toggleSession.textContent = "Start";
       clearInterval(timerId);
       timerId = null;
-      stopControlCycleAffirmations();
       updateSessionSettingsNote();
       updatePositionGuideVisibility();
-      updateLightModeUi();
       updateSessionWaveform("rest");
     }
 
@@ -3215,53 +3261,6 @@
       }
     }
 
-    function updatePhaseTextWithFade(text) {
-      if (!phaseText) return;
-      phaseText.style.opacity = "0";
-      clearTimeout(controlCycleTimeoutId);
-      controlCycleTimeoutId = setTimeout(() => {
-        phaseText.textContent = text;
-        phaseText.style.opacity = "1";
-      }, 300);
-    }
-
-    function stopControlCycleAffirmations() {
-      clearInterval(controlCycleIntervalId);
-      controlCycleIntervalId = null;
-      clearTimeout(controlCycleTimeoutId);
-      controlCycleTimeoutId = null;
-      controlCycleIndex = 0;
-    }
-
-    function startControlCycleAffirmations(stepText) {
-      stopControlCycleAffirmations();
-      controlCycleMessages = stepText
-        ? [stepText, ...controlCycleAffirmations]
-        : [...controlCycleAffirmations];
-      controlCycleIndex = 0;
-      updatePhaseTextWithFade(controlCycleMessages[controlCycleIndex]);
-      controlCycleIntervalId = setInterval(() => {
-        controlCycleIndex = (controlCycleIndex + 1) % controlCycleMessages.length;
-        updatePhaseTextWithFade(controlCycleMessages[controlCycleIndex]);
-      }, 15000);
-    }
-
-    function refreshControlCycleAffirmations() {
-      const step = getSessionSteps(currentSessionKey)[currentStepIndex];
-      if (
-        currentSessionKey === "A" &&
-        step &&
-        step.title === "Phase 3: Control Cycles" &&
-        timerId
-      ) {
-        if (!controlCycleIntervalId) {
-          startControlCycleAffirmations(step.text);
-        }
-      } else {
-        stopControlCycleAffirmations();
-      }
-    }
-
     function flashWillpowerToast() {
       if (!urgeToast) return;
       urgeToast.classList.remove("hidden");
@@ -3324,14 +3323,12 @@
         arousalSlider.value = 3;
         updateArousalFeedback(3);
       }
-      if (currentSessionKey === "A" && step.title === "Phase 3: Control Cycles") {
-        startControlCycleAffirmations(step.text);
-      } else {
-        stopControlCycleAffirmations();
-        phaseText.textContent = step.text;
-        phaseText.style.opacity = "1";
-      }
-      speak(`${step.title}. ${step.text}`);
+      setPhaseGuidance({
+        title: step.title,
+        action: step.action || step.title,
+        instructions: step.instructions || []
+      });
+      speak(getStepSpeech(step));
       if (index === 0) {
         preStartAdjustment = 0;
       }
@@ -3349,20 +3346,18 @@
 
     function startSession() {
       if (!currentSessionKey) return;
-      sessionLightModeActive = lightModeEnabled;
+      sessionLightModeActive = isLightModeActiveForKey(currentSessionKey);
       sessionStart = new Date();
       setStep(0);
       timerId = setInterval(tick, 1000);
       toggleSession.textContent = "Pause";
       updateSessionSettingsNote();
-      updateLightModeUi();
     }
 
     function pauseSession() {
       clearInterval(timerId);
       timerId = null;
       toggleSession.textContent = "Resume";
-      stopControlCycleAffirmations();
     }
 
     function endSession(reason) {
@@ -3371,7 +3366,6 @@
       toggleSession.textContent = "Start";
       arousalPanel.classList.add("hidden");
       stopNeuroAudio();
-      stopControlCycleAffirmations();
       if (!sessionStart) return;
       const duration = Math.round((Date.now() - sessionStart.getTime()) / 60000);
       lastLogPending = {
@@ -3385,7 +3379,6 @@
       sessionStart = null;
       sessionLightModeActive = false;
       updateBioMonitorState(null, null);
-      updateLightModeUi();
       updateSessionWaveform("rest");
       postFeeling.value = "Energized";
       sessionSettingsInput.value = "";
@@ -4102,6 +4095,12 @@
       btn.addEventListener("click", () => showSection(btn.dataset.target));
     });
 
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest(".definition-trigger");
+      if (!trigger) return;
+      showDefinitionToast(trigger.dataset.definition);
+    });
+
     if (handbookSearch) {
       handbookSearch.addEventListener("input", (event) => {
         setHandbookTab("protocols");
@@ -4119,16 +4118,6 @@
 
     selectAButton.addEventListener("click", () => setSession("A"));
     selectBButton.addEventListener("click", () => setSession("B"));
-    if (lightModeToggle) {
-      lightModeToggle.addEventListener("change", (event) => {
-        lightModeEnabled = event.target.checked;
-        if (currentSessionKey === "A" && !sessionStart) {
-          setSession("A");
-        } else {
-          updateLightModeUi();
-        }
-      });
-    }
     soundToggle.addEventListener("click", toggleNeuroAudio);
     soundModeButton.addEventListener("click", toggleNeuroMode);
     panicButton.addEventListener("click", activatePanicMode);
@@ -4148,7 +4137,6 @@
         if (sessionStart) {
           timerId = setInterval(tick, 1000);
           toggleSession.textContent = "Pause";
-          refreshControlCycleAffirmations();
         } else {
           startSession();
         }
@@ -4441,16 +4429,8 @@
       showSection("train");
       const today = getScheduleForToday();
       if (today.plan.includes("Session A")) {
-        lightModeEnabled = today.plan.includes("Light");
-        if (lightModeToggle) {
-          lightModeToggle.checked = lightModeEnabled;
-        }
         setSession("A");
       } else if (today.plan.includes("Session B")) {
-        lightModeEnabled = false;
-        if (lightModeToggle) {
-          lightModeToggle.checked = false;
-        }
         setSession("B");
       } else {
         sessionTitle.textContent = "Rest Day";
