@@ -959,6 +959,10 @@
             </div>
           </div>
         </div>
+        <div class="rounded-xl border border-slate-700 bg-slate-900/90 p-4">
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-300">Trainer's Instructions</p>
+          <ul id="trainer-instructions" class="mt-3 list-disc space-y-2 pl-5 text-sm text-white"></ul>
+        </div>
         <div class="flex items-center justify-center gap-3">
           <button id="minus-30" class="rounded-lg border border-neon-cyan/40 px-3 py-2 text-xs font-semibold text-neon-cyan">
             -30s
@@ -2317,39 +2321,80 @@
           {
             title: "Phase 0: Setup",
             duration: 600,
-            text: "Hygiene, Warmth, Lube. Slow Insertion. No stimulation.",
-            color: "#06b6d4"
+            text: "Prepare the body, lubricate, and insert with calm control.",
+            color: "#06b6d4",
+            coaching: [
+              "Apply ample lubrication.",
+              "Exhale fully while inserting.",
+              "Stop at first resistance. Comfort > Depth."
+            ]
           },
           {
-            title: "Phase 1: Warmup",
+            title: "Phase 1: Stillness",
             duration: 120,
-            text: "Body scan. Soften glutes/abs. Device still.",
-            color: "#06b6d4"
+            text: "Stay motionless and soften the body.",
+            color: "#06b6d4",
+            coaching: [
+              "HANDS OFF the device.",
+              "Scan body: Jaw loose? Glutes soft?",
+              "Breathe into the belly. No movement."
+            ]
           },
           {
-            title: "Phase 2: Active Milking",
-            duration: 240,
-            text: "Motion: Rock forward -> Pull back. Visual: 'Come Hither'. Goal: Fluid drainage.",
-            color: "#06b6d4"
-          },
-          {
-            title: "Phase 3: Gentle Ramp",
+            title: "Phase 2: Gentle Ramp",
             duration: 480,
-            text: "Low setting. Goal: Level 3-4 (Mild fullness).",
-            color: "#06b6d4"
+            text: "Ease into vibration and seek warmth, not buzz.",
+            color: "#06b6d4",
+            coaching: [
+              "Increase vibration slowly.",
+              "Seek a deep 'hum', not a surface 'buzz'.",
+              "Target Level 3-4 (Warmth only)."
+            ]
           },
           {
-            title: "Phase 4: Control Cycle",
+            title: "Phase 3: Control Cycle (Ramp)",
+            duration: 180,
+            text: "Gradually lift intensity without clenching.",
+            color: "#06b6d4",
+            coaching: [
+              "Slowly increase intensity.",
+              "Allow arousal to rise to Level 6.",
+              "Breathe deep. Do not clench."
+            ]
+          },
+          {
+            title: "Phase 4: Control Cycle (Hold)",
             duration: 1080,
-            text: "Hold steady, then downshift. Track sensation and breathe evenly.",
-            color: "#06b6d4"
+            text: "Hold the wave. Stay calm and in control.",
+            color: "#06b6d4",
+            coaching: [
+              "STAY HERE. Don't chase more.",
+              "If you hit Level 8: STOP immediately.",
+              "Surf the wave. Soften the pelvic floor."
+            ]
           },
           {
-            title: "Phase 5: Reset",
+            title: "Phase 5: Control Cycle (Downshift)",
+            duration: 180,
+            text: "Power down and let arousal fall.",
+            color: "#06b6d4",
+            coaching: [
+              "Power OFF immediately.",
+              "Exhale for 8 seconds.",
+              "Wait for arousal to drop back to Level 3."
+            ]
+          },
+          {
+            title: "Phase 6: Reset",
             duration: 600,
-            text: "Pelvic Floor Reset. Device Off. Downshift breathing.",
+            text: "Device off. Breathe and soften.",
             color: "#10b981",
-            showArousal: true
+            showArousal: true,
+            coaching: [
+              "Device OFF.",
+              "5 deep 'softening' breaths.",
+              "Remove gently only when calm."
+            ]
           }
         ]
       },
@@ -2362,47 +2407,47 @@
           {
             title: "Step 1: Warmup",
             duration: 300,
-            text: "Warm cloth/shower. Relax.",
-            color: "#06b6d4"
+            text: "Heat and loosen the tissue before pressure.",
+            color: "#06b6d4",
+            coaching: [
+              "Apply heat (cloth/water) for 5 mins.",
+              "Massage tissue until pliable.",
+              "Do NOT skip this."
+            ]
           },
           {
-            title: "Step 2: Seal",
+            title: "Step 2: Seal Check",
             duration: 60,
-            text: "Create seal. Mild pressure only.",
-            color: "#06b6d4"
+            text: "Confirm a gentle seal with minimal vacuum.",
+            color: "#06b6d4",
+            coaching: [
+              "Place cylinder against body.",
+              "Create mild vacuum to seal.",
+              "No stretching yet. Just contact."
+            ]
           },
           {
-            title: "Step 3: Cycle 1",
+            title: "Step 3: Work Cycle",
             duration: 240,
-            text: "HOLD. Warm expansion. No pain. Internal Pulse: Gently engage Kegel for 1s to push blood into the tube. Relax. Repeat every 10s.",
-            color: "#06b6d4"
+            text: "Build to expansion while monitoring sensation.",
+            color: "#06b6d4",
+            coaching: [
+              "Pump slowly to 70% expansion.",
+              "If you feel 'pulling' at base: Release slightly.",
+              "Internal Pulse: Gently engage Kegel to push blood in."
+            ]
           },
           {
-            title: "Step 4: Release",
+            title: "Step 4: Full Release",
             duration: 90,
-            text: "FULL RELEASE. Mandatory rest.",
+            text: "Release all pressure and restore circulation.",
             color: "#10b981",
-            showArousal: true
-          },
-          {
-            title: "Step 5: Cycle 2",
-            duration: 240,
-            text: "HOLD. Consistent pressure. Internal Pulse: Gently engage Kegel for 1s to push blood into the tube. Relax. Repeat every 10s.",
-            color: "#06b6d4"
-          },
-          {
-            title: "Step 6: Release",
-            duration: 90,
-            text: "FULL RELEASE.",
-            color: "#10b981",
-            showArousal: true
-          },
-          {
-            title: "Step 7: Integration",
-            duration: 300,
-            text: "Remove device. Deep breathing. Relax pelvic floor.",
-            color: "#10b981",
-            showArousal: true
+            showArousal: true,
+            coaching: [
+              "Press release valve.",
+              "Let ALL pressure go.",
+              "Allow fresh blood to return. Massage briefly."
+            ]
           }
         ]
       },
@@ -2413,29 +2458,38 @@
         visual: "flow_timer",
         phases: [
           {
-            title: "Mode 1: Base Lock (Trap Blood)",
+            title: "Mode 1: The Base Lock",
             duration: 180,
-            text: "Form an 'OK' grip at the base. Trap blood, then massage the shaft with the other hand.",
-            color: "#f59e0b"
+            text: "Lock at the base and build awareness.",
+            color: "#f59e0b",
+            coaching: [
+              "Make 'OK' grip at base.",
+              "Squeeze firmly to trap blood.",
+              "Massage shaft with free hand."
+            ]
           },
           {
-            title: "Mode 1: Fascia Twist (Corkscrew)",
+            title: "Mode 2: The Corkscrew",
             duration: 180,
-            text: "Use a twisting motion from base to glans. Stretch the fascia gently.",
-            color: "#f59e0b"
+            text: "Spiral the tissue and breathe through stretch.",
+            color: "#f59e0b",
+            coaching: [
+              "Grip base firmly.",
+              "Twist hand 45° while pulling up.",
+              "Feel the fascia stretch. Breathe."
+            ]
           },
           {
-            title: "Mode 1: Scrotal Drag (Anti-Turtle)",
+            title: "Mode 3: Integration",
             duration: 120,
-            text: "Gently pull the scrotum downward. Breathe into the stretch to prevent turtling.",
-            color: "#f59e0b"
-          },
-          {
-            title: "Mode 1: Integration",
-            duration: 120,
-            text: "Hands off. Stillness. Feel the warmth and circulation.",
+            text: "Hands off and observe residual sensation.",
             color: "#10b981",
-            showArousal: true
+            showArousal: true,
+            coaching: [
+              "Hands off.",
+              "Observe the 'Ghost Touch' sensation.",
+              "Do not touch. Just feel."
+            ]
           }
         ]
       }
@@ -2536,6 +2590,7 @@
     const phaseTitle = document.getElementById("phase-title");
     const phaseText = document.getElementById("phase-text");
     const phaseTime = document.getElementById("phase-time");
+    const trainerInstructions = document.getElementById("trainer-instructions");
     const progressRing = document.getElementById("progress-ring");
     const bioMonitor = document.getElementById("bio-monitor");
     const bioMonitorLabel = document.getElementById("bio-monitor-label");
@@ -2831,12 +2886,14 @@
     }
 
     function adjustStepDurationsToTarget(steps, targetTotal) {
-      const nonControlSteps = steps.filter((step) => step.title !== "Phase 4: Control Cycle");
+      const nonControlSteps = steps.filter(
+        (step) => step.title !== "Phase 4: Control Cycle (Hold)"
+      );
       const baseNonControlTotal = nonControlSteps.reduce((sum, step) => sum + step.duration, 0);
       const remaining = Math.max(0, targetTotal);
       const scale = baseNonControlTotal ? remaining / baseNonControlTotal : 1;
       return steps.map((step) => {
-        if (step.title === "Phase 4: Control Cycle") {
+        if (step.title === "Phase 4: Control Cycle (Hold)") {
           return { ...step };
         }
         return { ...step, duration: Math.max(30, Math.round(step.duration * scale)) };
@@ -2855,7 +2912,7 @@
       let steps = sessionConfig?.phases.map((step) => ({ ...step })) || [];
 
       steps = steps.map((step) => {
-        if (step.title === "Phase 4: Control Cycle") {
+        if (step.title === "Phase 4: Control Cycle (Hold)") {
           return {
             ...step,
             duration: controlDuration,
@@ -2878,7 +2935,7 @@
       const adjustedTotal = steps.reduce((sum, step) => sum + step.duration, 0);
       const diff = targetTotal - adjustedTotal;
       if (diff !== 0) {
-        const resetStep = steps.find((step) => step.title === "Phase 5: Reset");
+        const resetStep = steps.find((step) => step.title === "Phase 6: Reset");
         if (resetStep) {
           resetStep.duration = Math.max(30, resetStep.duration + diff);
         }
@@ -2886,7 +2943,7 @@
 
       if (sessionLightModeActive) {
         const rampStep = steps.find((step) => step.title === "Phase 3: Gentle Ramp");
-        const resetStep = steps.find((step) => step.title === "Phase 5: Reset");
+        const resetStep = steps.find((step) => step.title === "Phase 6: Reset");
         if (rampStep && resetStep) {
           const reduction = Math.min(120, Math.max(0, rampStep.duration - 30));
           rampStep.duration -= reduction;
@@ -2958,9 +3015,9 @@
 
     function getWaveformModeFromTitle(title) {
       const lower = (title || "").toLowerCase();
-      if (/(ramp|twist)/.test(lower)) return "ramp";
+      if (/(ramp|twist|corkscrew)/.test(lower)) return "ramp";
       if (/(hold|cycle|control|work|milking|lock|drag)/.test(lower)) return "hold";
-      if (/(setup|warmup|release|reset|integration|stillness|seal)/.test(lower)) {
+      if (/(setup|warmup|release|reset|integration|stillness|seal|downshift)/.test(lower)) {
         return "rest";
       }
       return "rest";
@@ -3890,6 +3947,7 @@
         updateBioMonitorState(null, null);
         updateSessionSettingsNote();
         updateLightModeUi();
+        updateTrainerInstructions(null);
         return;
       }
       currentSessionKey = key;
@@ -3938,6 +3996,7 @@
       updatePositionGuideVisibility();
       updateLightModeUi();
       updateSessionWaveform("rest");
+      updateTrainerInstructions(steps[0]);
     }
 
     function openInfoModal(type) {
@@ -4146,18 +4205,21 @@
         if (stepTitle?.includes("Phase 0")) {
           bioMonitor.dataset.phase = "setup";
           bioMonitorLabel.textContent = "CALIBRATING...";
-        } else if (stepTitle?.includes("Warmup")) {
+        } else if (stepTitle?.includes("Stillness")) {
           bioMonitor.dataset.phase = "stillness";
           bioMonitorLabel.textContent = "NO MOVEMENT";
-        } else if (stepTitle?.includes("Active Milking")) {
-          bioMonitor.dataset.phase = "milking";
-          bioMonitorLabel.textContent = "FLOW DRAIN";
         } else if (stepTitle?.includes("Gentle Ramp")) {
           bioMonitor.dataset.phase = "ramp";
           bioMonitorLabel.textContent = "TARGET ACQUIRE";
-        } else if (stepTitle?.includes("Control Cycle")) {
+        } else if (stepTitle?.includes("Control Cycle (Ramp)")) {
+          bioMonitor.dataset.phase = "ramp";
+          bioMonitorLabel.textContent = "CONTROL RAMP";
+        } else if (stepTitle?.includes("Control Cycle (Hold)")) {
           bioMonitor.dataset.phase = "hold";
           bioMonitorLabel.textContent = "CONTROL HOLD";
+        } else if (stepTitle?.includes("Control Cycle (Downshift)")) {
+          bioMonitor.dataset.phase = "rest";
+          bioMonitorLabel.textContent = "DOWNSHIFT";
         } else if (stepTitle?.includes("Reset")) {
           bioMonitor.dataset.phase = "rest";
           bioMonitorLabel.textContent = "COOL DOWN";
@@ -4188,12 +4250,9 @@
         if (stepTitle?.includes("Base Lock")) {
           bioMonitor.dataset.phase = "hold";
           bioMonitorLabel.textContent = "BASE LOCK";
-        } else if (stepTitle?.includes("Fascia Twist")) {
+        } else if (stepTitle?.includes("Corkscrew")) {
           bioMonitor.dataset.phase = "ramp";
           bioMonitorLabel.textContent = "SPIRAL FLOW";
-        } else if (stepTitle?.includes("Scrotal Drag")) {
-          bioMonitor.dataset.phase = "hold";
-          bioMonitorLabel.textContent = "LOW TETHER";
         } else {
           bioMonitor.dataset.phase = "rest";
           bioMonitorLabel.textContent = "INTEGRATE";
@@ -4255,6 +4314,25 @@
         phaseText.textContent = text;
         phaseText.style.opacity = "1";
       }, 300);
+    }
+
+    function updateTrainerInstructions(step) {
+      if (!trainerInstructions) return;
+      trainerInstructions.innerHTML = "";
+      const coaching = step?.coaching || [];
+      if (!coaching.length) {
+        const emptyItem = document.createElement("li");
+        emptyItem.textContent = "No trainer instructions for this phase.";
+        emptyItem.className = "text-slate-300";
+        trainerInstructions.appendChild(emptyItem);
+        return;
+      }
+      coaching.forEach((instruction) => {
+        const item = document.createElement("li");
+        item.textContent = instruction;
+        item.className = "leading-relaxed";
+        trainerInstructions.appendChild(item);
+      });
     }
 
     function stopControlCycleAffirmations() {
@@ -4321,7 +4399,7 @@
       if (
         currentSessionKey === "A" &&
         step &&
-        step.title === "Phase 4: Control Cycle" &&
+        step.title === "Phase 4: Control Cycle (Hold)" &&
         timerId
       ) {
         if (!controlCycleIntervalId) {
@@ -4393,6 +4471,7 @@
       updateBioMonitorState(currentSessionKey, step.title);
       updateSessionWaveform(getWaveformModeFromTitle(step.title));
       arousalPanel.classList.toggle("hidden", !step.showArousal);
+      updateTrainerInstructions(step);
       if (step.showArousal) {
         arousalSlider.value = 3;
         updateArousalFeedback(3);
@@ -4400,7 +4479,7 @@
       if (navigator.vibrate) {
         navigator.vibrate([200]);
       }
-      if (currentSessionKey === "A" && step.title === "Phase 4: Control Cycle") {
+      if (currentSessionKey === "A" && step.title === "Phase 4: Control Cycle (Hold)") {
         startControlCycleAffirmations(step.text);
         startSubliminalScripts();
       } else {
