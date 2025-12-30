@@ -12,487 +12,494 @@
       theme: {
         extend: {
           colors: {
-            "gym-dark": "#111827",
-            "gym-card": "#1f2937",
-            "neon-cyan": "#06b6d4",
-            "neon-amber": "#f59e0b",
-            "neon-emerald": "#10b981",
-            "neon-rose": "#e11d48",
-            "neon-violet": "#8b5cf6"
+            "gym-dark": "#0f172a",
+            "gym-card": "#1e293b",
+            "neon-cyan": "#22d3ee",
+            "neon-amber": "#fbbf24",
+            "neon-emerald": "#34d399",
+            "neon-rose": "#f43f5e",
           },
-          fontFamily: {
-            sans: ["Inter", "ui-sans-serif", "system-ui"]
-          },
-          boxShadow: {
-            glow: "0 0 25px rgba(6, 182, 212, 0.35)"
-          }
+          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui"] },
+          boxShadow: { glow: "0 0 20px rgba(34, 211, 238, 0.2)" }
         }
       }
     };
   </script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    /* ... (CSS Remains Unchanged for Stability) ... */
-    body { background: #111827; color: #f9fafb; }
-    .ring { transform: rotate(-90deg); transform-origin: 50% 50%; }
-    .bio-pacer {
-      position: relative; width: 220px; height: 220px; border-radius: 9999px;
-      background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.35), rgba(16, 185, 129, 0.08));
-      border: 2px solid rgba(16, 185, 129, 0.8);
-      animation: breathCycle 12s ease-in-out infinite;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 45px rgba(16, 185, 129, 0.45);
-    }
-    @keyframes breathCycle {
-      0% { transform: scale(0.75); }
-      33.333% { transform: scale(1.05); }
-      100% { transform: scale(0.75); }
-    }
-    .session-waveform { display: flex; gap: 6px; align-items: flex-end; height: 48px; }
-    .session-waveform .wave-bar {
-      flex: 1; border-radius: 8px; transform-origin: bottom;
-      animation-duration: var(--wave-speed); animation-iteration-count: infinite; animation-timing-function: ease-in-out; opacity: 0.9;
-    }
-    .waveform--rest { --wave-color: #3b82f6; --wave-speed: 3.2s; --wave-animation: waveRest; }
-    .waveform--ramp { --wave-color: #22d3ee; --wave-speed: 1.8s; --wave-animation: waveRamp; }
-    .waveform--hold { --wave-color: #a855f7; --wave-speed: 0.9s; --wave-animation: waveHold; }
-    .session-waveform.waveform--rest .wave-bar, .session-waveform.waveform--ramp .wave-bar, .session-waveform.waveform--hold .wave-bar {
-      background: linear-gradient(180deg, var(--wave-color), rgba(15, 23, 42, 0.2));
-      animation-name: var(--wave-animation);
-    }
-    @keyframes waveRest { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(0.7); } }
-    @keyframes waveRamp { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
-    @keyframes waveHold { 0%, 100% { transform: scaleY(0.6); } 50% { transform: scaleY(1.2); } }
+    body { background: #0f172a; color: #f8fafc; -webkit-tap-highlight-color: transparent; }
+    /* Animations */
+    @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 0; } }
+    @keyframes scan-line { 0% { top: 0%; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    
     .bio-monitor {
       position: relative; width: 100%; height: 100%; border-radius: 9999px;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 70%);
+      border: 1px solid rgba(148, 163, 184, 0.2); overflow: hidden;
       display: flex; align-items: center; justify-content: center;
-      background: radial-gradient(circle at 30% 20%, rgba(15, 23, 42, 0.8), rgba(6, 9, 20, 0.95));
-      border: 1px solid rgba(148, 163, 184, 0.3); overflow: hidden;
     }
-    .bio-monitor__hud { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-align: center; }
-    /* Vector Scope Styles */
-    .vector-scope { position: absolute; inset: 12px; border-radius: 9999px; border: 2px solid rgba(34, 211, 238, 0.5); opacity: 0.8; }
-    .scope-ring { position: absolute; inset: 6px; border-radius: 9999px; border: 1px dashed rgba(34, 211, 238, 0.3); animation: scopeSpin 10s linear infinite; }
-    .scope-target { position: absolute; width: 15px; height: 15px; background: var(--accent); border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 15px #06b6d4; }
-    @keyframes scopeSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    /* Cylinder Styles */
-    .expansion-cylinder { position: absolute; inset: 20px; border: 2px solid #64748b; border-radius: 12px; background: rgba(255,255,255,0.02); }
-    .cylinder-fill { position: absolute; bottom: 0; left: 0; right: 0; background: #06b6d4; opacity: 0.5; height: 10%; transition: height 1s ease; }
+    
+    /* Vector Scope (Session A/C) */
+    .vector-scope { position: absolute; inset: 10px; border-radius: 50%; border: 1px dashed rgba(34, 211, 238, 0.3); animation: spin 20s linear infinite; }
+    .vector-target { position: absolute; width: 12px; height: 12px; background: #22d3ee; border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 15px #22d3ee; }
+    .vector-ping { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 1px solid #22d3ee; animation: pulse-ring 2s infinite; }
+    
+    /* Cylinder (Session B) */
+    .cylinder-body { width: 80px; height: 160px; border: 2px solid #64748b; border-radius: 12px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
+    .cylinder-fill { position: absolute; bottom: 0; left: 0; right: 0; background: #34d399; opacity: 0.6; height: 0%; transition: height 1s ease; }
+    .cylinder-line { position: absolute; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.2); }
+    
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    
+    .phase-bar-bg { width: 100%; height: 4px; background: #334155; border-radius: 2px; margin-top: 10px; overflow: hidden; }
+    .phase-bar-fill { height: 100%; background: #22d3ee; width: 100%; transition: width 1s linear; }
   </style>
 </head>
-<body class="min-h-screen bg-gym-dark font-sans pb-24">
+<body class="pb-24">
 
-  <header class="px-6 pt-8 pb-4">
-    <p class="text-sm uppercase tracking-[0.4em] text-neon-emerald">Ultimate</p>
-    <h1 class="text-3xl font-bold text-white">Solo Performance Hub</h1>
-    <p class="mt-2 text-sm text-slate-300">Sustory 6-in-1 Protocol Active.</p>
+  <header class="px-6 pt-8 pb-4 bg-gym-dark sticky top-0 z-20 border-b border-slate-800">
+    <div class="flex justify-between items-center">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-neon-emerald">System V4.1</p>
+        <h1 class="text-2xl font-bold text-white">Performance Hub</h1>
+      </div>
+      <div class="text-right">
+        <p class="text-xs text-slate-400">Readiness</p>
+        <p class="text-neon-emerald font-bold">98%</p>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section id="hub" class="px-6 space-y-4">
-      <div class="bg-gym-card rounded-2xl p-4 shadow-lg">
-        <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
-          <span>System Readiness</span>
-          <span id="readiness-score" class="text-white font-semibold">98%</span>
-        </div>
-        <div class="mt-2 h-3 w-full overflow-hidden rounded-full bg-black/40">
-          <div class="h-3 w-[98%] rounded-full bg-neon-emerald"></div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3">
-        <button id="btn-emergency" class="rounded-2xl border-2 border-neon-rose/70 bg-black/40 py-4 text-sm font-semibold uppercase tracking-widest text-neon-rose">
-          ⚡ EMERGENCY
-        </button>
-        <button id="btn-game-day" class="rounded-2xl border-2 border-neon-amber/70 bg-black/40 py-4 text-sm font-semibold uppercase tracking-widest text-neon-amber">
-          🏆 Game Day
-        </button>
-      </div>
-
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today's Protocol</p>
-        <h2 class="text-xl font-semibold mt-2 text-white">Session A: Sustory Protocol</h2>
-        <p class="text-sm text-slate-300 mt-1">Thrusting + Vibe. Counter-Strike Drill.</p>
-        <button onclick="app.showSection('train')" class="mt-4 w-full rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">
-          Go to Training
-        </button>
-      </div>
-    </section>
-
-    <section id="train" class="hidden px-6 space-y-5">
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
-            <h2 id="session-title" class="text-2xl font-semibold mt-1">Select Session</h2>
-            <p id="session-subtitle" class="text-sm text-slate-300 mt-1">Ready for input.</p>
-          </div>
-          <div class="text-2xl text-neon-cyan"><i class="fa-solid fa-bolt"></i></div>
-        </div>
-
-        <div class="mt-6 relative w-full h-64 bg-black/40 rounded-2xl border border-slate-700 flex items-center justify-center overflow-hidden">
-           <div id="visual-container" class="bio-monitor">
-              <div class="bio-monitor__hud">
-                <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">00:00</p>
-                <p id="phase-label" class="text-[10px] uppercase tracking-widest text-neon-cyan mt-2">STANDBY</p>
-              </div>
-           </div>
-        </div>
-
-        <div class="mt-4 grid grid-cols-2 gap-3">
-          <button id="btn-toggle" class="rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark">Start</button>
-          <button id="btn-stop" class="rounded-xl border border-neon-rose text-neon-rose py-3 font-semibold">Stop</button>
+  <main id="app-content" class="px-4 py-4 space-y-4">
+    
+    <div id="view-hub" class="space-y-4">
+      <div class="bg-gym-card rounded-2xl p-5 border border-slate-800 shadow-lg">
+        <h2 class="text-white font-semibold text-lg flex items-center gap-2">
+          <i class="fa-solid fa-microchip text-neon-cyan"></i> Active Protocol
+        </h2>
+        <p class="text-slate-400 text-sm mt-1">Sustory 6-in-1 Integration Loaded.</p>
+        <div class="mt-4 flex gap-2">
+          <span class="px-2 py-1 bg-neon-emerald/10 text-neon-emerald text-[10px] uppercase font-bold rounded">Connected</span>
+          <span class="px-2 py-1 bg-neon-amber/10 text-neon-amber text-[10px] uppercase font-bold rounded">Grower Mode</span>
         </div>
       </div>
 
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg border border-neon-cyan/20">
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Trainer's Instructions</p>
-        <ul id="trainer-text" class="mt-3 space-y-2 text-sm text-slate-200 list-disc pl-5">
-          <li>Select a session to begin.</li>
-        </ul>
-      </div>
-
-      <div class="grid grid-cols-3 gap-3">
-        <button onclick="app.loadSession('A')" class="rounded-xl border border-neon-cyan/40 p-3 text-neon-cyan font-bold hover:bg-neon-cyan/10">Session A<br><span class="text-[10px] font-normal">Sustory</span></button>
-        <button onclick="app.loadSession('B')" class="rounded-xl border border-neon-emerald/40 p-3 text-neon-emerald font-bold hover:bg-neon-emerald/10">Session B<br><span class="text-[10px] font-normal">Pump</span></button>
-        <button onclick="app.loadSession('C')" class="rounded-xl border border-neon-amber/40 p-3 text-neon-amber font-bold hover:bg-neon-amber/10">Session C<br><span class="text-[10px] font-normal">Manual</span></button>
-      </div>
-      
-      <button id="btn-audio" class="w-full rounded-xl border border-slate-600 py-3 text-sm text-slate-400">
-        🔊 Focus Noise: OFF
+      <button onclick="app.nav('train')" class="w-full bg-gradient-to-r from-neon-cyan to-blue-600 py-4 rounded-xl font-bold text-white shadow-glow uppercase tracking-widest text-sm">
+        Enter Training
       </button>
 
-    </section>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="alert('Protocol: Cold Rinse (60s) + 20 Squats.')" class="p-4 rounded-xl bg-gym-card border border-neon-rose/50 text-neon-rose font-bold text-sm">
+          ⚡ URGE SOS
+        </button>
+        <button onclick="app.nav('handbook')" class="p-4 rounded-xl bg-gym-card border border-slate-700 text-slate-300 font-bold text-sm">
+          📚 Handbook
+        </button>
+      </div>
+    </div>
 
-    <section id="logs" class="hidden px-6">
-       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-         <h2 class="text-xl font-bold text-white mb-4">Training Log</h2>
-         <div id="log-list" class="space-y-3">
-           <p class="text-slate-400 text-sm">No logs yet.</p>
-         </div>
-         <button onclick="localStorage.removeItem('usph_logs'); app.renderLogs();" class="mt-4 w-full border border-neon-rose text-neon-rose py-2 rounded-lg text-xs uppercase">Clear Logs</button>
-       </div>
-    </section>
+    <div id="view-train" class="hidden space-y-4">
+      
+      <div class="bg-gym-card rounded-2xl p-1 border border-slate-800 shadow-xl relative overflow-hidden">
+        
+        <div class="p-4 flex justify-between items-center relative z-10">
+          <div>
+            <p id="session-name" class="text-xs uppercase tracking-widest text-slate-400">Select Session</p>
+            <h2 id="phase-name" class="text-xl font-bold text-white mt-1">STANDBY</h2>
+          </div>
+          <div id="timer" class="text-3xl font-mono font-bold text-neon-cyan tabular-nums">00:00</div>
+        </div>
 
-    <section id="handbook" class="hidden px-6 space-y-4">
-       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-         <h2 class="text-xl font-bold text-white mb-2">Prostate Protocol (Sustory)</h2>
-         <p class="text-sm text-slate-300 mb-4">How to use the 6-in-1 for maximum results.</p>
-         <div class="space-y-3 text-sm text-slate-200">
-            <div class="p-3 bg-black/40 rounded-lg border-l-2 border-neon-cyan">
-               <strong class="text-neon-cyan block mb-1">The Counter-Strike</strong>
-               When the device thrusts IN, you Push OUT (Reverse Kegel). This creates a "Shield" against premature ejaculation.
-            </div>
-            <div class="p-3 bg-black/40 rounded-lg border-l-2 border-neon-amber">
-               <strong class="text-neon-amber block mb-1">The P-Wave</strong>
-               Dry Orgasm training. Separate the spasm from the fluid. If you feel the pulse, stop thrusting and just breathe.
-            </div>
-         </div>
-       </div>
-    </section>
+        <div class="h-48 relative flex items-center justify-center bg-black/20">
+          <div id="visual-render" class="w-40 h-40">
+            <div class="bio-monitor"><div class="vector-scope"><div class="vector-target"></div></div></div>
+          </div>
+        </div>
+
+        <div class="px-4 pb-2">
+           <div class="phase-bar-bg"><div id="phase-progress" class="phase-bar-fill" style="width: 0%"></div></div>
+        </div>
+
+        <div class="p-5 bg-slate-900/80 border-t border-slate-700">
+          <p class="text-[10px] uppercase tracking-[0.3em] text-neon-amber mb-2">Trainer's Cues</p>
+          <ul id="coaching-text" class="space-y-3 text-sm text-slate-200 leading-relaxed">
+            <li><i class="fa-solid fa-circle-info text-slate-500 mr-2"></i>Select a session below to begin.</li>
+          </ul>
+        </div>
+
+        <div class="p-4 grid grid-cols-2 gap-3 bg-gym-card">
+          <button id="btn-main" onclick="player.toggle()" class="bg-neon-cyan text-gym-dark font-bold py-3 rounded-xl">Start</button>
+          <button onclick="player.stop()" class="border border-neon-rose text-neon-rose font-bold py-3 rounded-xl">Stop</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <button onclick="player.load('A')" class="p-3 rounded-xl border border-slate-700 hover:border-neon-cyan bg-gym-card">
+          <div class="text-neon-cyan text-lg mb-1"><i class="fa-solid fa-bullseye"></i></div>
+          <div class="text-xs font-bold text-white">Session A</div>
+          <div class="text-[9px] text-slate-400">Sustory</div>
+        </button>
+        <button onclick="player.load('B')" class="p-3 rounded-xl border border-slate-700 hover:border-neon-emerald bg-gym-card">
+          <div class="text-neon-emerald text-lg mb-1"><i class="fa-solid fa-droplet"></i></div>
+          <div class="text-xs font-bold text-white">Session B</div>
+          <div class="text-[9px] text-slate-400">Pump</div>
+        </button>
+        <button onclick="player.load('C')" class="p-3 rounded-xl border border-slate-700 hover:border-neon-amber bg-gym-card">
+          <div class="text-neon-amber text-lg mb-1"><i class="fa-solid fa-hand"></i></div>
+          <div class="text-xs font-bold text-white">Session C</div>
+          <div class="text-[9px] text-slate-400">Manual</div>
+        </button>
+      </div>
+
+      <button id="btn-noise" onclick="audio.toggle()" class="w-full py-3 rounded-xl border border-slate-700 text-slate-400 text-sm font-semibold flex items-center justify-center gap-2">
+        <i class="fa-solid fa-volume-off"></i> Focus Noise: OFF
+      </button>
+
+    </div>
+
+    <div id="view-handbook" class="hidden space-y-4">
+      <div class="bg-gym-card p-5 rounded-2xl border border-slate-800">
+        <h2 class="text-xl font-bold text-white">Technique Guide</h2>
+        <div class="mt-4 space-y-4">
+          <div class="p-3 bg-black/30 rounded-lg border-l-2 border-neon-cyan">
+            <h3 class="text-neon-cyan font-bold text-sm">The Counter-Strike</h3>
+            <p class="text-xs text-slate-300 mt-1">When the device thrusts <b>IN</b>, you Push <b>OUT</b> (Reverse Kegel). Do not clench. This trains the "Shield" reflex.</p>
+          </div>
+          <div class="p-3 bg-black/30 rounded-lg border-l-2 border-neon-emerald">
+            <h3 class="text-neon-emerald font-bold text-sm">Pulse Pumping</h3>
+            <p class="text-xs text-slate-300 mt-1">Don't just sit there. Flex your PC muscle (Kegel) gently to push blood *into* the vacuum tube.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-700 pb-safe">
-    <div class="grid grid-cols-4 text-xs text-slate-400">
-      <button onclick="app.showSection('hub')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-house"></i> Hub</button>
-      <button onclick="app.showSection('train')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-dumbbell"></i> Train</button>
-      <button onclick="app.showSection('logs')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-clipboard"></i> Logs</button>
-      <button onclick="app.showSection('handbook')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-book"></i> Guide</button>
+  <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-800 pb-safe z-50">
+    <div class="grid grid-cols-3 h-16">
+      <button onclick="app.nav('hub')" class="flex flex-col items-center justify-center text-slate-400 hover:text-white">
+        <i class="fa-solid fa-house mb-1"></i> <span class="text-[10px]">HUB</span>
+      </button>
+      <button onclick="app.nav('train')" class="flex flex-col items-center justify-center text-slate-400 hover:text-white">
+        <i class="fa-solid fa-dumbbell mb-1"></i> <span class="text-[10px]">TRAIN</span>
+      </button>
+      <button onclick="app.nav('handbook')" class="flex flex-col items-center justify-center text-slate-400 hover:text-white">
+        <i class="fa-solid fa-book mb-1"></i> <span class="text-[10px]">GUIDE</span>
+      </button>
     </div>
   </nav>
 
   <script>
-    const SESSION_LIBRARY = {
-      // SESSION A: SUSTORY 6-IN-1 PROTOCOL
+    /* --- DATA: DEEP COACHING LIBRARY --- */
+    const SESSIONS = {
       A: {
-        title: "Sustory Protocol",
+        title: "Session A: Sustory Protocol",
         visual: "vector",
         phases: [
           { 
-            name: "Setup & Base Lock", duration: 180, 
+            name: "Setup & Lock", duration: 180, 
             coaching: [
-              "<b>Lube Up:</b> Apply generously to device and entrance.",
-              "<b>Base Lock:</b> Loop the ring around Penis AND Testicles.",
-              "<b>Insert:</b> Curve facing UP (towards navel). Go slow."
-            ] 
+              "<b>1. Lube Protocol:</b> Coat the device head and your entrance generously. Do not spare the lube.",
+              "<b>2. The Base Lock:</b> Loop the ring around your SCROTUM first, then the penis. This traps venous blood for better signals.",
+              "<b>3. Insertion:</b> Exhale deeply. Insert slowly with the curve facing UP (towards navel)."
+            ]
           },
           { 
-            name: "Sensory Wakeup", duration: 120, 
+            name: "Sensory Mapping", duration: 120, 
             coaching: [
-              "<b>Remote:</b> Vibe ON (Low). Thrust OFF.",
-              "<b>Focus:</b> Locate the buzzing sensation at the prostate.",
-              "<b>Release:</b> Relax the anus. Don't fight it."
-            ] 
+              "<b>Remote:</b> Set Vibration to LOW. Thrust OFF.",
+              "<b>Body Scan:</b> Unclench your jaw. Drop your shoulders. If your mouth is tight, your pelvic floor is tight.",
+              "<b>Focus:</b> Close your eyes. Find exactly where the vibration touches the prostate. Breathe into that spot."
+            ]
           },
           { 
             name: "Active Drainage", duration: 300, 
             coaching: [
-              "<b>Remote:</b> Thrust ON (Level 1). Vibe LOW.",
-              "<b>Action:</b> Let the device thrust. Do not rock hips.",
-              "<b>Visual:</b> Clearing the ducts."
-            ] 
+              "<b>Remote:</b> Set Thrust to LEVEL 1. Vibe LOW.",
+              "<b>Mechanics:</b> Let the device do the work. Do NOT rock your hips to meet it.",
+              "<b>Visualization:</b> Imagine the thrust is physically clearing out old fluid from the ducts. Clean pipes = Stronger erections."
+            ]
           },
           { 
-            name: "Counter-Strike Drill", duration: 300, 
+            name: "The Counter-Strike", duration: 300, 
             coaching: [
               "<b>Remote:</b> Thrust MEDIUM. Vibe OFF.",
-              "<b>The Drill:</b> When it thrusts IN, you Push OUT (Reverse Kegel).",
-              "<b>Shield:</b> Create a forcefield. Disassociate sensation from reaction."
-            ] 
+              "<b>THE DRILL:</b> This is the mental gym. When it thrusts IN, you Push OUT (Reverse Kegel).",
+              "<b>The Goal:</b> Build a 'Shield' against the involuntary clench. Disassociate sensation from reaction.",
+              "<b>Correction:</b> If you feel a clench, STOP. Take 3 breaths. Restart."
+            ]
           },
           { 
-            name: "The P-Wave (Dry Orgasm)", duration: 180, 
+            name: "The P-Wave", duration: 180, 
             coaching: [
               "<b>Remote:</b> Thrust OFF. Vibe MAX.",
-              "<b>Seek:</b> Wait for the 'Pulse' (Spasm).",
-              "<b>Control:</b> Let it spasm but DO NOT ejaculate.",
-              "<b>Edge:</b> If close to PONR, power off immediately."
-            ] 
+              "<b>Technique:</b> Lay still. Let the high vibration trigger a 'spasm' or pulse.",
+              "<b>Dry Orgasm:</b> If the pulse comes, breathe through it. Do NOT touch your penis. Let the prostate contract without ejaculating.",
+              "<b>Safety:</b> If you hit 'Point of No Return', Power OFF immediately."
+            ]
           },
           { 
             name: "Cool Down", duration: 60, 
-            coaching: ["Power OFF.", "5 Deep Breaths.", "Remove gently."] 
+            coaching: [
+              "<b>Power Down:</b> Turn all functions OFF.",
+              "<b>Reset:</b> Take 5 deep 'Belly Breaths' to soften the pelvic floor.",
+              "<b>Exit:</b> Remove the ring and device gently. Clean immediately."
+            ]
           }
         ]
       },
-      // SESSION B: PUMP THERAPY
       B: {
-        title: "Vascular Pump",
+        title: "Session B: Vascular Pump",
         visual: "cylinder",
         phases: [
-          { name: "Heat Prep", duration: 300, coaching: ["Apply warm cloth for 5 mins.", "Massage tissue until pliable.", "Never pump cold."] },
-          { name: "Seal Check", duration: 60, coaching: ["Place cylinder.", "Create mild vacuum.", "No stretching yet."] },
-          { name: "Work Cycle 1", duration: 180, coaching: ["Pump to 50%.", "<b>Pulse Drill:</b> Flex (Kegel) into the tube to push blood in."] },
-          { name: "Release", duration: 60, coaching: ["Release ALL vacuum.", "Massage briefly."] },
-          { name: "Work Cycle 2", duration: 180, coaching: ["Pump to 70%.", "Focus on Girth. Pulse Drill active."] },
-          { name: "Finish", duration: 60, coaching: ["Release and remove.", "Shake out."] }
+          { 
+            name: "Thermal Prep", duration: 300, 
+            coaching: [
+              "<b>Safety First:</b> Cold tissue tears. Warm tissue expands.",
+              "<b>Action:</b> Apply a hot washcloth or soak in warm water for 5 minutes.",
+              "<b>Massage:</b> Knead the tissue until it feels 'heavy' and pliable."
+            ]
+          },
+          { 
+            name: "Seal Check", duration: 60, 
+            coaching: [
+              "<b>Placement:</b> Press cylinder firmly against the pubis. Trim hair if seal leaks.",
+              "<b>Vacuum:</b> Pump just enough to stick. No stretching yet.",
+              "<b>Check:</b> Ensure testicles are outside the tube (unless designed for it)."
+            ]
+          },
+          { 
+            name: "Expansion Cycle 1", duration: 180, 
+            coaching: [
+              "<b>Target:</b> Pump to 50% expansion. It should feel 'full', not painful.",
+              "<b>Pulse Drill:</b> Flex your PC muscle (Kegel) for 1 second to push blood INTO the tube, then relax for 3 seconds.",
+              "<b>Why:</b> This forces expansion from the inside out."
+            ]
+          },
+          { 
+            name: "Perfusion Rest", duration: 60, 
+            coaching: [
+              "<b>Action:</b> Press the release valve. Dump ALL pressure.",
+              "<b>Massage:</b> Gently massage the shaft to restore fresh oxygenated blood.",
+              "<b>Visual:</b> Watch the color return from purple/dark to red/pink."
+            ]
+          },
+          { 
+            name: "Expansion Cycle 2", duration: 180, 
+            coaching: [
+              "<b>Target:</b> Pump to 70% (Safe Max). Focus on Girth, not Length.",
+              "<b>Sensation:</b> If you feel a sharp pinch, you are pulling skin, not tunnel. Reset.",
+              "<b>Drill:</b> Continue the Pulse Drill. Flex... Release."
+            ]
+          },
+          { 
+            name: "Final Release", duration: 60, 
+            coaching: [
+              "<b>Finish:</b> Release vacuum completely.",
+              "<b>Shake Out:</b> Helicopter or shake gently to relax the fascia.",
+              "<b>Note:</b> You may look puffy (The Donut). This subsides in 1-2 hours."
+            ]
+          }
         ]
       },
-      // SESSION C: MANUAL MASTERY
       C: {
-        title: "Manual Mastery",
+        title: "Session C: Manual Mastery",
         visual: "vector",
         phases: [
-          { name: "Lube & Grip", duration: 60, coaching: ["Use high quality oil.", "Coat entire shaft."] },
-          { name: "Base Lock", duration: 180, coaching: ["OK Grip at base.", "Squeeze firmly to trap blood."] },
-          { name: "The Corkscrew", duration: 180, coaching: ["Twist hand 45° while pulling up.", "Stretch fascia."] },
-          { name: "Ghost Touch", duration: 120, coaching: ["HANDS OFF.", "Focus on the 'tingling echo'.", "Rewire sensitivity."] },
-          { name: "Squeeze Reset", duration: 60, coaching: ["Squeeze base of Glans firmly.", "Hold for 10s to reset arousal."] }
+          { name: "Lube & Grip", duration: 60, coaching: ["<b>Prep:</b> Use coconut oil or high-quality lube.", "<b>Coverage:</b> Coat the entire shaft and glans."] },
+          { name: "Base Lock", duration: 180, coaching: ["<b>Grip:</b> Make an 'OK' sign at the very base.", "<b>Action:</b> Squeeze firmly to trap blood (Tourniquet effect).", "<b>Stroke:</b> Use other hand to massage the blood-filled shaft."] },
+          { name: "The Corkscrew", duration: 180, coaching: ["<b>Action:</b> Grip base. Twist hand 45 degrees while pulling UP.", "<b>Feel:</b> You are stretching the fascia (sheath), not the skin.", "<b>Breathe:</b> Inhale into the twist."] },
+          { name: "Ghost Touch", duration: 120, coaching: ["<b>HANDS OFF:</b> Drop hands to your sides.", "<b>Focus:</b> Feel the 'tingling echo' on the skin.", "<b>Mental:</b> This trains you to enjoy sensation without friction."] },
+          { name: "Squeeze Reset", duration: 60, coaching: ["<b>Emergency Drill:</b> Squeeze base of Glans firmly.", "<b>Hold:</b> 10 seconds. Watch arousal drop.", "<b>Release:</b> Relax."] }
         ]
       }
     };
 
-    // SOUND ENGINE
-    class SoundEngine {
-        constructor() {
-            this.ctx = null;
-            this.gain = null;
-        }
-        init() {
-            if (this.ctx) return;
-            const AC = window.AudioContext || window.webkitAudioContext;
-            this.ctx = new AC();
-            this.gain = this.ctx.createGain();
-            this.gain.gain.value = 0;
-            this.gain.connect(this.ctx.destination);
-            
-            // Brown Noise Buffer
-            const bufSize = this.ctx.sampleRate * 2;
-            const buffer = this.ctx.createBuffer(1, bufSize, this.ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
-
-            const noise = this.ctx.createBufferSource();
-            noise.buffer = buffer;
-            noise.loop = true;
-            
-            // Lowpass Filter
-            const filter = this.ctx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.value = 150;
-            
-            noise.connect(filter);
-            filter.connect(this.gain);
-            noise.start(0);
-        }
-        toggle(on) {
-            if(!this.ctx) this.init();
-            if(this.ctx.state === 'suspended') this.ctx.resume();
-            const now = this.ctx.currentTime;
-            this.gain.gain.setTargetAtTime(on ? 0.5 : 0, now, 0.1);
-        }
-    }
-
-    const app = {
-        session: null,
-        timer: null,
-        timeLeft: 0,
-        phaseIdx: 0,
-        wakeLock: null,
-        audio: new SoundEngine(),
-
-        init() {
-            this.renderLogs();
-        },
-
-        showSection(id) {
-            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        },
-
-        loadSession(key) {
-            this.session = JSON.parse(JSON.stringify(SESSION_LIBRARY[key]));
-            this.phaseIdx = 0;
-            document.getElementById('session-title').innerText = this.session.title;
-            document.getElementById('session-subtitle').innerText = "Ready to start.";
-            this.updatePhase();
-            this.renderVisual();
-        },
-
-        updatePhase() {
-            if(!this.session) return;
-            const phase = this.session.phases[this.phaseIdx];
-            this.timeLeft = phase.duration;
-            document.getElementById('phase-label').innerText = phase.name;
-            document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
-            
-            // Trainer Text
-            const list = document.getElementById('trainer-text');
-            list.innerHTML = phase.coaching.map(t => `<li>${t}</li>`).join('');
-        },
-
-        start() {
-            if(!this.session) return alert("Select a session first.");
-            if(this.timer) return; // Already running
-            
-            this.requestWakeLock();
-            this.audio.init();
-            if(this.audio.ctx && this.audio.ctx.state === 'suspended') this.audio.ctx.resume();
-
-            document.getElementById('btn-toggle').innerText = "Pause";
-            this.timer = setInterval(() => {
-                this.timeLeft--;
-                document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
-                if(this.timeLeft <= 0) this.nextPhase();
-            }, 1000);
-        },
-
-        pause() {
-            clearInterval(this.timer);
-            this.timer = null;
-            document.getElementById('btn-toggle').innerText = "Resume";
-            this.audio.toggle(false);
-        },
-
-        stop() {
-            this.pause();
-            document.getElementById('btn-toggle').innerText = "Start";
-            document.getElementById('timer-display').innerText = "00:00";
-            if(this.wakeLock) this.wakeLock.release();
-            
-            // Log It
-            if(this.session) {
-                const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
-                logs.unshift({
-                    date: new Date().toLocaleDateString(),
-                    type: this.session.title,
-                    duration: "Complete"
-                });
-                localStorage.setItem('usph_logs', JSON.stringify(logs));
-                this.renderLogs();
-            }
-            this.session = null;
-            alert("Session Complete.");
-            this.showSection('hub');
-        },
-
-        nextPhase() {
-            this.phaseIdx++;
-            if(this.phaseIdx >= this.session.phases.length) {
-                this.stop();
-            } else {
-                this.updatePhase();
-                // Haptic
-                if(navigator.vibrate) navigator.vibrate(200);
-            }
-        },
-
-        async requestWakeLock() {
-            try { if('wakeLock' in navigator) this.wakeLock = await navigator.wakeLock.request('screen'); }
-            catch(e) { console.log(e); }
-        },
-
-        formatTime(sec) {
-            const m = Math.floor(sec / 60).toString().padStart(2,'0');
-            const s = (sec % 60).toString().padStart(2,'0');
-            return `${m}:${s}`;
-        },
-
-        renderVisual() {
-            const container = document.getElementById('visual-container');
-            if(this.session.visual === 'cylinder') {
-                container.innerHTML = `
-                   <div class="bio-monitor__hud">
-                     <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">${this.formatTime(this.timeLeft)}</p>
-                     <p id="phase-label" class="text-[10px] uppercase tracking-widest text-neon-cyan mt-2">READY</p>
-                   </div>
-                   <div class="expansion-cylinder"><div class="cylinder-fill"></div></div>
-                `;
-            } else {
-                container.innerHTML = `
-                   <div class="bio-monitor__hud">
-                     <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">${this.formatTime(this.timeLeft)}</p>
-                     <p id="phase-label" class="text-[10px] uppercase tracking-widest text-neon-cyan mt-2">READY</p>
-                   </div>
-                   <div class="vector-scope"><div class="scope-ring"></div><div class="scope-target"></div></div>
-                `;
-            }
-        },
-
-        renderLogs() {
-            const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
-            const list = document.getElementById('log-list');
-            if(logs.length === 0) return list.innerHTML = '<p class="text-slate-400 text-sm">No logs yet.</p>';
-            
-            list.innerHTML = logs.map(l => `
-                <div class="bg-black/40 p-3 rounded-lg border border-slate-700 flex justify-between text-sm">
-                    <span class="text-white font-bold">${l.type}</span>
-                    <span class="text-slate-400">${l.date}</span>
-                </div>
-            `).join('');
-        },
+    /* --- AUDIO ENGINE --- */
+    const audio = {
+      ctx: null,
+      gain: null,
+      osc: null,
+      active: false,
+      
+      init() {
+        if (this.ctx) return;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AC();
+        this.gain = this.ctx.createGain();
+        this.gain.gain.value = 0;
+        this.gain.connect(this.ctx.destination);
         
-        toggleAudio() {
-             const btn = document.getElementById('btn-audio');
-             const isActive = btn.innerText.includes("ON");
-             if(isActive) {
-                 this.audio.toggle(false);
-                 btn.innerText = "🔊 Focus Noise: OFF";
-                 btn.classList.remove("text-neon-cyan", "border-neon-cyan");
-             } else {
-                 this.audio.toggle(true);
-                 btn.innerText = "🔊 Focus Noise: ON";
-                 btn.classList.add("text-neon-cyan", "border-neon-cyan");
-             }
+        // Brown Noise Generator
+        const bufSize = this.ctx.sampleRate * 2;
+        const buffer = this.ctx.createBuffer(1, bufSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
+        
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 150;
+        noise.connect(filter);
+        filter.connect(this.gain);
+        noise.start(0);
+        
+        // Beeper
+        this.osc = this.ctx.createOscillator();
+        const oscGain = this.ctx.createGain();
+        oscGain.gain.value = 0;
+        this.osc.connect(oscGain);
+        oscGain.connect(this.ctx.destination);
+        this.osc.start(0);
+        this.beepGain = oscGain;
+      },
+
+      toggle() {
+        if (!this.ctx) this.init();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this.active = !this.active;
+        const btn = document.getElementById('btn-noise');
+        
+        if (this.active) {
+          this.gain.gain.setTargetAtTime(0.5, this.ctx.currentTime, 0.1);
+          btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> Focus Noise: ON`;
+          btn.classList.add('text-neon-cyan', 'border-neon-cyan');
+        } else {
+          this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.1);
+          btn.innerHTML = `<i class="fa-solid fa-volume-off"></i> Focus Noise: OFF`;
+          btn.classList.remove('text-neon-cyan', 'border-neon-cyan');
         }
+      },
+
+      beep() {
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const now = this.ctx.currentTime;
+        this.beepGain.gain.cancelScheduledValues(now);
+        this.beepGain.gain.setValueAtTime(0.1, now);
+        this.beepGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      }
     };
 
-    // Event Listeners
-    document.getElementById('btn-toggle').onclick = () => {
-        if(app.timer) app.pause();
-        else app.start();
-    };
-    document.getElementById('btn-stop').onclick = () => app.stop();
-    document.getElementById('btn-audio').onclick = () => app.toggleAudio();
+    /* --- PLAYER ENGINE --- */
+    const player = {
+      session: null,
+      timer: null,
+      phaseIdx: 0,
+      timeLeft: 0,
+      totalTime: 0,
+      wakeLock: null,
 
-    // Init
-    app.init();
+      nav(id) {
+        document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
+        document.getElementById(`view-${id}`).classList.remove('hidden');
+      },
+
+      load(key) {
+        this.session = JSON.parse(JSON.stringify(SESSIONS[key]));
+        this.phaseIdx = 0;
+        document.getElementById('session-name').innerText = this.session.title;
+        this.updateUI();
+        this.renderVisual();
+      },
+
+      updateUI() {
+        if (!this.session) return;
+        const phase = this.session.phases[this.phaseIdx];
+        this.timeLeft = phase.duration;
+        this.totalTime = phase.duration;
+        
+        // Text
+        document.getElementById('phase-name').innerText = phase.name;
+        document.getElementById('timer').innerText = this.format(this.timeLeft);
+        
+        // Deep Coaching List
+        const list = document.getElementById('coaching-text');
+        list.innerHTML = phase.coaching.map(line => 
+          `<li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-neon-cyan mt-1"></i> <span>${line}</span></li>`
+        ).join('');
+      },
+
+      toggle() {
+        if (!this.session) return alert("Please select a session.");
+        if (this.timer) {
+          clearInterval(this.timer);
+          this.timer = null;
+          document.getElementById('btn-main').innerText = "Resume";
+          audio.toggle(); // Auto mute on pause
+        } else {
+          this.requestWakeLock();
+          if(!audio.active) audio.toggle(); // Auto play on start
+          document.getElementById('btn-main').innerText = "Pause";
+          this.timer = setInterval(() => this.tick(), 1000);
+        }
+      },
+
+      tick() {
+        this.timeLeft--;
+        document.getElementById('timer').innerText = this.format(this.timeLeft);
+        
+        // Progress Bar
+        const pct = ((this.totalTime - this.timeLeft) / this.totalTime) * 100;
+        document.getElementById('phase-progress').style.width = `${pct}%`;
+
+        if (this.timeLeft <= 0) {
+          this.nextPhase();
+        }
+      },
+
+      nextPhase() {
+        this.phaseIdx++;
+        if (this.phaseIdx >= this.session.phases.length) {
+          this.finish();
+        } else {
+          this.updateUI();
+          audio.beep(); // Phase Change Chime
+          if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        }
+      },
+
+      finish() {
+        this.stop();
+        alert("Session Complete. Consistency +1");
+        this.nav('hub');
+      },
+
+      stop() {
+        clearInterval(this.timer);
+        this.timer = null;
+        document.getElementById('btn-main').innerText = "Start";
+        if (this.wakeLock) this.wakeLock.release();
+        if (audio.active) audio.toggle();
+      },
+
+      format(s) {
+        const m = Math.floor(s / 60).toString().padStart(2, '0');
+        const sec = (s % 60).toString().padStart(2, '0');
+        return `${m}:${sec}`;
+      },
+
+      renderVisual() {
+        const container = document.getElementById('visual-render');
+        if (this.session.visual === 'cylinder') {
+          container.innerHTML = `<div class="bio-monitor"><div class="cylinder-body"><div class="cylinder-line" style="bottom:70%"></div><div class="cylinder-fill" id="anim-fill"></div></div></div>`;
+          // Simple anim logic for cylinder would go here
+        } else {
+          container.innerHTML = `<div class="bio-monitor"><div class="vector-scope"><div class="vector-ping"></div><div class="vector-target"></div></div></div>`;
+        }
+      },
+
+      async requestWakeLock() {
+        try { if ('wakeLock' in navigator) this.wakeLock = await navigator.wakeLock.request('screen'); }
+        catch (e) { console.log("WakeLock failed", e); }
+      }
+    };
+
+    // Init App
+    const app = player; // Alias
+    window.app = app;
   </script>
 </body>
 </html>
