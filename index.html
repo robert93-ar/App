@@ -40,18 +40,53 @@
   <style>
     body { background: #111827; color: #f9fafb; -webkit-tap-highlight-color: transparent; }
     
-    /* PHASE BAR (New) */
+    /* PHASE BAR (New Feature) */
     .phase-bar-bg { width: 100%; height: 4px; background: rgba(51, 65, 85, 0.5); border-radius: 2px; margin-top: 10px; overflow: hidden; }
     .phase-bar-fill { height: 100%; background: #06b6d4; width: 100%; transition: width 1s linear; }
 
-    /* VISUALS */
+    .ring { transform: rotate(-90deg); transform-origin: 50% 50%; }
+    .bio-pacer {
+      position: relative; width: 220px; height: 220px; border-radius: 9999px;
+      background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.35), rgba(16, 185, 129, 0.08));
+      border: 2px solid rgba(16, 185, 129, 0.8);
+      animation: breathCycle 12s ease-in-out infinite;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 45px rgba(16, 185, 129, 0.45);
+    }
+    .bio-pacer::before {
+      content: ""; position: absolute; inset: 18px; border-radius: 9999px;
+      border: 2px solid rgba(16, 185, 129, 0.35); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+    @keyframes breathCycle {
+      0% { transform: scale(0.75); } 33.333% { transform: scale(1.05); } 100% { transform: scale(0.75); }
+    }
+    
+    /* Session Waveform */
+    .session-waveform { display: flex; gap: 6px; align-items: flex-end; height: 48px; }
+    .session-waveform .wave-bar {
+      flex: 1; border-radius: 8px; transform-origin: bottom;
+      animation-duration: var(--wave-speed); animation-iteration-count: infinite; animation-timing-function: ease-in-out; opacity: 0.9;
+    }
+    .waveform--rest { --wave-color: #3b82f6; --wave-speed: 3.2s; --wave-animation: waveRest; }
+    .waveform--ramp { --wave-color: #22d3ee; --wave-speed: 1.8s; --wave-animation: waveRamp; }
+    .waveform--hold { --wave-color: #a855f7; --wave-speed: 0.9s; --wave-animation: waveHold; }
+    
+    .session-waveform.waveform--rest .wave-bar, .session-waveform.waveform--ramp .wave-bar, .session-waveform.waveform--hold .wave-bar {
+      background: linear-gradient(180deg, var(--wave-color), rgba(15, 23, 42, 0.2));
+      animation-name: var(--wave-animation);
+    }
+    @keyframes waveRest { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(0.7); } }
+    @keyframes waveRamp { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+    @keyframes waveHold { 0%, 100% { transform: scaleY(0.6); } 50% { transform: scaleY(1.2); } }
+
+    /* Visualizer (Merged Styles) */
     .bio-monitor {
       position: relative; width: 100%; height: 100%; border-radius: 9999px;
       display: flex; align-items: center; justify-content: center;
       background: radial-gradient(circle at 30% 20%, rgba(15, 23, 42, 0.8), rgba(6, 9, 20, 0.95));
       border: 1px solid rgba(148, 163, 184, 0.3); overflow: hidden;
     }
-    .bio-monitor__hud { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; pointer-events: none; }
+    .bio-monitor__hud { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-align: center; }
     
     .vector-scope, .expansion-cylinder { position: absolute; inset: 12px; opacity: 0; transition: opacity 0.6s ease; }
     .bio-monitor[data-visual="vector_scope"] .vector-scope { opacity: 1; }
@@ -69,46 +104,39 @@
 </head>
 <body class="min-h-screen bg-gym-dark font-sans pb-24">
 
-  <header class="px-6 pt-8 pb-4">
-    <div class="flex justify-between items-center">
-      <div>
-        <p class="text-sm uppercase tracking-[0.4em] text-neon-emerald">Ultimate</p>
-        <h1 class="text-3xl font-bold text-white">Performance Hub</h1>
-      </div>
-      <div class="text-right">
-         <p class="text-xs text-slate-400 uppercase tracking-widest">Readiness</p>
-         <p id="system-readiness-score" class="text-xl font-bold text-neon-emerald">98%</p>
-      </div>
-    </div>
+  <header id="app-header" class="px-6 pt-8 pb-4">
+    <p class="text-sm uppercase tracking-[0.4em] text-neon-emerald">Ultimate</p>
+    <h1 class="text-3xl font-bold text-white">Solo Performance Hub</h1>
+    <p class="mt-2 text-sm text-slate-300">Sustory 6-in-1 Protocol Active.</p>
     <div class="mt-3 flex items-center gap-3">
-      <span class="inline-flex items-center rounded-full border border-neon-amber/60 bg-neon-amber/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neon-amber">
+      <span id="mastery-badge" class="inline-flex items-center rounded-full border border-neon-amber/60 bg-neon-amber/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neon-amber">
         Level 1 Rookie
-      </span>
-      <span class="inline-flex items-center rounded-full border border-neon-cyan/60 bg-neon-cyan/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neon-cyan">
-        Sustory Ready
       </span>
     </div>
   </header>
 
-  <main class="px-4 py-4 space-y-4">
-    
-    <section id="hub" class="space-y-4">
-      
-      <div class="grid grid-cols-2 gap-3">
-        <button onclick="alert('Protocol: Cold Rinse (60s) + 20 Squats.')" class="rounded-2xl border-2 border-neon-rose/70 bg-black/40 py-4 text-center text-sm font-semibold uppercase tracking-[0.25em] text-neon-rose shadow-lg">
-          ⚡ URGE SOS
-        </button>
-        <button onclick="app.showSection('handbook')" class="rounded-2xl border-2 border-slate-700 bg-black/40 py-4 text-center text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
-          📚 Handbook
-        </button>
+  <div id="urge-toast" class="pointer-events-none fixed left-1/2 top-6 z-50 hidden -translate-x-1/2 rounded-full border border-neon-emerald/60 bg-gym-card/90 px-5 py-2 text-sm font-semibold text-neon-emerald opacity-0 shadow-lg transition-opacity duration-300">
+    Willpower +1
+  </div>
+
+  <main>
+    <section id="hub" class="px-6 space-y-4">
+      <div class="bg-gym-card rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
+          <span>System Readiness</span>
+          <span id="system-readiness-score" class="text-white font-semibold">98%</span>
+        </div>
+        <div class="mt-2 h-3 w-full overflow-hidden rounded-full bg-black/40">
+          <div id="system-readiness-bar" class="h-3 w-[98%] rounded-full bg-neon-emerald"></div>
+        </div>
       </div>
 
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today's Protocol</p>
-        <h2 class="text-xl font-semibold mt-2 text-white">Session A: Sustory Protocol</h2>
-        <p class="text-sm text-slate-300 mt-1">Deep Coaching: Counter-Strike Drill.</p>
-        <button onclick="app.showSection('train'); app.loadSession('A');" class="mt-4 w-full rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">
-          Start Session
+      <div class="grid grid-cols-2 gap-3">
+        <button id="btn-emergency" class="rounded-2xl border-2 border-neon-rose/70 bg-black/40 py-4 text-sm font-semibold uppercase tracking-widest text-neon-rose">
+          ⚡ EMERGENCY
+        </button>
+        <button id="btn-game-day" class="rounded-2xl border-2 border-neon-amber/70 bg-black/40 py-4 text-sm font-semibold uppercase tracking-widest text-neon-amber">
+          🏆 Game Day
         </button>
       </div>
 
@@ -126,117 +154,109 @@
             <span id="weekly-morning" class="text-white font-semibold">0/7 days</span>
           </div>
           <div class="rounded-xl bg-black/40 p-3 flex items-center justify-between">
-            <span>Consistency</span>
-            <span id="streak-display" class="text-white font-semibold">0 days</span>
+            <span>Consistency Streak</span>
+            <span id="weekly-streak" class="text-white font-semibold">0 days</span>
           </div>
         </div>
-        <button id="log-daily-btn" class="w-full rounded-xl border border-neon-emerald/50 py-2 text-sm font-semibold text-neon-emerald hover:bg-neon-emerald/10">
+        <button id="log-daily" class="w-full rounded-xl border border-neon-emerald/50 py-2 text-sm font-semibold text-neon-emerald hover:bg-neon-emerald/10">
           Log Daily Stats
+        </button>
+      </div>
+
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today's Protocol</p>
+        <h2 id="today-plan" class="text-xl font-semibold mt-2 text-white">Session A: Sustory Protocol</h2>
+        <p id="today-description" class="text-sm text-slate-300 mt-1">Counter-Strike & P-Wave Drill.</p>
+        <button id="start-today" class="mt-4 w-full rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">
+          Start Session
         </button>
       </div>
     </section>
 
-    <section id="train" class="hidden space-y-5">
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between relative z-10">
+    <section id="train" class="hidden px-6 space-y-5">
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+        <div class="flex items-center justify-between">
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
             <h2 id="session-title" class="text-2xl font-semibold mt-1">Select Session</h2>
+            <p id="session-note" class="text-sm text-slate-300 mt-1">Ready for input.</p>
           </div>
           <div class="text-2xl text-neon-cyan"><i class="fa-solid fa-bolt"></i></div>
         </div>
 
-        <div class="mt-4 relative w-full h-64 bg-black/40 rounded-2xl border border-slate-700 flex items-center justify-center overflow-hidden">
+        <div class="mt-6 relative w-full h-64 bg-black/40 rounded-2xl border border-slate-700 flex items-center justify-center overflow-hidden">
            <div id="bio-monitor" class="bio-monitor" data-visual="vector_scope">
               <div class="vector-scope"><div class="scope-ring"></div><div class="scope-target"></div></div>
               <div class="expansion-cylinder"><div class="cylinder-line" style="bottom:70%"></div><div class="cylinder-fill"></div></div>
               
               <div class="bio-monitor__hud">
-                <p id="phase-label" class="text-[10px] uppercase tracking-[0.3em] text-slate-300">Standby</p>
+                <p id="bio-monitor-label" class="text-[10px] uppercase tracking-[0.3em] text-slate-300">Standby</p>
                 <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">00:00</p>
                 <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
               </div>
            </div>
         </div>
-        
         <div class="phase-bar-bg"><div id="phase-progress" class="phase-bar-fill" style="width: 0%"></div></div>
 
-        <div class="mt-4 p-4 bg-slate-900/80 rounded-xl border border-slate-700">
-           <p class="text-[10px] uppercase tracking-[0.3em] text-neon-amber mb-2">Trainer's Cues</p>
-           <ul id="trainer-text" class="space-y-3 text-sm text-slate-300 leading-relaxed list-none">
-              <li>Select a session below to begin.</li>
-           </ul>
-        </div>
-
         <div class="mt-4 flex items-center justify-center gap-3">
-          <button onclick="app.adjustTime(-30)" class="rounded-lg border border-neon-cyan/40 px-3 py-2 text-xs font-semibold text-neon-cyan">-30s</button>
+          <button id="minus-30" class="rounded-lg border border-neon-cyan/40 px-3 py-2 text-xs font-semibold text-neon-cyan">-30s</button>
           <button id="toggle-session" class="flex-1 rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">Start</button>
-          <button onclick="app.nextPhase()" class="rounded-lg border border-neon-amber/40 px-3 py-2 text-xs font-semibold text-neon-amber">Skip >></button>
-          <button onclick="app.adjustTime(30)" class="rounded-lg border border-neon-emerald/40 px-3 py-2 text-xs font-semibold text-neon-emerald">+30s</button>
+          <button id="next-phase" class="rounded-lg border border-neon-amber/40 px-3 py-2 text-xs font-semibold text-neon-amber">Skip >></button>
+          <button id="plus-30" class="rounded-lg border border-neon-emerald/40 px-3 py-2 text-xs font-semibold text-neon-emerald">+30s</button>
         </div>
-        <button onclick="app.stop()" class="mt-3 w-full rounded-xl border border-neon-rose text-neon-rose py-2 font-semibold">End Session</button>
+        <button id="abort-session" class="mt-3 w-full rounded-xl border border-neon-rose text-neon-rose py-2 font-semibold">End Session</button>
       </div>
 
-      <div class="grid grid-cols-3 gap-2 text-center">
-        <button onclick="app.loadSession('A')" class="p-3 rounded-xl border border-slate-700 hover:border-neon-cyan bg-gym-card">
-          <div class="text-neon-cyan text-lg mb-1"><i class="fa-solid fa-bullseye"></i></div>
-          <div class="text-xs font-bold text-white">Session A</div>
-          <div class="text-[9px] text-slate-400">Sustory</div>
-        </button>
-        <button onclick="app.loadSession('B')" class="p-3 rounded-xl border border-slate-700 hover:border-neon-emerald bg-gym-card">
-          <div class="text-neon-emerald text-lg mb-1"><i class="fa-solid fa-droplet"></i></div>
-          <div class="text-xs font-bold text-white">Session B</div>
-          <div class="text-[9px] text-slate-400">Pump</div>
-        </button>
-        <button onclick="app.loadSession('C')" class="p-3 rounded-xl border border-slate-700 hover:border-neon-amber bg-gym-card">
-          <div class="text-neon-amber text-lg mb-1"><i class="fa-solid fa-hand"></i></div>
-          <div class="text-xs font-bold text-white">Session C</div>
-          <div class="text-[9px] text-slate-400">Manual</div>
-        </button>
+      <div class="bg-gym-card rounded-2xl p-5 shadow-lg border border-neon-cyan/20">
+        <p class="text-[10px] uppercase tracking-[0.3em] text-neon-amber mb-2">Trainer's Cues</p>
+        <ul id="trainer-instructions" class="space-y-3 text-sm text-slate-200 list-none leading-relaxed">
+          <li>Select a session to begin.</li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <button id="select-a" class="rounded-xl border border-neon-cyan/40 p-3 text-neon-cyan font-bold hover:bg-neon-cyan/10">Session A<br><span class="text-[10px] font-normal">Sustory</span></button>
+        <button id="select-b" class="rounded-xl border border-neon-emerald/40 p-3 text-neon-emerald font-bold hover:bg-neon-emerald/10">Session B<br><span class="text-[10px] font-normal">Pump</span></button>
+        <button id="select-c" class="rounded-xl border border-neon-amber/40 p-3 text-neon-amber font-bold hover:bg-neon-amber/10">Session C<br><span class="text-[10px] font-normal">Manual</span></button>
       </div>
       
-      <button id="sound-toggle" onclick="app.toggleAudio()" class="w-full rounded-xl border border-slate-600 py-3 text-sm text-slate-400 font-semibold flex items-center justify-center gap-2 hover:text-white">
-         <i class="fa-solid fa-volume-off"></i> <span id="sound-toggle-label">Focus Noise: OFF</span>
+      <button id="sound-toggle" class="w-full rounded-xl border border-slate-600 py-3 text-sm text-slate-400 font-semibold flex items-center justify-center gap-2 hover:text-white">
+        <i class="fa-solid fa-volume-off"></i> <span id="sound-toggle-label">Focus Noise: OFF</span>
       </button>
     </section>
 
     <section id="logs" class="hidden px-6 space-y-4">
-        <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">History</p>
-            <div id="log-list" class="mt-4 space-y-3"></div>
-            <button onclick="localStorage.removeItem('usph_logs'); app.renderLogs();" class="mt-4 w-full border border-neon-rose text-neon-rose py-2 rounded-lg text-xs uppercase">Clear History</button>
-        </div>
+       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+         <h2 class="text-xl font-bold text-white mb-4">Training Log</h2>
+         <div id="log-list" class="space-y-3"><p class="text-slate-400 text-sm">No logs yet.</p></div>
+         <button id="clear-data" class="mt-4 w-full border border-neon-rose text-neon-rose py-2 rounded-lg text-xs uppercase">Clear Logs</button>
+       </div>
     </section>
 
     <section id="handbook" class="hidden px-6 space-y-4">
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-        <h2 class="text-xl font-bold text-white mb-2">Sustory Protocol Guide</h2>
-        <div class="space-y-4">
-           <div class="p-4 bg-black/40 rounded-xl border-l-4 border-neon-cyan">
-              <h3 class="text-neon-cyan font-bold text-sm uppercase tracking-wide">The Counter-Strike</h3>
-              <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                 When the device thrusts <b>IN</b>, you Push <b>OUT</b> (Reverse Kegel).<br><br>
-                 Do not clench. Imagine creating a "Forcefield" with your pelvic floor.
-              </p>
-           </div>
-           <div class="p-4 bg-black/40 rounded-xl border-l-4 border-neon-amber">
-              <h3 class="text-neon-amber font-bold text-sm uppercase tracking-wide">The P-Wave</h3>
-              <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                 Dry Orgasm training. If you feel the rhythmic pulsing start, STOP all movement. Turn off thrusting. Just breathe through the waves.
-              </p>
-           </div>
-        </div>
-      </div>
+       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
+         <h2 class="text-xl font-bold text-white mb-2">Sustory Protocol</h2>
+         <p class="text-sm text-slate-300 mb-4">Deep Coaching Techniques.</p>
+         <div class="space-y-3 text-sm text-slate-200">
+            <div class="p-3 bg-black/40 rounded-lg border-l-2 border-neon-cyan">
+               <strong class="text-neon-cyan block mb-1">The Counter-Strike</strong>
+               When the device thrusts IN, you Push OUT (Reverse Kegel). This creates a "Shield" against premature ejaculation.
+            </div>
+            <div class="p-3 bg-black/40 rounded-lg border-l-2 border-neon-amber">
+               <strong class="text-neon-amber block mb-1">The P-Wave</strong>
+               Dry Orgasm training. If you feel the pulse, stop thrusting and just breathe.
+            </div>
+         </div>
+       </div>
     </section>
-
   </main>
 
-  <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-700 pb-safe z-50">
+  <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-700 pb-safe">
     <div class="grid grid-cols-4 text-xs text-slate-400">
-      <button onclick="app.showSection('hub')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-house"></i> Hub</button>
-      <button onclick="app.showSection('train')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-dumbbell"></i> Train</button>
-      <button onclick="app.showSection('logs')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-clipboard"></i> Logs</button>
-      <button onclick="app.showSection('handbook')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-book"></i> Guide</button>
+      <button data-target="hub" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-house"></i> Hub</button>
+      <button data-target="train" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-dumbbell"></i> Train</button>
+      <button data-target="logs" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-clipboard"></i> Logs</button>
+      <button data-target="handbook" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-book"></i> Guide</button>
     </div>
   </nav>
 
@@ -257,16 +277,17 @@
          </div>
       </div>
       <div class="mt-6 grid grid-cols-2 gap-3">
-        <button onclick="document.getElementById('daily-log-modal').classList.add('hidden')" class="rounded-xl border border-slate-500 py-3">Cancel</button>
-        <button onclick="app.saveDailyLog()" class="rounded-xl bg-neon-emerald py-3 text-gym-dark font-bold">Save Log</button>
+        <button id="cancel-daily-log" class="rounded-xl border border-slate-500 py-3">Cancel</button>
+        <button id="save-daily-log" class="rounded-xl bg-neon-emerald py-3 text-gym-dark font-bold">Save Log</button>
       </div>
     </div>
   </div>
 
   <script>
-    /* --- DATA: DEEP COACHING LIBRARY --- */
+    /* --- DATA: DEEP COACHING LIBRARY (V4.1 Merged) --- */
     const SESSION_LIBRARY = {
-      A: {
+      // SESSION A: SUSTORY 6-IN-1
+      session_a_rookie: {
         title: "Sustory Protocol",
         visual: "vector_scope",
         phases: [
@@ -278,7 +299,8 @@
           { name: "Cool Down", duration: 60, coaching: ["<b>Power Down:</b> All functions OFF.", "<b>Reset:</b> 5 deep belly breaths.", "<b>Exit:</b> Remove ring gently."] }
         ]
       },
-      B: {
+      // SESSION B: PUMP
+      session_b_standard: {
         title: "Vascular Pump",
         visual: "expansion_cylinder",
         phases: [
@@ -290,7 +312,8 @@
           { name: "Final Release", duration: 60, coaching: ["<b>Finish:</b> Release vacuum completely.", "<b>Shake Out:</b> Relax the fascia."] }
         ]
       },
-      C: {
+      // SESSION C: MANUAL
+      session_c_trance: {
         title: "Manual Mastery",
         visual: "vector_scope",
         phases: [
@@ -324,8 +347,9 @@
         if(!this.ctx) this.init(); if(this.ctx.state === 'suspended') this.ctx.resume();
         this.active = !this.active;
         const btn = document.getElementById('sound-toggle-label');
-        if(this.active) { this.gain.gain.setTargetAtTime(0.5, this.ctx.currentTime, 0.1); btn.innerText="Focus Noise: ON"; }
-        else { this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.1); btn.innerText="Focus Noise: OFF"; }
+        const wrapper = document.getElementById('sound-toggle');
+        if(this.active) { this.gain.gain.setTargetAtTime(0.5, this.ctx.currentTime, 0.1); btn.innerText="Focus Noise: ON"; wrapper.classList.add("text-neon-cyan", "border-neon-cyan"); }
+        else { this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.1); btn.innerText="Focus Noise: OFF"; wrapper.classList.remove("text-neon-cyan", "border-neon-cyan"); }
       },
       chime() {
         if(!this.ctx) return; if(this.ctx.state==='suspended') this.ctx.resume();
@@ -344,23 +368,62 @@
       init() {
         this.renderLogs();
         this.updateStats();
-        // Nav
-        document.getElementById('log-daily-btn').onclick = () => document.getElementById('daily-log-modal').classList.remove('hidden');
+        
+        // Navigation Logic
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+           btn.addEventListener('click', () => this.showSection(btn.dataset.target));
+        });
+        
+        // Session Logic
         document.getElementById('toggle-session').onclick = () => { if(this.timer) this.pause(); else this.start(); };
         document.getElementById('abort-session').onclick = () => this.stop();
+        document.getElementById('minus-30').onclick = () => this.adjustTime(-30);
+        document.getElementById('plus-30').onclick = () => this.adjustTime(30);
+        document.getElementById('next-phase').onclick = () => this.nextPhase();
+        
+        // Selection
+        document.getElementById('select-a').onclick = () => this.loadSession('A');
+        document.getElementById('select-b').onclick = () => this.loadSession('B');
+        document.getElementById('select-c').onclick = () => this.loadSession('C');
+        document.getElementById('start-today').onclick = () => { this.showSection('train'); this.loadSession('A'); };
+        
+        // Logging
+        document.getElementById('log-daily').onclick = () => { 
+           document.getElementById('daily-log-modal').classList.remove('hidden'); 
+           document.getElementById('daily-log-modal').classList.add('flex');
+        };
+        document.getElementById('cancel-daily-log').onclick = () => {
+           document.getElementById('daily-log-modal').classList.add('hidden'); 
+           document.getElementById('daily-log-modal').classList.remove('flex');
+        };
+        document.getElementById('save-daily-log').onclick = () => this.saveDailyLog();
+        document.getElementById('clear-data').onclick = () => {
+           if(confirm("Clear history?")) { localStorage.removeItem('usph_logs'); this.renderLogs(); this.updateStats(); }
+        };
+        
+        // Panic
+        document.getElementById('btn-emergency').onclick = () => alert("Protocol: Cold Rinse + Squats");
+        document.getElementById('sound-toggle').onclick = () => soundEngine.toggle();
       },
 
       showSection(id) {
         document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+           btn.classList.toggle('text-neon-cyan', btn.dataset.target === id);
+        });
       },
 
       loadSession(key) {
-        this.session = JSON.parse(JSON.stringify(SESSION_LIBRARY[key]));
+        const map = { 'A': 'session_a_rookie', 'B': 'session_b_standard', 'C': 'session_c_trance' };
+        this.session = JSON.parse(JSON.stringify(SESSION_LIBRARY[map[key]]));
         this.phaseIdx = 0;
+        
         document.getElementById('session-title').innerText = this.session.title;
-        // Visual
-        document.getElementById('bio-monitor').dataset.visual = this.session.visual;
+        document.getElementById('session-note').innerText = "Ready to start.";
+        const monitor = document.getElementById('bio-monitor');
+        if (monitor) monitor.dataset.visual = this.session.visual;
+        
         this.updatePhase();
       },
 
@@ -369,9 +432,9 @@
         const phase = this.session.phases[this.phaseIdx];
         this.timeLeft = phase.duration;
         this.totalPhaseTime = phase.duration;
-        document.getElementById('phase-label').innerText = phase.name;
+        document.getElementById('bio-monitor-label').innerText = phase.name;
         document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
-        const list = document.getElementById('trainer-text');
+        const list = document.getElementById('trainer-instructions');
         list.innerHTML = phase.coaching.map(l => `<li class="flex items-start gap-3"><i class="fa-solid fa-caret-right text-neon-cyan mt-1 shrink-0"></i> <span>${l}</span></li>`).join('');
       },
 
@@ -420,6 +483,7 @@
         logs.unshift({ type: this.session.title, date: new Date().toLocaleDateString(), duration: "Complete" });
         localStorage.setItem('usph_logs', JSON.stringify(logs));
         this.renderLogs();
+        this.updateStats();
         this.session = null;
         alert("Session Complete.");
         this.showSection('hub');
@@ -437,7 +501,7 @@
         try { if('wakeLock' in navigator) this.wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
       },
 
-      // LOGGING & STATS RESTORED
+      // LOGGING
       setDailyMorning(val, btn) {
         this.tempMorning = val;
         document.querySelectorAll('.daily-mw-btn').forEach(b => b.classList.remove('bg-neon-emerald', 'text-gym-dark'));
@@ -456,6 +520,7 @@
         this.renderLogs();
         this.updateStats();
         document.getElementById('daily-log-modal').classList.add('hidden');
+        document.getElementById('daily-log-modal').classList.remove('flex');
       },
 
       renderLogs() {
@@ -478,13 +543,9 @@
         document.getElementById('weekly-morning').innerText = `${morningCount}/7 days`;
         
         // Streak
-        let streak = 0;
-        // Simple mock streak logic
-        if(logs.length > 0) streak = logs.length; // Just counts total logs for now as per simple logic
-        document.getElementById('streak-display').innerText = `${streak} days`;
-      },
-      
-      toggleAudio() { soundEngine.toggle(); }
+        document.getElementById('weekly-streak').innerText = `${logs.length} entries`;
+        document.getElementById('streak').innerText = `${logs.length} entries`;
+      }
     };
 
     app.init();
