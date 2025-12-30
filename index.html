@@ -38,12 +38,8 @@
     referrerpolicy="no-referrer"
   />
   <style>
-    body { background: #111827; color: #f9fafb; -webkit-tap-highlight-color: transparent; }
-    
-    /* PHASE BAR (New Feature) */
-    .phase-bar-bg { width: 100%; height: 4px; background: rgba(51, 65, 85, 0.5); border-radius: 2px; margin-top: 10px; overflow: hidden; }
-    .phase-bar-fill { height: 100%; background: #06b6d4; width: 100%; transition: width 1s linear; }
-
+    /* ... (CSS Remains Unchanged for Stability) ... */
+    body { background: #111827; color: #f9fafb; }
     .ring { transform: rotate(-90deg); transform-origin: 50% 50%; }
     .bio-pacer {
       position: relative; width: 220px; height: 220px; border-radius: 9999px;
@@ -53,15 +49,11 @@
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 0 45px rgba(16, 185, 129, 0.45);
     }
-    .bio-pacer::before {
-      content: ""; position: absolute; inset: 18px; border-radius: 9999px;
-      border: 2px solid rgba(16, 185, 129, 0.35); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.3);
-    }
     @keyframes breathCycle {
-      0% { transform: scale(0.75); } 33.333% { transform: scale(1.05); } 100% { transform: scale(0.75); }
+      0% { transform: scale(0.75); }
+      33.333% { transform: scale(1.05); }
+      100% { transform: scale(0.75); }
     }
-    
-    /* Session Waveform */
     .session-waveform { display: flex; gap: 6px; align-items: flex-end; height: 48px; }
     .session-waveform .wave-bar {
       flex: 1; border-radius: 8px; transform-origin: bottom;
@@ -70,7 +62,6 @@
     .waveform--rest { --wave-color: #3b82f6; --wave-speed: 3.2s; --wave-animation: waveRest; }
     .waveform--ramp { --wave-color: #22d3ee; --wave-speed: 1.8s; --wave-animation: waveRamp; }
     .waveform--hold { --wave-color: #a855f7; --wave-speed: 0.9s; --wave-animation: waveHold; }
-    
     .session-waveform.waveform--rest .wave-bar, .session-waveform.waveform--ramp .wave-bar, .session-waveform.waveform--hold .wave-bar {
       background: linear-gradient(180deg, var(--wave-color), rgba(15, 23, 42, 0.2));
       animation-name: var(--wave-animation);
@@ -78,8 +69,6 @@
     @keyframes waveRest { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(0.7); } }
     @keyframes waveRamp { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
     @keyframes waveHold { 0%, 100% { transform: scaleY(0.6); } 50% { transform: scaleY(1.2); } }
-
-    /* Visualizer (Merged Styles) */
     .bio-monitor {
       position: relative; width: 100%; height: 100%; border-radius: 9999px;
       display: flex; align-items: center; justify-content: center;
@@ -87,47 +76,33 @@
       border: 1px solid rgba(148, 163, 184, 0.3); overflow: hidden;
     }
     .bio-monitor__hud { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-align: center; }
-    
-    .vector-scope, .expansion-cylinder { position: absolute; inset: 12px; opacity: 0; transition: opacity 0.6s ease; }
-    .bio-monitor[data-visual="vector_scope"] .vector-scope { opacity: 1; }
-    .bio-monitor[data-visual="expansion_cylinder"] .expansion-cylinder { opacity: 1; }
-
-    .vector-scope { border-radius: 9999px; background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.18), rgba(6, 10, 20, 0.95)); border: 2px solid rgba(34, 211, 238, 0.5); box-shadow: 0 0 18px rgba(6, 182, 212, 0.35); }
-    .scope-ring { position: absolute; inset: 6px; border-radius: 9999px; border: 1px dashed rgba(34, 211, 238, 0.7); animation: scopeSpin 10s linear infinite; }
+    /* Vector Scope Styles */
+    .vector-scope { position: absolute; inset: 12px; border-radius: 9999px; border: 2px solid rgba(34, 211, 238, 0.5); opacity: 0.8; }
+    .scope-ring { position: absolute; inset: 6px; border-radius: 9999px; border: 1px dashed rgba(34, 211, 238, 0.3); animation: scopeSpin 10s linear infinite; }
     .scope-target { position: absolute; width: 15px; height: 15px; background: var(--accent); border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 15px #06b6d4; }
     @keyframes scopeSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    .expansion-cylinder { border-radius: 24px; border: 2px solid rgba(16, 185, 129, 0.35); background: linear-gradient(180deg, rgba(15, 23, 42, 0.7), rgba(3, 7, 18, 0.95)); }
-    .cylinder-fill { position: absolute; bottom: 0; left: 10px; right: 10px; background: rgba(34, 197, 94, 0.6); height: 10%; transition: height 1s ease; border-radius: 4px; }
-    .cylinder-line { position: absolute; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.2); }
+    /* Cylinder Styles */
+    .expansion-cylinder { position: absolute; inset: 20px; border: 2px solid #64748b; border-radius: 12px; background: rgba(255,255,255,0.02); }
+    .cylinder-fill { position: absolute; bottom: 0; left: 0; right: 0; background: #06b6d4; opacity: 0.5; height: 10%; transition: height 1s ease; }
   </style>
 </head>
 <body class="min-h-screen bg-gym-dark font-sans pb-24">
 
-  <header id="app-header" class="px-6 pt-8 pb-4">
+  <header class="px-6 pt-8 pb-4">
     <p class="text-sm uppercase tracking-[0.4em] text-neon-emerald">Ultimate</p>
     <h1 class="text-3xl font-bold text-white">Solo Performance Hub</h1>
     <p class="mt-2 text-sm text-slate-300">Sustory 6-in-1 Protocol Active.</p>
-    <div class="mt-3 flex items-center gap-3">
-      <span id="mastery-badge" class="inline-flex items-center rounded-full border border-neon-amber/60 bg-neon-amber/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neon-amber">
-        Level 1 Rookie
-      </span>
-    </div>
   </header>
-
-  <div id="urge-toast" class="pointer-events-none fixed left-1/2 top-6 z-50 hidden -translate-x-1/2 rounded-full border border-neon-emerald/60 bg-gym-card/90 px-5 py-2 text-sm font-semibold text-neon-emerald opacity-0 shadow-lg transition-opacity duration-300">
-    Willpower +1
-  </div>
 
   <main>
     <section id="hub" class="px-6 space-y-4">
       <div class="bg-gym-card rounded-2xl p-4 shadow-lg">
         <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
           <span>System Readiness</span>
-          <span id="system-readiness-score" class="text-white font-semibold">98%</span>
+          <span id="readiness-score" class="text-white font-semibold">98%</span>
         </div>
         <div class="mt-2 h-3 w-full overflow-hidden rounded-full bg-black/40">
-          <div id="system-readiness-bar" class="h-3 w-[98%] rounded-full bg-neon-emerald"></div>
+          <div class="h-3 w-[98%] rounded-full bg-neon-emerald"></div>
         </div>
       </div>
 
@@ -140,35 +115,12 @@
         </button>
       </div>
 
-      <div class="bg-gym-card rounded-2xl p-5 shadow-lg space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Weekly Status</p>
-            <h2 class="text-xl font-semibold mt-2 flex items-center gap-2">The Stud Score</h2>
-          </div>
-          <i class="fa-solid fa-chart-line text-neon-emerald text-xl"></i>
-        </div>
-        <div class="grid gap-3 text-sm text-slate-300">
-          <div class="rounded-xl bg-black/40 p-3 flex items-center justify-between">
-            <span>Morning Glory</span>
-            <span id="weekly-morning" class="text-white font-semibold">0/7 days</span>
-          </div>
-          <div class="rounded-xl bg-black/40 p-3 flex items-center justify-between">
-            <span>Consistency Streak</span>
-            <span id="weekly-streak" class="text-white font-semibold">0 days</span>
-          </div>
-        </div>
-        <button id="log-daily" class="w-full rounded-xl border border-neon-emerald/50 py-2 text-sm font-semibold text-neon-emerald hover:bg-neon-emerald/10">
-          Log Daily Stats
-        </button>
-      </div>
-
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Today's Protocol</p>
-        <h2 id="today-plan" class="text-xl font-semibold mt-2 text-white">Session A: Sustory Protocol</h2>
-        <p id="today-description" class="text-sm text-slate-300 mt-1">Counter-Strike & P-Wave Drill.</p>
-        <button id="start-today" class="mt-4 w-full rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">
-          Start Session
+        <h2 class="text-xl font-semibold mt-2 text-white">Session A: Sustory Protocol</h2>
+        <p class="text-sm text-slate-300 mt-1">Thrusting + Vibe. Counter-Strike Drill.</p>
+        <button onclick="app.showSection('train')" class="mt-4 w-full rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">
+          Go to Training
         </button>
       </div>
     </section>
@@ -179,64 +131,59 @@
           <div>
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Session Player</p>
             <h2 id="session-title" class="text-2xl font-semibold mt-1">Select Session</h2>
-            <p id="session-note" class="text-sm text-slate-300 mt-1">Ready for input.</p>
+            <p id="session-subtitle" class="text-sm text-slate-300 mt-1">Ready for input.</p>
           </div>
           <div class="text-2xl text-neon-cyan"><i class="fa-solid fa-bolt"></i></div>
         </div>
 
         <div class="mt-6 relative w-full h-64 bg-black/40 rounded-2xl border border-slate-700 flex items-center justify-center overflow-hidden">
-           <div id="bio-monitor" class="bio-monitor" data-visual="vector_scope">
-              <div class="vector-scope"><div class="scope-ring"></div><div class="scope-target"></div></div>
-              <div class="expansion-cylinder"><div class="cylinder-line" style="bottom:70%"></div><div class="cylinder-fill"></div></div>
-              
+           <div id="visual-container" class="bio-monitor">
               <div class="bio-monitor__hud">
-                <p id="bio-monitor-label" class="text-[10px] uppercase tracking-[0.3em] text-slate-300">Standby</p>
                 <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">00:00</p>
-                <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400">remaining</p>
+                <p id="phase-label" class="text-[10px] uppercase tracking-widest text-neon-cyan mt-2">STANDBY</p>
               </div>
            </div>
         </div>
-        <div class="phase-bar-bg"><div id="phase-progress" class="phase-bar-fill" style="width: 0%"></div></div>
 
-        <div class="mt-4 flex items-center justify-center gap-3">
-          <button id="minus-30" class="rounded-lg border border-neon-cyan/40 px-3 py-2 text-xs font-semibold text-neon-cyan">-30s</button>
-          <button id="toggle-session" class="flex-1 rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark shadow-glow">Start</button>
-          <button id="next-phase" class="rounded-lg border border-neon-amber/40 px-3 py-2 text-xs font-semibold text-neon-amber">Skip >></button>
-          <button id="plus-30" class="rounded-lg border border-neon-emerald/40 px-3 py-2 text-xs font-semibold text-neon-emerald">+30s</button>
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <button id="btn-toggle" class="rounded-xl bg-neon-cyan py-3 font-semibold text-gym-dark">Start</button>
+          <button id="btn-stop" class="rounded-xl border border-neon-rose text-neon-rose py-3 font-semibold">Stop</button>
         </div>
-        <button id="abort-session" class="mt-3 w-full rounded-xl border border-neon-rose text-neon-rose py-2 font-semibold">End Session</button>
       </div>
 
       <div class="bg-gym-card rounded-2xl p-5 shadow-lg border border-neon-cyan/20">
-        <p class="text-[10px] uppercase tracking-[0.3em] text-neon-amber mb-2">Trainer's Cues</p>
-        <ul id="trainer-instructions" class="space-y-3 text-sm text-slate-200 list-none leading-relaxed">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Trainer's Instructions</p>
+        <ul id="trainer-text" class="mt-3 space-y-2 text-sm text-slate-200 list-disc pl-5">
           <li>Select a session to begin.</li>
         </ul>
       </div>
 
       <div class="grid grid-cols-3 gap-3">
-        <button id="select-a" class="rounded-xl border border-neon-cyan/40 p-3 text-neon-cyan font-bold hover:bg-neon-cyan/10">Session A<br><span class="text-[10px] font-normal">Sustory</span></button>
-        <button id="select-b" class="rounded-xl border border-neon-emerald/40 p-3 text-neon-emerald font-bold hover:bg-neon-emerald/10">Session B<br><span class="text-[10px] font-normal">Pump</span></button>
-        <button id="select-c" class="rounded-xl border border-neon-amber/40 p-3 text-neon-amber font-bold hover:bg-neon-amber/10">Session C<br><span class="text-[10px] font-normal">Manual</span></button>
+        <button onclick="app.loadSession('A')" class="rounded-xl border border-neon-cyan/40 p-3 text-neon-cyan font-bold hover:bg-neon-cyan/10">Session A<br><span class="text-[10px] font-normal">Sustory</span></button>
+        <button onclick="app.loadSession('B')" class="rounded-xl border border-neon-emerald/40 p-3 text-neon-emerald font-bold hover:bg-neon-emerald/10">Session B<br><span class="text-[10px] font-normal">Pump</span></button>
+        <button onclick="app.loadSession('C')" class="rounded-xl border border-neon-amber/40 p-3 text-neon-amber font-bold hover:bg-neon-amber/10">Session C<br><span class="text-[10px] font-normal">Manual</span></button>
       </div>
       
-      <button id="sound-toggle" class="w-full rounded-xl border border-slate-600 py-3 text-sm text-slate-400 font-semibold flex items-center justify-center gap-2 hover:text-white">
-        <i class="fa-solid fa-volume-off"></i> <span id="sound-toggle-label">Focus Noise: OFF</span>
+      <button id="btn-audio" class="w-full rounded-xl border border-slate-600 py-3 text-sm text-slate-400">
+        🔊 Focus Noise: OFF
       </button>
+
     </section>
 
-    <section id="logs" class="hidden px-6 space-y-4">
+    <section id="logs" class="hidden px-6">
        <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
          <h2 class="text-xl font-bold text-white mb-4">Training Log</h2>
-         <div id="log-list" class="space-y-3"><p class="text-slate-400 text-sm">No logs yet.</p></div>
-         <button id="clear-data" class="mt-4 w-full border border-neon-rose text-neon-rose py-2 rounded-lg text-xs uppercase">Clear Logs</button>
+         <div id="log-list" class="space-y-3">
+           <p class="text-slate-400 text-sm">No logs yet.</p>
+         </div>
+         <button onclick="localStorage.removeItem('usph_logs'); app.renderLogs();" class="mt-4 w-full border border-neon-rose text-neon-rose py-2 rounded-lg text-xs uppercase">Clear Logs</button>
        </div>
     </section>
 
     <section id="handbook" class="hidden px-6 space-y-4">
        <div class="bg-gym-card rounded-2xl p-5 shadow-lg">
-         <h2 class="text-xl font-bold text-white mb-2">Sustory Protocol</h2>
-         <p class="text-sm text-slate-300 mb-4">Deep Coaching Techniques.</p>
+         <h2 class="text-xl font-bold text-white mb-2">Prostate Protocol (Sustory)</h2>
+         <p class="text-sm text-slate-300 mb-4">How to use the 6-in-1 for maximum results.</p>
          <div class="space-y-3 text-sm text-slate-200">
             <div class="p-3 bg-black/40 rounded-lg border-l-2 border-neon-cyan">
                <strong class="text-neon-cyan block mb-1">The Counter-Strike</strong>
@@ -244,7 +191,7 @@
             </div>
             <div class="p-3 bg-black/40 rounded-lg border-l-2 border-neon-amber">
                <strong class="text-neon-amber block mb-1">The P-Wave</strong>
-               Dry Orgasm training. If you feel the pulse, stop thrusting and just breathe.
+               Dry Orgasm training. Separate the spasm from the fluid. If you feel the pulse, stop thrusting and just breathe.
             </div>
          </div>
        </div>
@@ -253,301 +200,298 @@
 
   <nav class="fixed bottom-0 inset-x-0 bg-gym-card/95 backdrop-blur border-t border-slate-700 pb-safe">
     <div class="grid grid-cols-4 text-xs text-slate-400">
-      <button data-target="hub" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-house"></i> Hub</button>
-      <button data-target="train" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-dumbbell"></i> Train</button>
-      <button data-target="logs" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-clipboard"></i> Logs</button>
-      <button data-target="handbook" class="nav-btn py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-book"></i> Guide</button>
+      <button onclick="app.showSection('hub')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-house"></i> Hub</button>
+      <button onclick="app.showSection('train')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-dumbbell"></i> Train</button>
+      <button onclick="app.showSection('logs')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-clipboard"></i> Logs</button>
+      <button onclick="app.showSection('handbook')" class="py-4 flex flex-col items-center gap-1 hover:text-white"><i class="fa-solid fa-book"></i> Guide</button>
     </div>
   </nav>
 
-  <div id="daily-log-modal" class="fixed inset-0 hidden items-end justify-center bg-black/70 p-6 z-50">
-    <div class="w-full max-w-md rounded-2xl bg-gym-card p-6 border border-slate-700">
-      <h3 class="text-xl font-semibold text-white mb-4">Daily Check-In</h3>
-      <div class="space-y-4 text-sm text-slate-300">
-         <div class="p-3 bg-black/40 rounded-xl">
-            <label class="block text-xs uppercase tracking-widest mb-2 text-neon-emerald">Morning Wood?</label>
-            <div class="grid grid-cols-2 gap-3">
-               <button onclick="app.setDailyMorning(true, this)" class="daily-mw-btn border border-slate-600 px-4 py-3 rounded-lg font-bold">Yes</button>
-               <button onclick="app.setDailyMorning(false, this)" class="daily-mw-btn border border-slate-600 px-4 py-3 rounded-lg font-bold">No</button>
-            </div>
-         </div>
-         <div class="p-3 bg-black/40 rounded-xl">
-            <label class="block text-xs uppercase tracking-widest mb-2 text-neon-violet">Sleep Quality (1-5)</label>
-            <input id="daily-sleep" type="range" min="1" max="5" value="3" class="w-full accent-neon-violet">
-         </div>
-      </div>
-      <div class="mt-6 grid grid-cols-2 gap-3">
-        <button id="cancel-daily-log" class="rounded-xl border border-slate-500 py-3">Cancel</button>
-        <button id="save-daily-log" class="rounded-xl bg-neon-emerald py-3 text-gym-dark font-bold">Save Log</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    /* --- DATA: DEEP COACHING LIBRARY (V4.1 Merged) --- */
     const SESSION_LIBRARY = {
-      // SESSION A: SUSTORY 6-IN-1
-      session_a_rookie: {
+      // SESSION A: SUSTORY 6-IN-1 PROTOCOL
+      A: {
         title: "Sustory Protocol",
-        visual: "vector_scope",
+        visual: "vector",
         phases: [
-          { name: "Setup & Lock", duration: 180, coaching: ["<b>Lube Protocol:</b> Coat device and entrance.", "<b>Base Lock:</b> Loop ring around SCROTUM first, then penis.", "<b>Insert:</b> Curve facing UP (towards navel)."] },
-          { name: "Sensory Mapping", duration: 120, coaching: ["<b>Remote:</b> Vibe LOW. Thrust OFF.", "<b>Body Scan:</b> Unclench jaw. Drop shoulders.", "<b>Focus:</b> Find where vibration hits the prostate."] },
-          { name: "Active Drainage", duration: 300, coaching: ["<b>Remote:</b> Thrust LEVEL 1. Vibe LOW.", "<b>Mechanics:</b> Let device do the work. Don't rock hips.", "<b>Visual:</b> Clearing out the ducts."] },
-          { name: "The Counter-Strike", duration: 300, coaching: ["<b>Remote:</b> Thrust MEDIUM. Vibe OFF.", "<b>THE DRILL:</b> When it thrusts IN, Push OUT (Reverse Kegel).", "<b>Goal:</b> Create a 'Shield' against the clench."] },
-          { name: "The P-Wave", duration: 180, coaching: ["<b>Remote:</b> Thrust OFF. Vibe MAX.", "<b>Dry Orgasm:</b> If pulse starts, breathe through it.", "<b>Safety:</b> If close to PONR, power OFF."] },
-          { name: "Cool Down", duration: 60, coaching: ["<b>Power Down:</b> All functions OFF.", "<b>Reset:</b> 5 deep belly breaths.", "<b>Exit:</b> Remove ring gently."] }
+          { 
+            name: "Setup & Base Lock", duration: 180, 
+            coaching: [
+              "<b>Lube Up:</b> Apply generously to device and entrance.",
+              "<b>Base Lock:</b> Loop the ring around Penis AND Testicles.",
+              "<b>Insert:</b> Curve facing UP (towards navel). Go slow."
+            ] 
+          },
+          { 
+            name: "Sensory Wakeup", duration: 120, 
+            coaching: [
+              "<b>Remote:</b> Vibe ON (Low). Thrust OFF.",
+              "<b>Focus:</b> Locate the buzzing sensation at the prostate.",
+              "<b>Release:</b> Relax the anus. Don't fight it."
+            ] 
+          },
+          { 
+            name: "Active Drainage", duration: 300, 
+            coaching: [
+              "<b>Remote:</b> Thrust ON (Level 1). Vibe LOW.",
+              "<b>Action:</b> Let the device thrust. Do not rock hips.",
+              "<b>Visual:</b> Clearing the ducts."
+            ] 
+          },
+          { 
+            name: "Counter-Strike Drill", duration: 300, 
+            coaching: [
+              "<b>Remote:</b> Thrust MEDIUM. Vibe OFF.",
+              "<b>The Drill:</b> When it thrusts IN, you Push OUT (Reverse Kegel).",
+              "<b>Shield:</b> Create a forcefield. Disassociate sensation from reaction."
+            ] 
+          },
+          { 
+            name: "The P-Wave (Dry Orgasm)", duration: 180, 
+            coaching: [
+              "<b>Remote:</b> Thrust OFF. Vibe MAX.",
+              "<b>Seek:</b> Wait for the 'Pulse' (Spasm).",
+              "<b>Control:</b> Let it spasm but DO NOT ejaculate.",
+              "<b>Edge:</b> If close to PONR, power off immediately."
+            ] 
+          },
+          { 
+            name: "Cool Down", duration: 60, 
+            coaching: ["Power OFF.", "5 Deep Breaths.", "Remove gently."] 
+          }
         ]
       },
-      // SESSION B: PUMP
-      session_b_standard: {
+      // SESSION B: PUMP THERAPY
+      B: {
         title: "Vascular Pump",
-        visual: "expansion_cylinder",
+        visual: "cylinder",
         phases: [
-          { name: "Thermal Prep", duration: 300, coaching: ["<b>Action:</b> Apply hot cloth for 5 mins.", "<b>Massage:</b> Knead tissue until pliable."] },
-          { name: "Seal Check", duration: 60, coaching: ["<b>Vacuum:</b> Pump just enough to stick.", "<b>Check:</b> Ensure testicles are outside tube."] },
-          { name: "Expansion Cycle 1", duration: 180, coaching: ["<b>Target:</b> Pump to 50%.", "<b>Pulse Drill:</b> Flex (Kegel) 1s to push blood INTO tube, relax 3s."] },
-          { name: "Perfusion Rest", duration: 60, coaching: ["<b>Action:</b> Release ALL pressure.", "<b>Massage:</b> Restore fresh blood flow."] },
-          { name: "Expansion Cycle 2", duration: 180, coaching: ["<b>Target:</b> Pump to 70% (Safe Max).", "<b>Drill:</b> Continue Pulse Drill."] },
-          { name: "Final Release", duration: 60, coaching: ["<b>Finish:</b> Release vacuum completely.", "<b>Shake Out:</b> Relax the fascia."] }
+          { name: "Heat Prep", duration: 300, coaching: ["Apply warm cloth for 5 mins.", "Massage tissue until pliable.", "Never pump cold."] },
+          { name: "Seal Check", duration: 60, coaching: ["Place cylinder.", "Create mild vacuum.", "No stretching yet."] },
+          { name: "Work Cycle 1", duration: 180, coaching: ["Pump to 50%.", "<b>Pulse Drill:</b> Flex (Kegel) into the tube to push blood in."] },
+          { name: "Release", duration: 60, coaching: ["Release ALL vacuum.", "Massage briefly."] },
+          { name: "Work Cycle 2", duration: 180, coaching: ["Pump to 70%.", "Focus on Girth. Pulse Drill active."] },
+          { name: "Finish", duration: 60, coaching: ["Release and remove.", "Shake out."] }
         ]
       },
-      // SESSION C: MANUAL
-      session_c_trance: {
+      // SESSION C: MANUAL MASTERY
+      C: {
         title: "Manual Mastery",
-        visual: "vector_scope",
+        visual: "vector",
         phases: [
-          { name: "Lube & Grip", duration: 60, coaching: ["<b>Prep:</b> Use coconut oil.", "<b>Coverage:</b> Coat entire shaft."] },
-          { name: "Base Lock", duration: 180, coaching: ["<b>Grip:</b> 'OK' sign at base.", "<b>Action:</b> Squeeze firmly to trap blood."] },
-          { name: "The Corkscrew", duration: 180, coaching: ["<b>Action:</b> Twist hand 45 degrees while pulling UP.", "<b>Feel:</b> Stretching fascia, not skin."] },
-          { name: "Ghost Touch", duration: 120, coaching: ["<b>HANDS OFF:</b> Drop hands.", "<b>Focus:</b> Feel the 'tingling echo'."] },
-          { name: "Squeeze Reset", duration: 60, coaching: ["<b>Drill:</b> Squeeze base of Glans firmly.", "<b>Hold:</b> 10 seconds to reset arousal."] }
+          { name: "Lube & Grip", duration: 60, coaching: ["Use high quality oil.", "Coat entire shaft."] },
+          { name: "Base Lock", duration: 180, coaching: ["OK Grip at base.", "Squeeze firmly to trap blood."] },
+          { name: "The Corkscrew", duration: 180, coaching: ["Twist hand 45° while pulling up.", "Stretch fascia."] },
+          { name: "Ghost Touch", duration: 120, coaching: ["HANDS OFF.", "Focus on the 'tingling echo'.", "Rewire sensitivity."] },
+          { name: "Squeeze Reset", duration: 60, coaching: ["Squeeze base of Glans firmly.", "Hold for 10s to reset arousal."] }
         ]
       }
     };
 
-    /* --- AUDIO ENGINE --- */
-    const soundEngine = {
-      ctx: null, gain: null, beepGain: null, osc: null, active: false,
-      init() {
-        if(this.ctx) return;
-        const AC = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AC();
-        this.gain = this.ctx.createGain(); this.gain.gain.value = 0; this.gain.connect(this.ctx.destination);
-        const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 2, this.ctx.sampleRate);
-        const data = buf.getChannelData(0); for(let i=0; i<data.length; i++) data[i] = (Math.random()*2-1);
-        const noise = this.ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
-        const filter = this.ctx.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value=150;
-        noise.connect(filter).connect(this.gain); noise.start(0);
-        
-        this.beepGain = this.ctx.createGain(); this.beepGain.gain.value=0; this.beepGain.connect(this.ctx.destination);
-        this.osc = this.ctx.createOscillator(); this.osc.connect(this.beepGain); this.osc.start(0);
-      },
-      toggle() {
-        if(!this.ctx) this.init(); if(this.ctx.state === 'suspended') this.ctx.resume();
-        this.active = !this.active;
-        const btn = document.getElementById('sound-toggle-label');
-        const wrapper = document.getElementById('sound-toggle');
-        if(this.active) { this.gain.gain.setTargetAtTime(0.5, this.ctx.currentTime, 0.1); btn.innerText="Focus Noise: ON"; wrapper.classList.add("text-neon-cyan", "border-neon-cyan"); }
-        else { this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.1); btn.innerText="Focus Noise: OFF"; wrapper.classList.remove("text-neon-cyan", "border-neon-cyan"); }
-      },
-      chime() {
-        if(!this.ctx) return; if(this.ctx.state==='suspended') this.ctx.resume();
-        const now = this.ctx.currentTime;
-        this.beepGain.gain.cancelScheduledValues(now);
-        this.beepGain.gain.setValueAtTime(0.1, now);
-        this.beepGain.gain.exponentialRampToValueAtTime(0.001, now+0.5);
-      }
-    };
+    // SOUND ENGINE
+    class SoundEngine {
+        constructor() {
+            this.ctx = null;
+            this.gain = null;
+        }
+        init() {
+            if (this.ctx) return;
+            const AC = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AC();
+            this.gain = this.ctx.createGain();
+            this.gain.gain.value = 0;
+            this.gain.connect(this.ctx.destination);
+            
+            // Brown Noise Buffer
+            const bufSize = this.ctx.sampleRate * 2;
+            const buffer = this.ctx.createBuffer(1, bufSize, this.ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
 
-    /* --- APP LOGIC --- */
+            const noise = this.ctx.createBufferSource();
+            noise.buffer = buffer;
+            noise.loop = true;
+            
+            // Lowpass Filter
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 150;
+            
+            noise.connect(filter);
+            filter.connect(this.gain);
+            noise.start(0);
+        }
+        toggle(on) {
+            if(!this.ctx) this.init();
+            if(this.ctx.state === 'suspended') this.ctx.resume();
+            const now = this.ctx.currentTime;
+            this.gain.gain.setTargetAtTime(on ? 0.5 : 0, now, 0.1);
+        }
+    }
+
     const app = {
-      session: null, timer: null, phaseIdx: 0, timeLeft: 0, totalPhaseTime: 0, wakeLock: null,
-      tempMorning: null,
+        session: null,
+        timer: null,
+        timeLeft: 0,
+        phaseIdx: 0,
+        wakeLock: null,
+        audio: new SoundEngine(),
 
-      init() {
-        this.renderLogs();
-        this.updateStats();
+        init() {
+            this.renderLogs();
+        },
+
+        showSection(id) {
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        },
+
+        loadSession(key) {
+            this.session = JSON.parse(JSON.stringify(SESSION_LIBRARY[key]));
+            this.phaseIdx = 0;
+            document.getElementById('session-title').innerText = this.session.title;
+            document.getElementById('session-subtitle').innerText = "Ready to start.";
+            this.updatePhase();
+            this.renderVisual();
+        },
+
+        updatePhase() {
+            if(!this.session) return;
+            const phase = this.session.phases[this.phaseIdx];
+            this.timeLeft = phase.duration;
+            document.getElementById('phase-label').innerText = phase.name;
+            document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
+            
+            // Trainer Text
+            const list = document.getElementById('trainer-text');
+            list.innerHTML = phase.coaching.map(t => `<li>${t}</li>`).join('');
+        },
+
+        start() {
+            if(!this.session) return alert("Select a session first.");
+            if(this.timer) return; // Already running
+            
+            this.requestWakeLock();
+            this.audio.init();
+            if(this.audio.ctx && this.audio.ctx.state === 'suspended') this.audio.ctx.resume();
+
+            document.getElementById('btn-toggle').innerText = "Pause";
+            this.timer = setInterval(() => {
+                this.timeLeft--;
+                document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
+                if(this.timeLeft <= 0) this.nextPhase();
+            }, 1000);
+        },
+
+        pause() {
+            clearInterval(this.timer);
+            this.timer = null;
+            document.getElementById('btn-toggle').innerText = "Resume";
+            this.audio.toggle(false);
+        },
+
+        stop() {
+            this.pause();
+            document.getElementById('btn-toggle').innerText = "Start";
+            document.getElementById('timer-display').innerText = "00:00";
+            if(this.wakeLock) this.wakeLock.release();
+            
+            // Log It
+            if(this.session) {
+                const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
+                logs.unshift({
+                    date: new Date().toLocaleDateString(),
+                    type: this.session.title,
+                    duration: "Complete"
+                });
+                localStorage.setItem('usph_logs', JSON.stringify(logs));
+                this.renderLogs();
+            }
+            this.session = null;
+            alert("Session Complete.");
+            this.showSection('hub');
+        },
+
+        nextPhase() {
+            this.phaseIdx++;
+            if(this.phaseIdx >= this.session.phases.length) {
+                this.stop();
+            } else {
+                this.updatePhase();
+                // Haptic
+                if(navigator.vibrate) navigator.vibrate(200);
+            }
+        },
+
+        async requestWakeLock() {
+            try { if('wakeLock' in navigator) this.wakeLock = await navigator.wakeLock.request('screen'); }
+            catch(e) { console.log(e); }
+        },
+
+        formatTime(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2,'0');
+            const s = (sec % 60).toString().padStart(2,'0');
+            return `${m}:${s}`;
+        },
+
+        renderVisual() {
+            const container = document.getElementById('visual-container');
+            if(this.session.visual === 'cylinder') {
+                container.innerHTML = `
+                   <div class="bio-monitor__hud">
+                     <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">${this.formatTime(this.timeLeft)}</p>
+                     <p id="phase-label" class="text-[10px] uppercase tracking-widest text-neon-cyan mt-2">READY</p>
+                   </div>
+                   <div class="expansion-cylinder"><div class="cylinder-fill"></div></div>
+                `;
+            } else {
+                container.innerHTML = `
+                   <div class="bio-monitor__hud">
+                     <p id="timer-display" class="text-5xl font-bold text-white tabular-nums">${this.formatTime(this.timeLeft)}</p>
+                     <p id="phase-label" class="text-[10px] uppercase tracking-widest text-neon-cyan mt-2">READY</p>
+                   </div>
+                   <div class="vector-scope"><div class="scope-ring"></div><div class="scope-target"></div></div>
+                `;
+            }
+        },
+
+        renderLogs() {
+            const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
+            const list = document.getElementById('log-list');
+            if(logs.length === 0) return list.innerHTML = '<p class="text-slate-400 text-sm">No logs yet.</p>';
+            
+            list.innerHTML = logs.map(l => `
+                <div class="bg-black/40 p-3 rounded-lg border border-slate-700 flex justify-between text-sm">
+                    <span class="text-white font-bold">${l.type}</span>
+                    <span class="text-slate-400">${l.date}</span>
+                </div>
+            `).join('');
+        },
         
-        // Navigation Logic
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-           btn.addEventListener('click', () => this.showSection(btn.dataset.target));
-        });
-        
-        // Session Logic
-        document.getElementById('toggle-session').onclick = () => { if(this.timer) this.pause(); else this.start(); };
-        document.getElementById('abort-session').onclick = () => this.stop();
-        document.getElementById('minus-30').onclick = () => this.adjustTime(-30);
-        document.getElementById('plus-30').onclick = () => this.adjustTime(30);
-        document.getElementById('next-phase').onclick = () => this.nextPhase();
-        
-        // Selection
-        document.getElementById('select-a').onclick = () => this.loadSession('A');
-        document.getElementById('select-b').onclick = () => this.loadSession('B');
-        document.getElementById('select-c').onclick = () => this.loadSession('C');
-        document.getElementById('start-today').onclick = () => { this.showSection('train'); this.loadSession('A'); };
-        
-        // Logging
-        document.getElementById('log-daily').onclick = () => { 
-           document.getElementById('daily-log-modal').classList.remove('hidden'); 
-           document.getElementById('daily-log-modal').classList.add('flex');
-        };
-        document.getElementById('cancel-daily-log').onclick = () => {
-           document.getElementById('daily-log-modal').classList.add('hidden'); 
-           document.getElementById('daily-log-modal').classList.remove('flex');
-        };
-        document.getElementById('save-daily-log').onclick = () => this.saveDailyLog();
-        document.getElementById('clear-data').onclick = () => {
-           if(confirm("Clear history?")) { localStorage.removeItem('usph_logs'); this.renderLogs(); this.updateStats(); }
-        };
-        
-        // Panic
-        document.getElementById('btn-emergency').onclick = () => alert("Protocol: Cold Rinse + Squats");
-        document.getElementById('sound-toggle').onclick = () => soundEngine.toggle();
-      },
-
-      showSection(id) {
-        document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-           btn.classList.toggle('text-neon-cyan', btn.dataset.target === id);
-        });
-      },
-
-      loadSession(key) {
-        const map = { 'A': 'session_a_rookie', 'B': 'session_b_standard', 'C': 'session_c_trance' };
-        this.session = JSON.parse(JSON.stringify(SESSION_LIBRARY[map[key]]));
-        this.phaseIdx = 0;
-        
-        document.getElementById('session-title').innerText = this.session.title;
-        document.getElementById('session-note').innerText = "Ready to start.";
-        const monitor = document.getElementById('bio-monitor');
-        if (monitor) monitor.dataset.visual = this.session.visual;
-        
-        this.updatePhase();
-      },
-
-      updatePhase() {
-        if(!this.session) return;
-        const phase = this.session.phases[this.phaseIdx];
-        this.timeLeft = phase.duration;
-        this.totalPhaseTime = phase.duration;
-        document.getElementById('bio-monitor-label').innerText = phase.name;
-        document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
-        const list = document.getElementById('trainer-instructions');
-        list.innerHTML = phase.coaching.map(l => `<li class="flex items-start gap-3"><i class="fa-solid fa-caret-right text-neon-cyan mt-1 shrink-0"></i> <span>${l}</span></li>`).join('');
-      },
-
-      start() {
-        if(!this.session) return alert("Select a session.");
-        if(this.timer) return;
-        this.requestWakeLock();
-        if(!soundEngine.active) soundEngine.toggle();
-        document.getElementById('toggle-session').innerText = "Pause";
-        this.timer = setInterval(() => this.tick(), 1000);
-      },
-
-      pause() {
-        clearInterval(this.timer); this.timer = null;
-        document.getElementById('toggle-session').innerText = "Resume";
-        soundEngine.toggle();
-      },
-
-      tick() {
-        this.timeLeft--;
-        document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
-        // Bar
-        const pct = ((this.totalPhaseTime - this.timeLeft) / this.totalPhaseTime) * 100;
-        document.getElementById('phase-progress').style.width = `${pct}%`;
-        if(this.timeLeft <= 0) this.nextPhase();
-      },
-
-      nextPhase() {
-        this.phaseIdx++;
-        if(this.phaseIdx >= this.session.phases.length) this.finish();
-        else { this.updatePhase(); soundEngine.chime(); if(navigator.vibrate) navigator.vibrate(200); }
-      },
-
-      adjustTime(sec) {
-        if(!this.session) return;
-        this.timeLeft = Math.max(0, this.timeLeft + sec);
-        document.getElementById('timer-display').innerText = this.formatTime(this.timeLeft);
-      },
-
-      stop() {
-        this.pause();
-        document.getElementById('toggle-session').innerText = "Start";
-        if(this.wakeLock) this.wakeLock.release();
-        // Log
-        const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
-        logs.unshift({ type: this.session.title, date: new Date().toLocaleDateString(), duration: "Complete" });
-        localStorage.setItem('usph_logs', JSON.stringify(logs));
-        this.renderLogs();
-        this.updateStats();
-        this.session = null;
-        alert("Session Complete.");
-        this.showSection('hub');
-      },
-
-      finish() { this.stop(); },
-
-      formatTime(s) {
-        const m = Math.floor(s/60).toString().padStart(2,'0');
-        const sec = (s%60).toString().padStart(2,'0');
-        return `${m}:${sec}`;
-      },
-
-      async requestWakeLock() {
-        try { if('wakeLock' in navigator) this.wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
-      },
-
-      // LOGGING
-      setDailyMorning(val, btn) {
-        this.tempMorning = val;
-        document.querySelectorAll('.daily-mw-btn').forEach(b => b.classList.remove('bg-neon-emerald', 'text-gym-dark'));
-        btn.classList.add('bg-neon-emerald', 'text-gym-dark');
-      },
-
-      saveDailyLog() {
-        const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
-        logs.unshift({
-           type: "Daily Check",
-           date: new Date().toLocaleDateString(),
-           morningWood: this.tempMorning,
-           sleep: document.getElementById('daily-sleep').value
-        });
-        localStorage.setItem('usph_logs', JSON.stringify(logs));
-        this.renderLogs();
-        this.updateStats();
-        document.getElementById('daily-log-modal').classList.add('hidden');
-        document.getElementById('daily-log-modal').classList.remove('flex');
-      },
-
-      renderLogs() {
-        const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
-        const list = document.getElementById('log-list');
-        if(logs.length === 0) return list.innerHTML = '<p class="text-slate-400 text-sm">No logs yet.</p>';
-        list.innerHTML = logs.map(l => {
-           if(l.type === "Daily Check") {
-              return `<div class="bg-black/40 p-3 rounded-lg border border-slate-700 text-sm"><span class="text-neon-emerald font-bold">Daily Check</span> <span class="text-slate-400">${l.date}</span><br>Morning Wood: ${l.morningWood ? 'Yes' : 'No'}</div>`;
-           }
-           return `<div class="bg-black/40 p-3 rounded-lg border border-slate-700 text-sm"><span class="text-white font-bold">${l.type}</span> <span class="text-slate-400">${l.date}</span></div>`;
-        }).join('');
-      },
-
-      updateStats() {
-        const logs = JSON.parse(localStorage.getItem('usph_logs') || "[]");
-        // Calculate Morning Glory x/7
-        const last7 = logs.filter(l => l.type === "Daily Check").slice(0, 7);
-        const morningCount = last7.filter(l => l.morningWood).length;
-        document.getElementById('weekly-morning').innerText = `${morningCount}/7 days`;
-        
-        // Streak
-        document.getElementById('weekly-streak').innerText = `${logs.length} entries`;
-        document.getElementById('streak').innerText = `${logs.length} entries`;
-      }
+        toggleAudio() {
+             const btn = document.getElementById('btn-audio');
+             const isActive = btn.innerText.includes("ON");
+             if(isActive) {
+                 this.audio.toggle(false);
+                 btn.innerText = "🔊 Focus Noise: OFF";
+                 btn.classList.remove("text-neon-cyan", "border-neon-cyan");
+             } else {
+                 this.audio.toggle(true);
+                 btn.innerText = "🔊 Focus Noise: ON";
+                 btn.classList.add("text-neon-cyan", "border-neon-cyan");
+             }
+        }
     };
 
+    // Event Listeners
+    document.getElementById('btn-toggle').onclick = () => {
+        if(app.timer) app.pause();
+        else app.start();
+    };
+    document.getElementById('btn-stop').onclick = () => app.stop();
+    document.getElementById('btn-audio').onclick = () => app.toggleAudio();
+
+    // Init
     app.init();
   </script>
 </body>
